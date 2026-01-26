@@ -127,35 +127,38 @@
 	
 	
     const key = 5;
-    let attempts = 0;
-    const maxAttempts = 10;
 
-    const decodeInterval = setInterval(() => {
-        attempts++;
+    // 定義解碼函數
+    const decodeEmail = (target) => {
+        const encodedStr = target.getAttribute('data-v');
+        // 檢查是否已解碼，避免重複觸發
+        if (encodedStr && !target.querySelector('a')) {
+            const decoded = encodedStr.split('').map(char => 
+                String.fromCharCode(char.charCodeAt(0) - key)
+            ).join('');
+            target.innerHTML = `<a href="mailto:${decoded}">${decoded}</a>`;
+        }
+    };
+
+    // 建立監視器
+    const observer = new MutationObserver((mutations) => {
         const target = document.querySelector('span.mm');
-
-        // 如果找到了目標，且還沒被解碼過（檢查是否有 <a> 標籤）
-        if (target && !target.querySelector('a')) {
-            const encodedStr = target.getAttribute('data-v');
-            if (encodedStr) {
-                const decoded = encodedStr.split('').map(char => 
-                    String.fromCharCode(char.charCodeAt(0) - key)
-                ).join('');
-
-                target.innerHTML = `<a href="mailto:${decoded}">${decoded}</a>`;
-                
-                // 成功解碼，清除計時器
-                clearInterval(decodeInterval);
-                console.log("Email decoded successfully.");
-            }
+        if (target) {
+            decodeEmail(target);
+            // 如果你確定這個 Email 標籤全站只有一個，解碼後可以關閉監視器以節省效能
+            // observer.disconnect(); 
         }
+    });
 
-        // 超過次數也停止，避免無窮運作
-        if (attempts >= maxAttempts) {
-            clearInterval(decodeInterval);
-            if (!target) console.warn("Email decoder: Target element not found after 10 attempts.");
-        }
-    }, 500); // 每 0.5 秒跑一次
+    // 開始觀察整個 document
+    observer.observe(document.body, {
+        childList: true, // 觀察子節點的新增/刪除
+        subtree: true    // 觀察所有後代節點
+    });
+
+    // 初次執行（防止元素在 JS 載入前就已經存在）
+    const initialTarget = document.querySelector('span.mm');
+    if (initialTarget) decodeEmail(initialTarget);
 	
 	function em(t){
 		const encoded = t.split('').map(char => 
