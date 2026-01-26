@@ -124,5 +124,44 @@
     };
 
     document.addEventListener('DOMContentLoaded', loadSpreadsheetsWithCache);
+	
+	
+    const key = 5;
+    let attempts = 0;
+    const maxAttempts = 10;
+
+    const decodeInterval = setInterval(() => {
+        attempts++;
+        const target = document.querySelector('span.mm');
+
+        // 如果找到了目標，且還沒被解碼過（檢查是否有 <a> 標籤）
+        if (target && !target.querySelector('a')) {
+            const encodedStr = target.getAttribute('data-v');
+            if (encodedStr) {
+                const decoded = encodedStr.split('').map(char => 
+                    String.fromCharCode(char.charCodeAt(0) - key)
+                ).join('');
+
+                target.innerHTML = `<a href="mailto:${decoded}">${decoded}</a>`;
+                
+                // 成功解碼，清除計時器
+                clearInterval(decodeInterval);
+                console.log("Email decoded successfully.");
+            }
+        }
+
+        // 超過次數也停止，避免無窮運作
+        if (attempts >= maxAttempts) {
+            clearInterval(decodeInterval);
+            if (!target) console.warn("Email decoder: Target element not found after 10 attempts.");
+        }
+    }, 500); // 每 0.5 秒跑一次
+	
+	function em(t){
+		const encoded = t.split('').map(char => 
+			String.fromCharCode(char.charCodeAt(0) + key)
+		).join('');
+		console.log(encoded);
+	}
 
 })();
