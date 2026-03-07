@@ -73,6 +73,8 @@
         'info': 'HTML!E2',
         'about': 'HTML!D2',
         'publications': 'HTML!C2',
+        'lab': 'HTML!F2',
+        'news': 'HTML!G2',
     };
 
     const renderContent = (data) => {
@@ -159,12 +161,12 @@
     // 初次執行（防止元素在 JS 載入前就已經存在）
     const initialTarget = document.querySelector('span.mm');
     if (initialTarget) decodeEmail(initialTarget);
-	
-	function em(t){
-		const encoded = t.split('').map(char => 
-			String.fromCharCode(char.charCodeAt(0) + key)
-		).join('');
-		console.log(encoded);
-	}
-
 })();
+
+
+function em(t){
+	const encoded = t.split('').map(char => 
+		String.fromCharCode(char.charCodeAt(0) + key)
+	).join('');
+	console.log(encoded);
+}
