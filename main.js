@@ -74,7 +74,6 @@
         'about': 'HTML!D2',
         'publications': 'HTML!C2',
         'lab': 'HTML!F2',
-        'news': 'HTML!G2',
     };
 
     const renderContent = (data) => {
