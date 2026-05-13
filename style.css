@@ -597,3 +597,282 @@ a:hover {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     }
 }
+
+/* =========================================
+   News Grid Layout (自動跳欄版)
+   ========================================= */
+
+.news-grid {
+  display: grid;
+  /* 關鍵：minmax(320px, 1fr) 確保卡片最少 320px，寬度夠就自動排成多欄 */
+  grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+  gap: 25px;
+  padding: 40px;
+}
+
+.news-card {
+  background-color: var(--background-white);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column; /* 讓內容垂直排列 */
+  transition: .3s;
+}
+
+.news-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow);
+  border-color: var(--primary-color);
+}
+
+/* 卡片上方：放置日期與標籤 */
+.news-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.news-badge-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 縮小一點的日曆方塊以符合卡片比例 */
+.news-date-box {
+  background-color: var(--background-light);
+  border-top: 3px solid var(--primary-color);
+  border-radius: 4px;
+  padding: 5px 10px;
+  text-align: center;
+  min-width: 60px;
+}
+
+.date-month {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--secondary-color);
+  text-transform: uppercase;
+}
+
+.date-day {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  line-height: 1;
+}
+
+/* 卡片主體 */
+.news-title {
+  font-size: 1.1rem;
+  margin: 0 0 10px 0;
+  line-height: 1.5;
+  color: var(--text-dark);
+}
+
+.news-text {
+  font-size: 0.9rem;
+  color: var(--secondary-color);
+  line-height: 1.6;
+  /* 限制內文最多顯示三行，避免卡片長度落差太大 */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 手機版微調 */
+@media (max-width: 768px) {
+  .news-grid {
+    padding: 20px;
+    grid-template-columns: 1fr; /* 手機版強制一欄 */
+  }
+}
+
+/* =========================================
+   Resource Grid Layout (自動跳欄卡片版)
+   ========================================= */
+
+.resource-grid {
+  display: grid;
+  /* 最小 320px，寬度夠會自動排成 2 欄或 3 欄 */
+  grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+  gap: 25px;
+  padding: 40px;
+}
+
+.resource-card {
+  background-color: var(--background-white);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  transition: .3s;
+  height: 100%; /* 讓卡片填滿 Grid 的高度 */
+}
+
+.resource-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow);
+  border-color: var(--primary-color);
+}
+
+/* 標題設定 */
+.resource-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+  line-height: 1.4;
+  color: var(--text-dark);
+}
+
+.resource-title a {
+  text-decoration: none;
+  color: inherit;
+  transition: .3s;
+}
+
+.resource-title a:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
+/* 日期與 Metadata */
+.resource-meta {
+  font-size: 0.85rem;
+  color: var(--secondary-color);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.resource-meta i, .pin-icon {
+  margin-right: 8px;
+  color: var(--primary-color);
+}
+
+/* 資源描述 */
+.resource-text {
+  font-size: 0.95rem;
+  color: var(--secondary-color);
+  line-height: 1.6;
+  flex-grow: 1; /* 關鍵設定：會自動伸展，確保卡片底部對齊 */
+}
+
+/* RWD 手機版微調 */
+@media (max-width: 768px) {
+  .resource-grid {
+    padding: 20px;
+    grid-template-columns: 1fr; /* 手機版強制變回單欄 */
+  }
+}
+
+/* =========================================
+   Member Section (補充樣式)
+   ========================================= */
+
+/* 預設無照片大頭貼 */
+.avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem; /* 讓 user icon 變大 */
+}
+.avatar-f { background-color: #fce7f3; color: #f472b6; }
+.avatar-m { background-color: #e0f2fe; color: #38bdf8; }
+.avatar-default { background-color: var(--background-light); color: var(--border-color); }
+
+/* 姓名連結與備用姓名 */
+.member-name a {
+  text-decoration: none;
+  color: inherit;
+  transition: .3s;
+}
+.member-name a:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+.member-name-alt {
+  font-size: 0.95rem;
+  color: var(--secondary-color);
+  margin-bottom: 5px;
+}
+
+/* 性別 Icon */
+.icon-m {
+  color: #3498db;
+  font-size: 0.8em;
+}
+.icon-f {
+  color: #e74c3c;
+  font-size: 0.8em;
+}
+
+/* =========================================
+   Welcome / About Section
+   ========================================= */
+
+/* 覆寫原本 about-card 的 40px padding，改為你設定的 20px 40px */
+.welcome-card {
+  padding: 20px 40px;
+}
+
+/* 處理段落間距 */
+.welcome-card .about-text p {
+  margin-bottom: 15px;
+}
+
+/* 讓最後一個段落底部不要有間距，確保卡片 padding 對稱 */
+.welcome-card .about-text p:last-child {
+  margin-bottom: 0;
+}
+
+/* RWD 手機版微調 - 對齊全站手機版間距 */
+@media (max-width: 768px) {
+  .welcome-card {
+    padding: 25px; 
+  }
+}
+
+.news-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px; /* 圓角膠囊形狀 */
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  vertical-align: middle;
+  margin-right: 10px;
+  margin-bottom: 3px;
+  background-color: var(--border-color); /* 預設背景色 */
+  color: var(--secondary-color); /* 預設文字色 */
+}
+/* 發表 (publish) - 學術專業的藍色 */
+.badge-publish {
+  background-color: #e0f2fe;
+  color: #0284c7;
+}
+
+/* 獎項 (award) - 榮耀的金色 */
+.badge-award {
+  background-color: #fef08a;
+  color: #ca8a04;
+}
+
+/* 新成員加入 (new member join) - 充滿活力與歡迎的綠色 */
+.badge-new-join {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+
+/* 成員畢業 (member graduate) - 象徵成就與榮譽的紫色 */
+.badge-graduate {
+  background-color: #f3e8ff;
+  color: #9333ea;
+}
