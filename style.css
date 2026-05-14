@@ -876,3 +876,124 @@ a:hover {
   background-color: #f3e8ff;
   color: #9333ea;
 }
+
+/* =========================================
+   Publication List (補充與微調)
+   ========================================= */
+
+/* 讓加粗的作者名稱套用主色系，凸顯 PI 的名字 */
+.highlight-author {
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+/* 讓 Meta 資訊 (期刊、日期) 水平排列並保持間距 */
+.pub-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px 25px; /* 元素之間的間距 */
+  margin-top: 8px;
+  align-items: center;
+}
+
+/* 期刊名稱採用斜體，符合學術常規 */
+.pub-journal span, .pub-journal {
+  font-style: italic;
+  color: var(--text-dark); /* 讓期刊名稱比一般灰色文字再深一點 */
+}
+
+/* PDF 按鈕 Hover 效果強化 */
+.pub-pdf-link {
+  color: #e74c3c; /* PDF 圖示通常用紅色較直覺 */
+  margin-left: 10px;
+  transition: .3s;
+}
+.pub-pdf-link:hover {
+  color: #c0392b;
+  transform: scale(1.1);
+}
+
+/* 為每篇論文加入微妙的 Hover 互動感 */
+.publication-item {
+  transition: background-color 0.3s ease;
+  border-radius: 4px; /* 右側稍微導角 */
+}
+.publication-item:hover {
+  background-color: #f8f9fa; /* 滑鼠移過去時有極淺的灰底，幫助專注閱讀該篇 */
+}
+
+/* =========================================
+   Publication Tags Style (標籤方塊化)
+   ========================================= */
+
+/* 標籤整列的容器 */
+.pub-tags-row {
+  display: flex;
+  flex-wrap: wrap; /* 螢幕不夠寬時才換行 */
+  gap: 8px;        /* 標籤之間的間距 */
+  margin-top: 10px;
+}
+
+/* 通用標籤設定：移除原本統一的背景，改為透明或白色，由下方特定 class 定義顏色 */
+.pub-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid transparent;
+}
+
+.pub-tag i {
+  margin-right: 6px;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+/* 1. 作者標籤 (淡藍色系) */
+.tag-authors {
+    background-color: #e0f2fe;
+    color: #0369a1;
+    border-color: #bae6fd;
+}
+.highlight-author {
+    color: var(--primary-darker);
+    text-decoration: underline;
+    font-weight: 700;
+}
+
+/* 2. 出處標籤 (淡綠色系) */
+.tag-venue {
+    background-color: #dcfce7;
+    color: #15803d;
+    border-color: #bbf7d0;
+}
+.tag-venue span {
+    font-style: italic;
+    font-weight: 500;
+}
+
+/* 3. 時間標籤 (淡橘色系) */
+.tag-date {
+    background-color: #fff7ed;
+    color: #9a3412;
+    border-color: #ffedd5;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+/* 移除原本 publication-item 可能存在的 margin */
+.publication-item {
+  padding: 20px 0 20px 50px;
+}
+
+/* 手機版微調 */
+@media (max-width: 768px) {
+  .pub-tags-row {
+    gap: 6px;
+  }
+  .pub-tag {
+    padding: 3px 8px;
+    font-size: 0.8rem;
+  }
+}
