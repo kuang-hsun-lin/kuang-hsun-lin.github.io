@@ -383,7 +383,7 @@
             html += `<div class="container bg-white pt-1 publication-section"><div class="interest-grid">`;
             dash.education.forEach(edu => {
                 const dateStr = edu.start + (edu.end ? `–${edu.end}` : '');
-                html += `<div class="interest-card"><div class="interest-icon"><i class="fa-solid fa-graduation-cap"></i></div><div class='interest-text'><h3 class="interest-title">${edu.degree}</h3><div class="list-item-details"><ul class="fa-ul education-details">` +
+                html += `<div class="interest-card"><div class="interest-icon card-icon-edu"><i class="fa-solid fa-graduation-cap"></i></div><div class='interest-text'><h3 class="interest-title">${edu.degree}</h3><div class="list-item-details"><ul class="fa-ul education-details">` +
                     `<li><span class="fa-li"><i class="fa-solid fa-graduation-cap"></i></span>${edu.dept}</li>` +
                     `<li><span class="fa-li"><i class="fa-solid fa-school-flag"></i></span>${edu.univ}</li>` +
                     `<li><span class="fa-li"><i class="fa-solid fa-calendar-days"></i></span>${dateStr}</li>` +
@@ -397,7 +397,7 @@
             html += `<div class="container bg-white pt-1 publication-section"><div class="interest-grid">`;
             dash.experience.forEach(exp => {
                 const dateStr = exp.start + (exp.end ? `–${exp.end}` : '–');
-                html += `<div class="interest-card"><div class="interest-icon"><i class="fa-solid fa-briefcase"></i></div><div class='interest-text'><h3 class="interest-title">${exp.title}</h3><div class="list-item-details"><ul class="fa-ul education-details">` +
+                html += `<div class="interest-card"><div class="interest-icon card-icon-exp"><i class="fa-solid fa-briefcase"></i></div><div class='interest-text'><h3 class="interest-title">${exp.title}</h3><div class="list-item-details"><ul class="fa-ul education-details">` +
                     `<li><span class="fa-li"><i class="fa-solid fa-building-columns"></i></span>${exp.affiliation}</li>` +
                     `<li><span class="fa-li"><i class="fa-solid fa-calendar-days"></i></span>${dateStr}</li>` +
                     (exp.desc ? `<li><span class="fa-li"><i class="fa-solid fa-note-sticky"></i></span>${exp.desc}</li>` : '') +
@@ -411,7 +411,7 @@
             html += `<div class="container bg-white pt-1 publication-section"><div class="interest-grid">`;
             dash.projects.forEach(proj => {
                 const dateStr = proj.start ? (proj.start + (proj.end ? `–${proj.end}` : '')) : '';
-                html += `<div class="interest-card"><div class="interest-icon"><i class="fa-solid fa-diagram-project"></i></div><div class='interest-text'><h3 class="interest-title">${proj.title}</h3><div class="list-item-details"><ul class="fa-ul education-details">` +
+                html += `<div class="interest-card"><div class="interest-icon card-icon-proj"><i class="fa-solid fa-diagram-project"></i></div><div class='interest-text'><h3 class="interest-title">${proj.title}</h3><div class="list-item-details"><ul class="fa-ul education-details">` +
                     (proj.role ? `<li><span class="fa-li"><i class="fa-solid fa-id-badge"></i></span>${proj.role}</li>` : '') +
                     (proj.funder ? `<li><span class="fa-li"><i class="fa-solid fa-landmark"></i></span>${proj.funder}</li>` : '') +
                     (dateStr ? `<li><span class="fa-li"><i class="fa-solid fa-calendar-days"></i></span>${dateStr}</li>` : '') +
@@ -514,7 +514,7 @@
                 sectionHeader('award', 'fa-solid fa-award', 'Awards') +
                 `<div class="container bg-white pt-1 publication-section"><div class="interest-grid">`;
             awards.forEach(aw => {
-                html += `<div class="interest-card"><div class="interest-icon"><i class="fa-solid fa-award"></i></div><div class='interest-text'><h3 class="interest-title">${aw.title}</h3><div class="list-item-details"><ul class="fa-ul education-details">` +
+                html += `<div class="interest-card"><div class="interest-icon card-icon-award"><i class="fa-solid fa-award"></i></div><div class='interest-text'><h3 class="interest-title">${aw.title}</h3><div class="list-item-details"><ul class="fa-ul education-details">` +
                     `<li><span class="fa-li"><i class="fa-solid fa-building-columns"></i></span>${aw.institute}</li>` +
                     (aw.desc ? `<li><span class="fa-li"><i class="fa-solid fa-note-sticky"></i></span>${aw.desc}</li>` : '') +
                     (aw.time ? `<li><span class="fa-li"><i class="fa-solid fa-calendar-days"></i></span>${aw.time}</li>` : '') +
@@ -630,7 +630,7 @@
     }
 
     // --- Main Data Loader ---
-    const CACHE_KEY = 'site_data_cache_v8';
+    const CACHE_KEY = 'site_data_cache_v9';
     const CACHE_EXPIRY_MS = 60 * 60 * 1000;
 
     const ranges = [
