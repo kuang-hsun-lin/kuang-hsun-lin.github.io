@@ -91,9 +91,12 @@
     // --- Helpers ---
     function highlightAuthor(authors) {
         if (!authors) return "";
-        return authors
-            .replace(/Lin,\s*Kuang-Hsun/g, '<b class="highlight-author">Lin, Kuang-Hsun</b>')
-            .replace(/Lin,\s*Guang-Xun/g, '<b class="highlight-author">Lin, Guang-Xun</b>');
+        // Match all Unicode dash/hyphen variants (-, ‐, ‑, ‒, –, —, −)
+        const dashPattern = '[\-\u2010-\u2015\u2212]';
+        const regex = new RegExp(`Lin,\\s*(Kuang|Guang)${dashPattern}(Hsun|Xun)`, 'g');
+        return authors.replace(regex, (match, first, second) => {
+            return `<b class="highlight-author">Lin, ${first}-${second}</b>`;
+        });
     }
 
     function formatDateDisplay(dateStr, yearStr, monthStr) {
@@ -630,7 +633,7 @@
     }
 
     // --- Main Data Loader ---
-    const CACHE_KEY = 'site_data_cache_v9';
+    const CACHE_KEY = 'site_data_cache_v10';
     const CACHE_EXPIRY_MS = 60 * 60 * 1000;
 
     const ranges = [
