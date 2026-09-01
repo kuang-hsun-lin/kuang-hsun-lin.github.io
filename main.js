@@ -358,7 +358,8 @@
         const bioContent = (dash.about.content || "").replace(/(Kuang-Hsun Lin)/g, '<strong>$1</strong>');
         const photoUrl = dash.about.photo || "https://lh3.googleusercontent.com/pw/AP1GczMEUGdtwza6KiRmnTREfA0thaF_kQEe-NXd3ElLBzRKQUs7EDgs6OI9goAIPrtRlqyEdkZWDZtFWgWPwSpaU-Zh9K7rJaIFifrf7N7yRww3WUtLsD2xkBAB11K8CFhJmjPaNcYt-hRJwsd7XKCqgKC0rw=w232";
 
-        return `<div class="container bg-white pt-1 publication-section">` +
+        return sectionHeader('about-sec', 'fa-solid fa-user', 'About') +
+            `<div class="container bg-white pt-1 publication-section">` +
             `<div class="about-card">` +
             `<div class="about-image"><img class="img-fluid" src="${photoUrl}" alt="Kuang-Hsun Lin 林光勛"></div>` +
             `<div class="about-text"><p>${bioContent}</p></div>` +
@@ -629,7 +630,7 @@
     }
 
     // --- Main Data Loader ---
-    const CACHE_KEY = 'site_data_cache_v7';
+    const CACHE_KEY = 'site_data_cache_v8';
     const CACHE_EXPIRY_MS = 60 * 60 * 1000;
 
     const ranges = [
