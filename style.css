@@ -1,53 +1,68 @@
 /* ===================================
-   STYLE.CSS - Final Version by Gemini (Sticky Container Fix)
-   Date: 2025-09-08
+   STYLE.CSS - Modern Academic Theme
+   Redesigned for Kuang-Hsun Lin
    =================================== */
 
 /* -------------------
-   1. CSS Variables (Theme)
+   1. CSS Variables
    ------------------- */
 :root {
     --primary-color: #34495E;
     --primary-darker: #2C3E50;
-    --secondary-color: #273645;
-    --background-light: #ECF0F1;
-    --background-white: #FFFFFF;
-    --text-dark: #2C3E50;
-    --text-light: #FFFFFF;
-    --border-color: #dee2e6;
-    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --primary-light: #4A6572;
+    --secondary-color: #334155;
+    --accent-color: #2563eb;
+    --accent-light: #eff6ff;
+    --background-light: #f8fafc;
+    --background-white: #ffffff;
+    --text-dark: #1e293b;
+    --text-muted: #64748b;
+    --text-light: #ffffff;
+    --border-color: #e2e8f0;
+    --border-subtle: #f1f5f9;
+    
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.06), 0 1px 4px -1px rgba(0, 0, 0, 0.04);
+    --shadow-hover: 0 10px 20px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
 
-    --sidebar-width: 300px;
-    --font-family-base: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    --sidebar-width: 280px;
+    --radius-sm: 6px;
+    --radius: 10px;
+    --radius-lg: 14px;
+    --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans TC', sans-serif;
 }
 
 /* -------------------
-   2. Global Styles
+   2. Global Reset & Typography
    ------------------- */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 body {
     font-family: var(--font-family-base);
     color: var(--text-dark);
     background-color: var(--background-light);
-    line-height: 1.7;
-	-webkit-hyphens: auto;
-	-ms-hyphens: auto;
-	hyphens: auto;
-    text-align: justify;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
     color: var(--text-dark);
+    line-height: 1.3;
 }
 
 a {
     color: var(--primary-color);
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
 }
 
 a:hover {
-    color: var(--primary-darker);
+    color: var(--accent-color);
     text-decoration: none;
 }
 
@@ -57,17 +72,18 @@ a:hover {
 .wrapper {
     position: relative;
     min-height: 100vh;
+    display: flex;
 }
 
+/* Sidebar */
 .sidebar {
-    box-sizing: border-box;
     width: var(--sidebar-width);
     min-width: var(--sidebar-width);
     height: 100vh;
     position: fixed;
     top: 0;
     left: 0;
-    padding: 30px;
+    padding: 24px 18px;
     background: var(--background-white);
     border-right: 1px solid var(--border-color);
     display: flex;
@@ -78,35 +94,26 @@ a:hover {
     z-index: 1000;
 }
 
-.content {
-    margin-left: var(--sidebar-width);
-    width: calc(100% - var(--sidebar-width));
-    padding-bottom: 50px;
-    background-color: var(--background-white);
-}
-
-/* -------------------
-   4. Sidebar Content
-   ------------------- */
 .sidebar-text {
     width: 100%;
 }
 
 .sidebar img.rounded-circle {
-    width: 150px;
-    height: 150px;
+    width: 125px;
+    height: 125px;
     object-fit: cover;
     border-radius: 50%;
-    background-color: transparent !important;
-    border: 6px solid var(--background-light);
+    border: 4px solid var(--background-light);
     box-shadow: var(--shadow);
+    margin-bottom: 0.75rem !important;
 }
 
 .sidebar h1 {
-    font-size: 1.8rem;
-    margin-top: 1rem;
-    margin-bottom: 1.5rem;
-    line-height: 1.3;
+    font-size: 1.45rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.25;
+    color: var(--text-dark);
 }
 
 .sidebar .fa-ul {
@@ -114,65 +121,82 @@ a:hover {
     padding-left: 0;
     text-align: left;
     display: inline-block;
+    margin-bottom: 0.75rem;
 }
 
 .sidebar .fa-ul li {
-    padding-bottom: 0.5rem;
-    font-size: 0.95rem;
+    padding-bottom: 0.35rem;
+    font-size: 0.88rem;
     color: var(--secondary-color);
+    line-height: 1.4;
 }
 
 .sidebar .fa-ul .fa-li {
-    color: var(--secondary-color);
+    color: var(--primary-color);
 }
 
 .sidebar a.btn.btn-outline-primary {
-    width: 42px;
-    height: 42px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin: 0 4px;
+    margin: 2px;
     padding: 0;
-    border-color: var(--border-color);
+    border: 1px solid var(--border-color);
     color: var(--secondary-color);
+    background: var(--background-light);
+    transition: all 0.2s ease;
 }
 
 .sidebar a.btn.btn-outline-primary:hover {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
     color: var(--text-light);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
 }
 
 .sidebar small {
     display: block;
     margin: 0 auto;
-    color: var(--secondary-color);
+    color: var(--text-muted);
+    font-size: 0.82rem;
 }
 
 .sidebar small.text-justify {
     text-align: justify;
+    line-height: 1.45;
+    background: var(--background-light);
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+    margin-top: 0.5rem;
 }
 
 .sidebar small p.text-right {
     text-align: right;
-    margin-top: 0.5rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0;
     font-style: italic;
-    font-size: 0.9em;
+    color: var(--primary-color);
+    font-weight: 600;
 }
 
-.sidebar small a[href*="htmlcodex.com"] {
-    font-size: 0.8em;
-    color: #ccc;
+/* Content Area */
+.content {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    min-height: 100vh;
+    padding-bottom: 40px;
+    background-color: var(--background-light);
 }
 
 /* -------------------
-   5. Navbar Styles
+   4. Navbar (Glassmorphism)
    ------------------- */
-/* <<< THIS IS THE UPDATE, PART 1 >>> */
-/* Apply sticky positioning and layout to the CONTAINER div */
 #includeNavbar {
     margin-left: var(--sidebar-width);
     width: calc(100% - var(--sidebar-width));
@@ -181,220 +205,245 @@ a:hover {
     z-index: 999;
 }
 
-/* Style the actual navbar element INSIDE the container */
 #includeNavbar .navbar {
-    background-color: var(--primary-darker) !important;
-    padding: 0.5rem 1.5rem;
+    background-color: rgba(44, 62, 80, 0.95) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 0.4rem 1.25rem;
     margin: 0;
     border-radius: 0;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
 }
 
-#includeNavbar .navbar-collapse {
-    justify-content: center !important;
-}
-
-#includeNavbar .navbar-brand {
-    font-weight: 700;
-    color: var(--text-light) !important;
+#includeNavbar .navbar-nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    margin: 0 auto;
 }
 
 #includeNavbar .nav-link {
     font-weight: 500;
-    font-size: 1.05rem;
-    color: var(--background-light) !important;
-    padding: 0.6rem 1.2rem;
-    position: relative;
-    border-radius: 6px;
-    margin: 0 4px;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.85) !important;
+    padding: 0.45rem 1.1rem;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s ease;
 }
 
-#includeNavbar .nav-link:hover,
-#includeNavbar .nav-link.active {
-    color: var(--text-light) !important;
+#includeNavbar .nav-link:hover {
+    color: #ffffff !important;
     background-color: rgba(255, 255, 255, 0.15);
 }
 
-#includeNavbar .navbar-toggler {
-    border-color: rgba(255, 255, 255, 0.2);
-}
-
-#includeNavbar .navbar-toggler-icon {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+#includeNavbar .nav-link.active {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.22);
+    font-weight: 600;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* -------------------
-   6. Helper Components (Floating Icons)
+   5. Section Header Banner
    ------------------- */
-.back-to-top, .lnk {
-    position: fixed;
-    display: none;
-    right: 25px;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: rgba(52, 73, 94, 0.1);
-    border: 1px solid rgba(52, 73, 94, 0.2);
-    color: var(--secondary-color);
-    font-size: 1.2rem;
-    text-align: center;
-    line-height: 44px;
-    z-index: 999;
-	animation-name: action;
-	animation-duration: 2s;
-	animation-iteration-count: infinite;
-	animation-timing-function: ease-in-out;
-	display: block;
-	opacity: 0;
-	pointer-events: none;
-}
-
-.back-to-top.show, .lnk.show {
-    display: block;
-	opacity: 1;
-	pointer-events: auto;
-}
-
-.back-to-top:hover, .lnk:hover {
-    background: var(--primary-color);
-    border-color: var(--primary-color);
-    color: var(--text-light);
-    text-decoration: none;
-}
-
-.back-to-top { bottom: 25px; }
-#scaward { bottom: 75px; }
-#scpatent { bottom: 125px; }
-#scconference { bottom: 175px; }
-#scjournal { bottom: 225px; }
-
-/* -------------------
-   7. Page Section Components
-   ------------------- */
-#info, #about, #publications {
-    padding: 0;
-    margin: 0;
-}
-
 .publication-section.bg-primary {
-    background-color: var(--primary-color) !important;
-    padding: 0.75rem 40px;
+    background: linear-gradient(135deg, var(--primary-darker), var(--primary-color)) !important;
+    padding: 0.6rem 20px;
+    margin-top: 18px;
+    margin-bottom: 0;
+    border-top-left-radius: var(--radius);
+    border-top-right-radius: var(--radius);
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.publication-section.bg-primary:first-of-type {
+    margin-top: 18px;
 }
 
 .publication-section h2 {
-    font-size: 1.2rem;
-    letter-spacing: 1.5px;
+    font-size: 1.08rem;
+    letter-spacing: 0.5px;
     margin: 0;
     color: var(--text-light);
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
+.publication-section h2 i {
+    font-size: 0.95rem;
+    opacity: 0.9;
+}
+
+.publication-section.bg-white {
+    background-color: var(--background-white) !important;
+    border-bottom-left-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+    border-top: none;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+}
+
+/* -------------------
+   6. Cards & Grid Layout
+   ------------------- */
 .interest-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
-    gap: 25px;
-    padding: 40px;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 16px;
+    padding: 20px;
 }
 
 .interest-card {
     display: flex;
     align-items: flex-start;
-    background-color: var(--background-light);
-    padding: 25px;
+    background-color: var(--background-white);
+    padding: 16px;
     border: 1px solid var(--border-color);
-    border-radius: 8px;
-    transition: all 0.3s ease;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.25s ease;
 }
 
 .interest-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow);
-    border-color: var(--primary-color);
-    background-color: var(--background-white);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+    border-color: #cbd5e1;
 }
 
 .interest-icon {
     flex-shrink: 0;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background-color: rgba(52, 73, 94, 0.1);
+    width: 46px;
+    height: 46px;
+    border-radius: 10px;
+    background: var(--accent-light);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 20px;
+    margin-right: 14px;
 }
 
 .interest-icon i {
-    font-size: 1.8rem;
+    font-size: 1.35rem;
     color: var(--primary-color);
 }
 
-.interest-title {
-    font-size: 1.25rem;
-    margin: .75rem 0 .75rem;
+.interest-text {
+    flex: 1;
 }
 
-.interest-desc, .education-details {
-    font-size: 0.95rem;
-    color: var(--secondary-color);
+.interest-title {
+    font-size: 1.05rem;
+    margin: 0 0 0.35rem 0;
+    color: var(--text-dark);
+}
+
+.interest-desc {
+    font-size: 0.88rem;
+    color: var(--text-muted);
     margin: 0;
+    line-height: 1.5;
 }
 
 .education-details {
     list-style: none;
     padding: 0;
-    line-height: 1.6;
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--secondary-color);
+    line-height: 1.5;
 }
 
 .education-details li {
-    padding-bottom: 0.4rem;
+    padding-bottom: 0.25rem;
 }
 
 .education-details .fa-li {
     color: var(--primary-color);
 }
 
-.about-card {
+/* -------------------
+   7. Publication Page (List & Tabs)
+   ------------------- */
+.pub-filter-container {
     display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 16px 20px;
+    background: var(--background-white);
+    border-radius: var(--radius);
+    margin: 18px auto 0;
+    max-width: 1200px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+}
+
+.pub-filter-btn {
+    display: inline-flex;
     align-items: center;
-    gap: 40px;
-    padding: 40px;
-}
-
-.about-image {
-    flex: 0 0 300px;
-}
-
-.about-image img {
-    width: 100%;
-    border-radius: 8px;
-    box-shadow: var(--shadow);
-}
-
-.about-text p {
-    font-size: 1.05rem;
-    line-height: 1.8;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    font-weight: 500;
     color: var(--secondary-color);
-    margin: 0;
+    background: var(--background-light);
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.about-text p strong {
+.pub-filter-btn:hover {
+    background: #e2e8f0;
     color: var(--text-dark);
+}
+
+.pub-filter-btn.active {
+    background: var(--primary-darker);
+    color: var(--text-light);
+    border-color: var(--primary-darker);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pub-filter-count {
+    background: rgba(0, 0, 0, 0.08);
+    padding: 1px 6px;
+    border-radius: 10px;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.pub-filter-btn.active .pub-filter-count {
+    background: rgba(255, 255, 255, 0.25);
+    color: var(--text-light);
 }
 
 .publication-list {
     list-style: none;
-    padding: 40px;
-    margin-top: -15px;
+    padding: 10px 20px 16px;
+    margin: 0;
     counter-reset: pub-counter;
 }
 
 .publication-item {
     position: relative;
-    padding: 25px 0 25px 50px;
-    border-bottom: 1px solid var(--border-color);
+    padding: 13px 0 13px 44px;
+    border-bottom: 1px solid var(--border-subtle);
     counter-increment: pub-counter;
+    transition: background-color 0.2s ease;
+}
+
+.publication-item:hover {
+    background-color: #fafbfc;
 }
 
 .publication-item:last-of-type {
@@ -404,596 +453,457 @@ a:hover {
 .publication-item::before {
     content: counter(pub-counter) ".";
     position: absolute;
-    left: 0;
-    top: 25px;
-    font-size: 1.2rem;
+    left: 4px;
+    top: 13px;
+    font-size: 0.95rem;
     font-weight: 700;
-    width: 40px;
+    width: 32px;
     text-align: right;
-    color: var(--primary-color);
-}
-
-.publication-item span {
-	margin: .5rem;
+    color: var(--text-muted);
 }
 
 .pub-main {
-    margin-bottom: 10px;
+    margin-bottom: 4px;
 }
 
 .pub-title {
-    font-size: 1.2rem;
+    font-size: 1.02rem;
     font-weight: 600;
-    margin: 0 0 8px;
+    margin: 0 0 6px;
     line-height: 1.4;
+    color: var(--text-dark);
+}
+
+.pub-title a {
+    color: var(--text-dark);
+}
+
+.pub-title a:hover {
+    color: var(--accent-color);
 }
 
 .pub-pdf-link {
-    font-size: 1.1rem;
-    margin-left: 8px;
-    display: inline-block;
-    color: var(--primary-color);
-}
-.pub-pdf-link:hover {
-    color: var(--primary-darker);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: #fee2e2;
+    color: #dc2626 !important;
+    border: 1px solid #fecaca;
+    margin-left: 6px;
+    vertical-align: middle;
 }
 
-.pub-authors, .pub-meta {
-    font-size: 0.95rem;
+.pub-pdf-link:hover {
+    background: #fca5a5;
+    color: #991b1b !important;
+}
+
+.pub-tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.86rem;
     color: var(--secondary-color);
 }
 
-.pub-authors b {
-    color: var(--text-dark);
+.pub-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
 }
 
-.pub-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px 20px;
-    margin-top: 10px;
+.pub-tag i {
+    font-size: 0.8rem;
+    color: var(--text-muted);
 }
 
-.pub-authors i, .pub-meta i {
-    margin-right: 8px;
-    color: var(--primary-color);
-    width: 1.2em;
+.highlight-author {
+    color: var(--primary-darker);
+    background: #e2e8f0;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 700;
 }
 
 /* -------------------
-   8. Responsive Design
+   8. About & Welcome Sections
    ------------------- */
-@media (max-width: 991.98px) {
-    .sidebar {
-        width: 100%;
-        height: auto;
-        position: static;
-        border-right: none;
-        border-bottom: 1px solid var(--border-color);
-    }
-    #includeNavbar, .content {
-        margin-left: 0;
-        width: 100%;
-    }
-    #includeNavbar {
-        position: sticky;
-    }
-    #includeNavbar .nav-link:hover,
-    #includeNavbar .nav-link.active {
-        background-color: rgba(255, 255, 255, 0.15);
-        color: var(--text-light) !important;
-    }
-}
-
-@media (max-width: 768px) {
-    .publication-section.bg-primary {
-        padding: 0.75rem 25px;
-    }
-	
-	.interest-grid {
-		grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-	}
-
-    .interest-grid, .about-card, .publication-list {
-        padding: 25px;
-    }
-    .about-card {
-        flex-direction: column;
-        text-align: left;
-        gap: 25px;
-    }
-    .about-image {
-        flex-basis: auto;
-        width: 100%;
-        max-width: 350px;
-    }
-    .publication-item {
-        padding-left: 40px;
-    }
-    .publication-item::before {
-        width: 30px;
-        left: -5px;
-    }
-    .pub-title {
-        font-size: 1.1rem;
-    }
-}
-
-@keyframes action {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-15px);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
-
-/* --- Lab Members Styles --- */
-.member-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
-    padding: 20px 40px;
-}
-
-.member-card {
-    background-color: var(--background-light);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 25px 20px;
-    text-align: center;
-    transition: all 0.3s ease;
+.about-card {
     display: flex;
-    flex-direction: column;
     align-items: center;
+    gap: 28px;
+    padding: 24px;
 }
 
-.member-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow);
-    border-color: var(--primary-color);
-    background-color: var(--background-white);
+.about-image {
+    flex: 0 0 240px;
 }
 
-.member-img {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 15px;
-    border: 3px solid var(--background-white);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.member-info {
+.about-image img {
     width: 100%;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
 }
 
-.member-name {
-    font-size: 1.2rem;
-    color: var(--text-dark);
-    margin-bottom: 5px;
-}
-
-.member-role {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--primary-color);
-    margin-bottom: 10px;
-}
-
-.member-desc {
-    font-size: 0.85rem;
+.about-text p {
+    font-size: 0.98rem;
+    line-height: 1.7;
     color: var(--secondary-color);
     margin: 0;
 }
 
-@media (max-width: 768px) {
-    .member-grid {
-        padding: 20px;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    }
+.about-text p strong {
+    color: var(--text-dark);
 }
 
-/* =========================================
-   News Grid Layout (自動跳欄版)
-   ========================================= */
+.welcome-card {
+    padding: 20px 24px;
+}
 
-.news-grid {
-  display: grid;
-  /* 關鍵：minmax(320px, 1fr) 確保卡片最少 320px，寬度夠就自動排成多欄 */
-  grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
-  gap: 25px;
-  padding: 40px;
+.welcome-card p {
+    font-size: 0.96rem;
+    line-height: 1.65;
+    color: var(--secondary-color);
+    margin-bottom: 0.75rem;
+}
+
+.welcome-card p:last-child {
+    margin-bottom: 0;
+}
+
+/* -------------------
+   9. News, Members, Resources
+   ------------------- */
+.news-grid, .resource-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 18px 20px;
 }
 
 .news-card {
-  background-color: var(--background-white);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column; /* 讓內容垂直排列 */
-  transition: .3s;
+    display: flex;
+    gap: 14px;
+    padding: 14px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    background: var(--background-white);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
 }
 
 .news-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow);
-  border-color: var(--primary-color);
+    box-shadow: var(--shadow);
+    border-color: #cbd5e1;
 }
 
-/* 卡片上方：放置日期與標籤 */
 .news-card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
 }
 
-.news-badge-container {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* 縮小一點的日曆方塊以符合卡片比例 */
 .news-date-box {
-  background-color: var(--background-light);
-  border-top: 3px solid var(--primary-color);
-  border-radius: 4px;
-  padding: 5px 10px;
-  text-align: center;
-  min-width: 60px;
+    width: 50px;
+    padding: 4px 0;
+    border-radius: var(--radius-sm);
+    background: var(--background-light);
+    border: 1px solid var(--border-color);
+    text-align: center;
 }
 
 .date-month {
-  display: block;
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: var(--secondary-color);
-  text-transform: uppercase;
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--primary-color);
 }
 
 .date-day {
-  display: block;
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: var(--primary-color);
-  line-height: 1;
-}
-
-/* 卡片主體 */
-.news-title {
-  font-size: 1.1rem;
-  margin: 0 0 10px 0;
-  line-height: 1.5;
-  color: var(--text-dark);
-}
-
-.news-text {
-  font-size: 0.9rem;
-  color: var(--secondary-color);
-  line-height: 1.6;
-  /* 限制內文最多顯示三行，避免卡片長度落差太大 */
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* 手機版微調 */
-@media (max-width: 768px) {
-  .news-grid {
-    padding: 20px;
-    grid-template-columns: 1fr; /* 手機版強制一欄 */
-  }
-}
-
-/* =========================================
-   Resource Grid Layout (自動跳欄卡片版)
-   ========================================= */
-
-.resource-grid {
-  display: grid;
-  /* 最小 320px，寬度夠會自動排成 2 欄或 3 欄 */
-  grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
-  gap: 25px;
-  padding: 40px;
-}
-
-.resource-card {
-  background-color: var(--background-white);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 25px;
-  display: flex;
-  flex-direction: column;
-  transition: .3s;
-  height: 100%; /* 讓卡片填滿 Grid 的高度 */
-}
-
-.resource-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow);
-  border-color: var(--primary-color);
-}
-
-/* 標題設定 */
-.resource-title {
-  font-size: 1.15rem;
-  font-weight: 600;
-  margin: 0 0 10px 0;
-  line-height: 1.4;
-  color: var(--text-dark);
-}
-
-.resource-title a {
-  text-decoration: none;
-  color: inherit;
-  transition: .3s;
-}
-
-.resource-title a:hover {
-  color: var(--primary-color);
-  text-decoration: underline;
-}
-
-/* 日期與 Metadata */
-.resource-meta {
-  font-size: 0.85rem;
-  color: var(--secondary-color);
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-}
-
-.resource-meta i, .pin-icon {
-  margin-right: 8px;
-  color: var(--primary-color);
-}
-
-/* 資源描述 */
-.resource-text {
-  font-size: 0.95rem;
-  color: var(--secondary-color);
-  line-height: 1.6;
-  flex-grow: 1; /* 關鍵設定：會自動伸展，確保卡片底部對齊 */
-}
-
-/* RWD 手機版微調 */
-@media (max-width: 768px) {
-  .resource-grid {
-    padding: 20px;
-    grid-template-columns: 1fr; /* 手機版強制變回單欄 */
-  }
-}
-
-/* =========================================
-   Member Section (補充樣式)
-   ========================================= */
-
-/* 預設無照片大頭貼 */
-.avatar-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 4rem; /* 讓 user icon 變大 */
-}
-.avatar-f { background-color: #fce7f3; color: #f472b6; }
-.avatar-m { background-color: #e0f2fe; color: #38bdf8; }
-.avatar-default { background-color: var(--background-light); color: var(--border-color); }
-
-/* 姓名連結與備用姓名 */
-.member-name a {
-  text-decoration: none;
-  color: inherit;
-  transition: .3s;
-}
-.member-name a:hover {
-  color: var(--primary-color);
-  text-decoration: underline;
-}
-.member-name-alt {
-  font-size: 0.95rem;
-  color: var(--secondary-color);
-  margin-bottom: 5px;
-}
-
-/* 性別 Icon */
-.icon-m {
-  color: #3498db;
-  font-size: 0.8em;
-}
-.icon-f {
-  color: #e74c3c;
-  font-size: 0.8em;
-}
-
-/* =========================================
-   Welcome / About Section
-   ========================================= */
-
-/* 覆寫原本 about-card 的 40px padding，改為你設定的 20px 40px */
-.welcome-card {
-  padding: 20px 40px;
-}
-
-/* 處理段落間距 */
-.welcome-card .about-text p {
-  margin-bottom: 15px;
-}
-
-/* 讓最後一個段落底部不要有間距，確保卡片 padding 對稱 */
-.welcome-card .about-text p:last-child {
-  margin-bottom: 0;
-}
-
-/* RWD 手機版微調 - 對齊全站手機版間距 */
-@media (max-width: 768px) {
-  .welcome-card {
-    padding: 25px; 
-  }
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--text-dark);
 }
 
 .news-badge {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 20px; /* 圓角膠囊形狀 */
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  vertical-align: middle;
-  margin-right: 10px;
-  margin-bottom: 3px;
-  background-color: var(--border-color); /* 預設背景色 */
-  color: var(--secondary-color); /* 預設文字色 */
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
 }
-/* 發表 (publish) - 學術專業的藍色 */
+
 .badge-publish {
-  background-color: #e0f2fe;
-  color: #0284c7;
+    background: #dbeafe;
+    color: #1e40af;
 }
 
-/* 獎項 (award) - 榮耀的金色 */
-.badge-award {
-  background-color: #fef08a;
-  color: #ca8a04;
-}
-
-/* 新成員加入 (new member join) - 充滿活力與歡迎的綠色 */
 .badge-new-join {
-  background-color: #dcfce7;
-  color: #16a34a;
+    background: #dcfce7;
+    color: #166534;
 }
 
-/* 成員畢業 (member graduate) - 象徵成就與榮譽的紫色 */
-.badge-graduate {
-  background-color: #f3e8ff;
-  color: #9333ea;
-}
-
-/* =========================================
-   Publication List (補充與微調)
-   ========================================= */
-
-/* 讓加粗的作者名稱套用主色系，凸顯 PI 的名字 */
-.highlight-author {
-  color: var(--primary-color);
-  font-weight: 700;
-}
-
-/* 讓 Meta 資訊 (期刊、日期) 水平排列並保持間距 */
-.pub-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px 25px; /* 元素之間的間距 */
-  margin-top: 8px;
-  align-items: center;
-}
-
-/* 期刊名稱採用斜體，符合學術常規 */
-.pub-journal span, .pub-journal {
-  font-style: italic;
-  color: var(--text-dark); /* 讓期刊名稱比一般灰色文字再深一點 */
-}
-
-/* PDF 按鈕 Hover 效果強化 */
-.pub-pdf-link {
-  color: #e74c3c; /* PDF 圖示通常用紅色較直覺 */
-  margin-left: 10px;
-  transition: .3s;
-}
-.pub-pdf-link:hover {
-  color: #c0392b;
-  transform: scale(1.1);
-}
-
-/* 為每篇論文加入微妙的 Hover 互動感 */
-.publication-item {
-  transition: background-color 0.3s ease;
-  border-radius: 4px; /* 右側稍微導角 */
-}
-.publication-item:hover {
-  background-color: #f8f9fa; /* 滑鼠移過去時有極淺的灰底，幫助專注閱讀該篇 */
-}
-
-/* =========================================
-   Publication Tags Style (標籤方塊化)
-   ========================================= */
-
-/* 標籤整列的容器 */
-.pub-tags-row {
-  display: flex;
-  flex-wrap: wrap; /* 螢幕不夠寬時才換行 */
-  gap: 8px;        /* 標籤之間的間距 */
-  margin-top: 10px;
-}
-
-/* 通用標籤設定：移除原本統一的背景，改為透明或白色，由下方特定 class 定義顏色 */
-.pub-tag {
-    display: inline-flex;
-    align-items: center;
-    padding: 4px 12px;
-    border-radius: 6px;
+.pin-icon {
+    color: #e11d48;
     font-size: 0.85rem;
-    font-weight: 500;
-    border: 1px solid transparent;
 }
 
-.pub-tag i {
-  margin-right: 6px;
-  font-size: 0.8rem;
-  opacity: 0.8;
+.news-card-body {
+    flex: 1;
 }
 
-/* 1. 作者標籤 (淡藍色系) */
-.tag-authors {
-    background-color: #e0f2fe;
-    color: #0369a1;
-    border-color: #bae6fd;
-}
-.highlight-author {
-    color: var(--primary-darker);
-    text-decoration: underline;
-    font-weight: 700;
+.news-title {
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 0 0 4px;
+    color: var(--text-dark);
 }
 
-/* 2. 出處標籤 (淡綠色系) */
-.tag-venue {
-    background-color: #dcfce7;
-    color: #15803d;
-    border-color: #bbf7d0;
-}
-.tag-venue span {
-    font-style: italic;
-    font-weight: 500;
+.news-text {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.45;
 }
 
-/* 3. 時間標籤 (淡橘色系) */
-.tag-date {
-    background-color: #fff7ed;
-    color: #9a3412;
-    border-color: #ffedd5;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
+/* Member Grid */
+.member-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    padding: 20px;
 }
 
-/* 移除原本 publication-item 可能存在的 margin */
-.publication-item {
-  padding: 20px 0 20px 50px;
+.member-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    background: var(--background-white);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.25s ease;
 }
 
-/* 手機版微調 */
-@media (max-width: 768px) {
-  .pub-tags-row {
-    gap: 6px;
-  }
-  .pub-tag {
-    padding: 3px 8px;
+.member-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.member-img {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.avatar-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--background-light);
+    color: var(--text-muted);
+    font-size: 1.5rem;
+}
+
+.member-info h3.member-name {
+    font-size: 0.98rem;
+    margin: 0 0 2px;
+}
+
+.icon-m { color: #2563eb; font-size: 0.85rem; }
+.icon-f { color: #db2777; font-size: 0.85rem; }
+
+.member-name-alt {
+    font-size: 0.84rem;
+    color: var(--text-muted);
+}
+
+.member-role {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: var(--accent-light);
+    color: var(--accent-color);
+    margin: 3px 0;
+}
+
+.member-desc {
     font-size: 0.8rem;
-  }
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* Resources */
+.resource-card {
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    background: var(--background-white);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+}
+
+.resource-card:hover {
+    border-color: var(--accent-color);
+    box-shadow: var(--shadow);
+}
+
+.resource-title {
+    font-size: 0.95rem;
+    margin: 0 0 4px;
+}
+
+.resource-meta {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+}
+
+.resource-text {
+    font-size: 0.86rem;
+    color: var(--secondary-color);
+}
+
+/* -------------------
+   10. Floating Scroll Buttons
+   ------------------- */
+.back-to-top, .lnk {
+    position: fixed;
+    display: none;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(44, 62, 80, 0.85);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-light);
+    font-size: 1rem;
+    text-align: center;
+    line-height: 40px;
+    z-index: 999;
+    transition: all 0.2s ease;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.back-to-top.show, .lnk.show {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.back-to-top:hover, .lnk:hover {
+    background: var(--accent-color);
+    color: #ffffff;
+    transform: scale(1.08);
+}
+
+.back-to-top { bottom: 20px; }
+#scaward { bottom: 65px; }
+#scpatent { bottom: 110px; }
+#scconference { bottom: 155px; }
+#scjournal { bottom: 200px; }
+
+/* -------------------
+   11. Responsive Design
+   ------------------- */
+@media (max-width: 991.98px) {
+    .wrapper {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        min-width: 100%;
+        height: auto;
+        position: static;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 20px;
+    }
+    
+    #includeNavbar, .content {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    #includeNavbar {
+        position: sticky;
+        top: 0;
+    }
+
+    .publication-section.bg-primary,
+    .publication-section.bg-white,
+    .pub-filter-container {
+        border-radius: 0;
+        margin-left: 0;
+        margin-right: 0;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .interest-grid {
+        grid-template-columns: 1fr;
+        padding: 14px;
+        gap: 12px;
+    }
+
+    .about-card {
+        flex-direction: column;
+        text-align: left;
+        gap: 16px;
+        padding: 16px;
+    }
+
+    .about-image {
+        flex: auto;
+        width: 100%;
+        max-width: 220px;
+        margin: 0 auto;
+    }
+
+    .publication-list {
+        padding: 10px 14px 14px;
+    }
+
+    .publication-item {
+        padding: 10px 0 10px 36px;
+    }
+
+    .publication-item::before {
+        width: 26px;
+        left: 2px;
+        font-size: 0.88rem;
+    }
+
+    .pub-title {
+        font-size: 0.95rem;
+    }
+
+    .pub-filter-container {
+        padding: 12px 14px;
+        gap: 6px;
+    }
+
+    .pub-filter-btn {
+        padding: 4px 10px;
+        font-size: 0.8rem;
+    }
 }

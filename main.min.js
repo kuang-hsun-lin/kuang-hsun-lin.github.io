@@ -35,6 +35,7 @@
     }
 
     function initPageInteractions() {
+        // Floating Back-to-top and Jump-links
         document.querySelectorAll('.back-to-top, .lnk').forEach(link => {
             link.addEventListener('click', (e) => {
                 const href = link.getAttribute('href');
@@ -64,6 +65,25 @@
                 } else {
                     btn.classList.remove('show');
                 }
+            });
+        });
+
+        // Publication Filter Tabs Interaction
+        document.querySelectorAll('.pub-filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const filter = btn.getAttribute('data-filter');
+                document.querySelectorAll('.pub-filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const sections = document.querySelectorAll('.pub-category-section');
+                sections.forEach(sec => {
+                    const cat = sec.getAttribute('data-category');
+                    if (filter === 'all' || cat === filter) {
+                        sec.style.display = 'block';
+                    } else {
+                        sec.style.display = 'none';
+                    }
+                });
             });
         });
     }
@@ -354,7 +374,7 @@
             dash.interests.forEach(item => {
                 html += `<div class="interest-card"><div class="interest-icon"><i class="fa-solid fa-${item.icon}"></i></div><div class='interest-text'><h3 class="interest-title">${item.item}</h3><p class="interest-desc">${item.desc}</p></div></div>`;
             });
-            html += `</div></div><br>`;
+            html += `</div></div>`;
         }
 
         if (dash.education.length > 0) {
@@ -368,7 +388,7 @@
                     `<li><span class="fa-li"><i class="fa-solid fa-calendar-days"></i></span>${dateStr}</li>` +
                     `</ul></div></div></div>`;
             });
-            html += `</div></div><br>`;
+            html += `</div></div>`;
         }
 
         if (dash.experience.length > 0) {
@@ -382,7 +402,7 @@
                     (exp.desc ? `<li><span class="fa-li"><i class="fa-solid fa-note-sticky"></i></span>${exp.desc}</li>` : '') +
                     `</ul></div></div></div>`;
             });
-            html += `</div></div><br>`;
+            html += `</div></div>`;
         }
 
         if (dash.projects.length > 0) {
@@ -396,7 +416,7 @@
                     (dateStr ? `<li><span class="fa-li"><i class="fa-solid fa-calendar-days"></i></span>${dateStr}</li>` : '') +
                     `</ul></div></div></div>`;
             });
-            html += `</div></div><br>`;
+            html += `</div></div>`;
         }
 
         if (dash.services.length > 0) {
@@ -408,7 +428,7 @@
                     (svc.time ? `<li><span class="fa-li"><i class="fa-solid fa-calendar-days"></i></span>${svc.time}</li>` : '') +
                     `</ul></div></div></div>`;
             });
-            html += `</div></div><br>`;
+            html += `</div></div>`;
         }
 
         if (dash.courses.length > 0) {
@@ -427,7 +447,22 @@
     }
 
     function renderPublicationPage(pubs, dash) {
-        let html = '';
+        const journals = pubs.filter(p => p.type === 'article').sort((a, b) => b.sortTime - a.sortTime);
+        const conferences = pubs.filter(p => p.type === 'inproceedings').sort((a, b) => b.sortTime - a.sortTime);
+        const patents = pubs.filter(p => p.type === 'misc').sort((a, b) => b.sortTime - a.sortTime);
+        const awards = dash.awards || [];
+        const tutorials = dash.tutorials || [];
+        const totalCount = journals.length + conferences.length + patents.length + awards.length + tutorials.length;
+
+        // Filter Pills Bar
+        let html = `<div class="pub-filter-container">` +
+            `<button class="pub-filter-btn active" data-filter="all">All <span class="pub-filter-count">${totalCount}</span></button>` +
+            `<button class="pub-filter-btn" data-filter="journal"><i class="fa-solid fa-book"></i> Journals <span class="pub-filter-count">${journals.length}</span></button>` +
+            `<button class="pub-filter-btn" data-filter="conference"><i class="fa-solid fa-note-sticky"></i> Conferences <span class="pub-filter-count">${conferences.length}</span></button>` +
+            `<button class="pub-filter-btn" data-filter="patent"><i class="fa-solid fa-lightbulb"></i> Patents <span class="pub-filter-count">${patents.length}</span></button>` +
+            `<button class="pub-filter-btn" data-filter="award"><i class="fa-solid fa-award"></i> Awards <span class="pub-filter-count">${awards.length}</span></button>` +
+            `<button class="pub-filter-btn" data-filter="other">Others <span class="pub-filter-count">${tutorials.length}</span></button>` +
+            `</div>`;
 
         const renderListItems = (list) => {
             return list.map(pub => {
@@ -439,7 +474,7 @@
                 return `<li class="publication-item" data-sort="${pub.sortTime}">` +
                     `<div class="pub-main"><h3 class="pub-title">` +
                     (pub.doi ? `<a href="${pub.doi}" target="_blank" rel="noopener noreferrer">${pub.title}</a>` : pub.title) +
-                    (pub.pdf ? ` <a class="pub-pdf-link" title="PDF" href="${pub.pdf}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-file-pdf"></i></a>` : '') +
+                    (pub.pdf ? ` <a class="pub-pdf-link" title="PDF" href="${pub.pdf}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-file-pdf"></i> PDF</a>` : '') +
                     `</h3><div class="pub-tags-row">` +
                     `<span class="pub-tag tag-authors"><i class="fa-solid fa-user-group"></i> <span>${highlightAuthor(pub.authors)}</span></span>` +
                     (venueText ? `<span class="pub-tag tag-venue"><i class="fa-solid ${venueIcon}"></i> <span>${venueText}</span></span>` : '') +
@@ -448,47 +483,57 @@
             }).join('');
         };
 
-        const journals = pubs.filter(p => p.type === 'article').sort((a, b) => b.sortTime - a.sortTime);
+        // 1. Journals
         if (journals.length > 0) {
-            html += sectionHeader('journal', 'fa-solid fa-book', 'Journal Articles');
-            html += `<div class="container bg-white pt-1 publication-section"><ol class="publication-list">${renderListItems(journals)}</ol></div><br>`;
+            html += `<div class="pub-category-section" data-category="journal">` +
+                sectionHeader('journal', 'fa-solid fa-book', 'Journal Articles') +
+                `<div class="container bg-white pt-1 publication-section"><ol class="publication-list">${renderListItems(journals)}</ol></div>` +
+                `</div>`;
         }
 
-        const conferences = pubs.filter(p => p.type === 'inproceedings').sort((a, b) => b.sortTime - a.sortTime);
+        // 2. Conferences
         if (conferences.length > 0) {
-            html += sectionHeader('conference', 'fa-solid fa-note-sticky', 'Conference & Proceeding Papers');
-            html += `<div class="container bg-white pt-1 publication-section"><ol class="publication-list">${renderListItems(conferences)}</ol></div><br>`;
+            html += `<div class="pub-category-section" data-category="conference">` +
+                sectionHeader('conference', 'fa-solid fa-note-sticky', 'Conference & Proceeding Papers') +
+                `<div class="container bg-white pt-1 publication-section"><ol class="publication-list">${renderListItems(conferences)}</ol></div>` +
+                `</div>`;
         }
 
-        const patents = pubs.filter(p => p.type === 'misc').sort((a, b) => b.sortTime - a.sortTime);
+        // 3. Patents
         if (patents.length > 0) {
-            html += sectionHeader('patent', 'fa-solid fa-lightbulb', 'Patents');
-            html += `<div class="container bg-white pt-1 publication-section"><ol class="publication-list">${renderListItems(patents)}</ol></div><br>`;
+            html += `<div class="pub-category-section" data-category="patent">` +
+                sectionHeader('patent', 'fa-solid fa-lightbulb', 'Patents') +
+                `<div class="container bg-white pt-1 publication-section"><ol class="publication-list">${renderListItems(patents)}</ol></div>` +
+                `</div>`;
         }
 
-        if (dash.awards && dash.awards.length > 0) {
-            html += sectionHeader('award', 'fa-solid fa-award', 'Awards');
-            html += `<div class="container bg-white pt-1 publication-section"><div class="interest-grid">`;
-            dash.awards.forEach(aw => {
+        // 4. Awards
+        if (awards.length > 0) {
+            html += `<div class="pub-category-section" data-category="award">` +
+                sectionHeader('award', 'fa-solid fa-award', 'Awards') +
+                `<div class="container bg-white pt-1 publication-section"><div class="interest-grid">`;
+            awards.forEach(aw => {
                 html += `<div class="interest-card"><div class="interest-icon"><i class="fa-solid fa-award"></i></div><div class='interest-text'><h3 class="interest-title">${aw.title}</h3><div class="list-item-details"><ul class="fa-ul education-details">` +
                     `<li><span class="fa-li"><i class="fa-solid fa-building-columns"></i></span>${aw.institute}</li>` +
                     (aw.desc ? `<li><span class="fa-li"><i class="fa-solid fa-note-sticky"></i></span>${aw.desc}</li>` : '') +
                     (aw.time ? `<li><span class="fa-li"><i class="fa-solid fa-calendar-days"></i></span>${aw.time}</li>` : '') +
                     `</ul></div></div></div>`;
             });
-            html += `</div></div><br>`;
+            html += `</div></div></div>`;
         }
 
-        if (dash.tutorials && dash.tutorials.length > 0) {
-            html += sectionHeader('other', '', 'Others');
-            html += `<div class="container bg-white pt-1 publication-section"><div class="interest-grid">`;
-            dash.tutorials.forEach(tut => {
+        // 5. Others
+        if (tutorials.length > 0) {
+            html += `<div class="pub-category-section" data-category="other">` +
+                sectionHeader('other', '', 'Others') +
+                `<div class="container bg-white pt-1 publication-section"><div class="interest-grid">`;
+            tutorials.forEach(tut => {
                 html += `<div class="interest-card"><div class="interest-icon"><i class="fa-solid fa-file-lines"></i></div><div class='interest-text'><h3 class="interest-title">${tut.title}</h3><div class="list-item-details"><ul class="fa-ul education-details">` +
                     (tut.authors ? `<li><span class="fa-li"><i class="fa-solid fa-user-group"></i></span>${highlightAuthor(tut.authors)}</li>` : '') +
                     `<li><span class="fa-li"><i class="fa-solid fa-calendar-days"></i></span>${tut.event} (${tut.time})</li>` +
                     `</ul></div></div></div>`;
             });
-            html += `</div></div>`;
+            html += `</div></div></div>`;
         }
 
         return html;
@@ -503,7 +548,7 @@
             dash.welcome.forEach(msg => {
                 html += `<p>${msg}</p>`;
             });
-            html += `</div></div></div><br>`;
+            html += `</div></div></div>`;
         }
 
         if (newsData.news && newsData.news.length > 0) {
@@ -528,7 +573,7 @@
                     (n.desc ? `<div class="news-text">${n.desc}</div>` : '') +
                     `</div></div>`;
             });
-            html += `</div></div><br>`;
+            html += `</div></div>`;
         }
 
         if (members && members.length > 0) {
@@ -557,7 +602,7 @@
                     dateRange +
                     `</div></div>`;
             });
-            html += `</div></div><br>`;
+            html += `</div></div>`;
         }
 
         if (newsData.resources && newsData.resources.length > 0) {
@@ -584,7 +629,7 @@
     }
 
     // --- Main Data Loader ---
-    const CACHE_KEY = 'site_data_cache_v4';
+    const CACHE_KEY = 'site_data_cache_v5';
     const CACHE_EXPIRY_MS = 60 * 60 * 1000;
 
     const ranges = [
@@ -605,8 +650,9 @@
         const members = parseMembers(memberRows);
         const newsData = parseNewsAndResources(newsRows);
 
-        const sidebarEl = document.getElementById('includeSidebar');
         const advisorImg = members.find(m => m.name === 'Kuang-Hsun Lin' || (m.role && m.role.toLowerCase() === 'advisor'))?.img || "https://lh3.googleusercontent.com/pw/AP1GczMEUGdtwza6KiRmnTREfA0thaF_kQEe-NXd3ElLBzRKQUs7EDgs6OI9goAIPrtRlqyEdkZWDZtFWgWPwSpaU-Zh9K7rJaIFifrf7N7yRww3WUtLsD2xkBAB11K8CFhJmjPaNcYt-hRJwsd7XKCqgKC0rw=w232";
+
+        const sidebarEl = document.getElementById('includeSidebar');
         if (sidebarEl) sidebarEl.innerHTML = getSidebarHTML(advisorImg);
 
         const navbarEl = document.getElementById('includeNavbar');
