@@ -123,7 +123,7 @@
             `<small class="text-left mt-4"><div class="mb-2"><ul class="fa-ul">` +
             `<li><span class="fa-li"><i class="fa-solid fa-user" title="Position"></i></span>Assistant Professor</li>` +
             `<li><span class="fa-li"><i class="fa-solid fa-building-user" title="Affiliation"></i></span>ICE, NYCU, TW</li>` +
-            `<li><span class="fa-li"><i class="fa-solid fa-envelope" title="Email"></i></span><span class="mm" data-v="pmqnsEs~hz3jiz3y|"/></li>` +
+            `<li><span class="fa-li"><i class="fa-solid fa-envelope" title="Email"></i></span><span class="mm" data-v="pmqnsEs~hz3jiz3y|"></span></li>` +
             `<li><span class="fa-li"><i class="fa-solid fa-phone" title="Phone"></i></span>+886-3-571-2121#54527</li>` +
             `<li><span class="fa-li"><i class="fa-solid fa-building" title="Office"></i></span>Office: ED828</li>` +
             `<li><span class="fa-li"><i class="fa-solid fa-building" title="Lab"></i></span>Lab: ED916</li>` +
