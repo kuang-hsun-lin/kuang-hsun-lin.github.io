@@ -72,7 +72,6 @@ a:hover {
 .wrapper {
     position: relative;
     min-height: 100vh;
-    display: flex;
 }
 
 /* Sidebar */
@@ -824,9 +823,6 @@ a:hover {
    11. Responsive Design
    ------------------- */
 @media (max-width: 991.98px) {
-    .wrapper {
-        flex-direction: column;
-    }
     
     .sidebar {
         width: 100%;
