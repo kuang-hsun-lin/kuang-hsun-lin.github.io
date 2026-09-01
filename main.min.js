@@ -143,7 +143,6 @@
 
     function getNavbarHTML() {
         return `<nav class="navbar navbar-expand-lg bg-secondary navbar-dark">` +
-            `<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"><span class="navbar-toggler-icon"></span></button>` +
             `<div class="collapse navbar-collapse justify-content-center" id="navbarCollapse"><div class="navbar-nav m-auto">` +
             `<a id="navbarHome" href="index.html" class="nav-item nav-link">Home</a>` +
             `<a id="navbarLab" href="lab.html" class="nav-item nav-link">Lab</a>` +
