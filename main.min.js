@@ -629,7 +629,7 @@
     }
 
     // --- Main Data Loader ---
-    const CACHE_KEY = 'site_data_cache_v6';
+    const CACHE_KEY = 'site_data_cache_v7';
     const CACHE_EXPIRY_MS = 60 * 60 * 1000;
 
     const ranges = [
