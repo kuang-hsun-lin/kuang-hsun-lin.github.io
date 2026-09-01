@@ -606,7 +606,8 @@
         const newsData = parseNewsAndResources(newsRows);
 
         const sidebarEl = document.getElementById('includeSidebar');
-        if (sidebarEl) sidebarEl.innerHTML = getSidebarHTML(dash.about.photo);
+        const advisorImg = members.find(m => m.name === 'Kuang-Hsun Lin' || (m.role && m.role.toLowerCase() === 'advisor'))?.img || "https://lh3.googleusercontent.com/pw/AP1GczMEUGdtwza6KiRmnTREfA0thaF_kQEe-NXd3ElLBzRKQUs7EDgs6OI9goAIPrtRlqyEdkZWDZtFWgWPwSpaU-Zh9K7rJaIFifrf7N7yRww3WUtLsD2xkBAB11K8CFhJmjPaNcYt-hRJwsd7XKCqgKC0rw=w232";
+        if (sidebarEl) sidebarEl.innerHTML = getSidebarHTML(advisorImg);
 
         const navbarEl = document.getElementById('includeNavbar');
         if (navbarEl) navbarEl.innerHTML = getNavbarHTML();
