@@ -544,7 +544,7 @@
 
         if (dash.welcome && dash.welcome.length > 0) {
             html += sectionHeader('welcome', '', 'Welcome');
-            html += `<div class="container bg-white pt-1 welcome-section"><div class="about-card welcome-card"><div class="about-text w-100">`;
+            html += `<div class="container bg-white pt-1 publication-section"><div class="about-card welcome-card"><div class="about-text w-100">`;
             dash.welcome.forEach(msg => {
                 html += `<p>${msg}</p>`;
             });
@@ -558,7 +558,7 @@
             });
 
             html += sectionHeader('news', '', 'News');
-            html += `<div class="container bg-white pt-1 news-section"><div class="news-grid">`;
+            html += `<div class="container bg-white pt-1 publication-section"><div class="news-grid">`;
             sortedNews.forEach(n => {
                 const catSlug = (n.category || '').toLowerCase().replace(/\s+/g, '-');
                 html += `<div class="news-card"><div class="news-card-header">` +
@@ -589,7 +589,7 @@
             });
 
             html += sectionHeader('members', '', 'Members');
-            html += `<div class="container bg-white pt-1 member-section"><div class="member-grid">`;
+            html += `<div class="container bg-white pt-1 publication-section"><div class="member-grid">`;
             sortedMembers.forEach(m => {
                 const genderIcon = m.gender === 'M' ? ' <i class="fa-solid fa-mars icon-m"></i>' : (m.gender === 'F' ? ' <i class="fa-solid fa-venus icon-f"></i>' : '');
                 const imgTag = m.img ? `<img src="${m.img}" onerror="this.src='https://via.placeholder.com/150'" alt="${m.name}" class="member-img">` : `<div class="member-img avatar-placeholder avatar-${m.gender === 'F' ? 'f' : (m.gender === 'M' ? 'm' : 'default')}"><i class="fa-solid fa-user"></i></div>`;
@@ -612,7 +612,7 @@
             });
 
             html += sectionHeader('resources', '', 'Resources');
-            html += `<div class="container bg-white pt-1 resource-section"><div class="resource-grid">`;
+            html += `<div class="container bg-white pt-1 publication-section"><div class="resource-grid">`;
             sortedRes.forEach(r => {
                 html += `<div class="resource-card"><h3 class="resource-title">` +
                     (r.pin ? `<i class="fa-solid fa-thumbtack pin-icon"></i>` : '') +
@@ -629,7 +629,7 @@
     }
 
     // --- Main Data Loader ---
-    const CACHE_KEY = 'site_data_cache_v5';
+    const CACHE_KEY = 'site_data_cache_v6';
     const CACHE_EXPIRY_MS = 60 * 60 * 1000;
 
     const ranges = [

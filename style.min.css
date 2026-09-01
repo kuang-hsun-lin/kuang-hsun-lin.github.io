@@ -279,7 +279,8 @@ a:hover {
     opacity: 0.9;
 }
 
-.publication-section.bg-white {
+.publication-section.bg-white,
+.container.bg-white {
     background-color: var(--background-white) !important;
     border-bottom-left-radius: var(--radius);
     border-bottom-right-radius: var(--radius);
