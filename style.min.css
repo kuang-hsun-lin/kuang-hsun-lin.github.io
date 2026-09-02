@@ -1079,3 +1079,40 @@ a:hover {
         font-size: 0.8rem;
     }
 }
+
+/* -------------------
+   Top 6G Laser Progress Bar & Session Entrance
+   ------------------- */
+#topProgressBar {
+    position: fixed;
+    top: 0;
+    left: var(--sidebar-width);
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #38BDF8, #0284C7, #2563EB);
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.8), 0 0 5px rgba(2, 132, 199, 0.6);
+    z-index: 10000;
+    transition: width 0.3s ease, opacity 0.3s ease;
+    pointer-events: none;
+}
+
+@media (max-width: 991.98px) {
+    #topProgressBar {
+        left: 0;
+    }
+}
+
+@keyframes firstEntrance {
+    0% {
+        opacity: 0.5;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.first-session-entrance {
+    animation: firstEntrance 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

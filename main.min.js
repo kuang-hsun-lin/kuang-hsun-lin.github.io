@@ -2,6 +2,34 @@
     "use strict";
 
     // --- Core Functions ---
+    // --- Top Laser Progress Bar ---
+    function getProgressBar() {
+        let bar = document.getElementById('topProgressBar');
+        if (!bar) {
+            bar = document.createElement('div');
+            bar.id = 'topProgressBar';
+            document.body.appendChild(bar);
+        }
+        return bar;
+    }
+
+    function startProgress() {
+        const bar = getProgressBar();
+        bar.style.opacity = '1';
+        bar.style.width = '35%';
+    }
+
+    function completeProgress() {
+        const bar = getProgressBar();
+        bar.style.width = '100%';
+        setTimeout(() => {
+            bar.style.opacity = '0';
+            setTimeout(() => {
+                bar.style.width = '0';
+            }, 300);
+        }, 200);
+    }
+
     function easeInOutQuad(t) {
         return t * (2 - t);
     }
@@ -743,7 +771,7 @@
     }
 
     // --- Main Data Loader ---
-    const CACHE_KEY = 'site_data_cache_v16';
+    const CACHE_KEY = 'site_data_cache_v17';
     const CACHE_EXPIRY_MS = 60 * 60 * 1000;
 
     const ranges = [
@@ -784,11 +812,22 @@
         const labEl = document.getElementById('lab');
         if (labEl) labEl.innerHTML = renderLabPage(dash, members, newsData);
 
+        // Session-only subtle entrance animation
+        if (!sessionStorage.getItem('site_intro_played')) {
+            const activeContainer = infoEl || aboutEl || pubEl || labEl;
+            if (activeContainer) {
+                activeContainer.classList.add('first-session-entrance');
+            }
+            sessionStorage.setItem('site_intro_played', '1');
+        }
+
         updateActiveNavLink();
         initPageInteractions();
+        completeProgress();
     }
 
     function loadSiteData() {
+        startProgress();
         const cachedData = localStorage.getItem(CACHE_KEY);
         const cachedTimestamp = localStorage.getItem(`${CACHE_KEY}_timestamp`);
 
