@@ -874,7 +874,6 @@
 
     // --- Main Data Loader ---
     const CACHE_KEY = 'site_data_cache_v24';
-    const CACHE_EXPIRY_MS = 60 * 60 * 1000;
 
     const ranges = [
         'Dashboard!A1:F64',
@@ -985,8 +984,9 @@
     // Email Obfuscation Decoder
     const emailKey = 5;
     function decodeEmail(target) {
+        if (!target || target.querySelector('a')) return;
         const encodedStr = target.getAttribute('data-v');
-        if (encodedStr && !target.querySelector('a')) {
+        if (encodedStr) {
             const decoded = encodedStr.split('').map(char =>
                 String.fromCharCode(char.charCodeAt(0) - emailKey)
             ).join('');
@@ -994,18 +994,14 @@
         }
     }
 
-    const observer = new MutationObserver(() => {
+    const emailObserver = new MutationObserver(() => {
         const target = document.querySelector('span.mm');
         if (target && !target.querySelector('a')) {
             decodeEmail(target);
-            observer.disconnect();
+            emailObserver.disconnect();
         }
     });
 
-    observer.observe(document.body, { childList: true, subtree: true });
-    const initialTarget = document.querySelector('span.mm');
-    if (initialTarget) {
-        decodeEmail(initialTarget);
-        observer.disconnect();
-    }
+    emailObserver.observe(document.body, { childList: true, subtree: true });
+    decodeEmail(document.querySelector('span.mm'));
 })();
