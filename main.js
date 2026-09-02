@@ -196,6 +196,59 @@
     }
 
     // --- Helpers ---
+    function parseResourceMeta(url) {
+        if (!url) return { label: 'Resource', icon: 'fa-solid fa-link', typeClass: 'type-link' };
+        const urlLower = url.toLowerCase().trim();
+
+        // 1. File Extensions
+        if (urlLower.endsWith('.pdf')) {
+            return { label: 'PDF Document', icon: 'fa-solid fa-file-pdf', typeClass: 'type-pdf' };
+        }
+        if (urlLower.endsWith('.zip') || urlLower.endsWith('.tar.gz') || urlLower.endsWith('.rar') || urlLower.endsWith('.7z')) {
+            return { label: 'Code / Dataset', icon: 'fa-solid fa-file-zipper', typeClass: 'type-overleaf' };
+        }
+
+        // 2. Extract Hostname
+        let host = '';
+        try {
+            host = new URL(url).hostname.toLowerCase();
+            if (host.startsWith('www.')) host = host.substring(4);
+        } catch (e) {
+            host = urlLower;
+        }
+
+        // 3. Known Major Platforms
+        if (host.includes('github.com')) return { label: 'GitHub Repository', icon: 'fa-brands fa-github', typeClass: 'type-drive' };
+        if (host.includes('overleaf.com')) return { label: 'Overleaf Template', icon: 'fa-solid fa-file-code', typeClass: 'type-overleaf' };
+        if (host.includes('drive.google.com') || host.includes('docs.google.com')) return { label: 'Google Drive', icon: 'fa-brands fa-google-drive', typeClass: 'type-drive' };
+        if (host.includes('dropbox.com')) return { label: 'Dropbox', icon: 'fa-brands fa-dropbox', typeClass: 'type-drive' };
+        if (host.includes('youtube.com') || host.includes('youtu.be')) return { label: 'YouTube Video', icon: 'fa-brands fa-youtube', typeClass: 'type-pdf' };
+        if (host.includes('arxiv.org')) return { label: 'arXiv Preprint', icon: 'fa-solid fa-file-lines', typeClass: 'type-pdf' };
+        if (host.includes('ieee.org')) return { label: 'IEEE Xplore', icon: 'fa-solid fa-book-open', typeClass: 'type-edu' };
+        if (host.includes('acm.org')) return { label: 'ACM Digital Library', icon: 'fa-solid fa-bookmark', typeClass: 'type-acm' };
+        if (host.includes('huggingface.co')) return { label: 'Hugging Face', icon: 'fa-solid fa-cube', typeClass: 'type-overleaf' };
+        if (host.includes('kaggle.com')) return { label: 'Kaggle Dataset', icon: 'fa-solid fa-chart-column', typeClass: 'type-edu' };
+
+        // 4. Universities (.edu / .edu.tw)
+        if (host.includes('.edu')) {
+            let schoolName = 'University';
+            if (host.includes('mit.')) schoolName = 'MIT';
+            else if (host.includes('nycu.')) schoolName = 'NYCU';
+            else if (host.includes('ntu.')) schoolName = 'NTU';
+            else if (host.includes('nthu.')) schoolName = 'NTHU';
+            else if (host.includes('illinois.')) schoolName = 'UIUC';
+            else if (host.includes('jhu.')) schoolName = 'JHU';
+            else if (host.includes('stanford.')) schoolName = 'Stanford';
+            else if (host.includes('berkeley.')) schoolName = 'UC Berkeley';
+            else if (host.includes('cmu.')) schoolName = 'CMU';
+            return { label: `${schoolName} Resource`, icon: 'fa-solid fa-building-columns', typeClass: 'type-edu' };
+        }
+
+        // 5. Automatic Fallback for ANY website
+        const cleanHost = host.split('/')[0];
+        return { label: cleanHost || 'External Link', icon: 'fa-solid fa-arrow-up-right-from-square', typeClass: 'type-link' };
+    }
+
     function highlightAuthor(authors) {
         if (!authors) return "";
         const dashPattern = '[\\-\\u2010-\\u2015\\u2212]';
@@ -756,47 +809,13 @@
             html += sectionHeader('resources', 'fa-solid fa-folder-open', 'Resources & Lab Tools');
             html += `<div class="container bg-white pt-1 publication-section"><div class="resource-grid">`;
             sortedRes.forEach(r => {
-                const urlLower = (r.url || '').toLowerCase();
-                let sourceLabel = 'Link';
-                let iconClass = 'fa-solid fa-arrow-up-right-from-square';
-                let typeClass = 'type-link';
-
-                if (urlLower.includes('overleaf.com')) {
-                    sourceLabel = 'Overleaf Template';
-                    iconClass = 'fa-solid fa-file-code';
-                    typeClass = 'type-overleaf';
-                } else if (urlLower.includes('drive.google.com')) {
-                    sourceLabel = 'Google Drive';
-                    iconClass = 'fa-brands fa-google-drive';
-                    typeClass = 'type-drive';
-                } else if (urlLower.includes('dl.acm.org')) {
-                    sourceLabel = 'ACM Digital Library';
-                    iconClass = 'fa-solid fa-bookmark';
-                    typeClass = 'type-acm';
-                } else if (urlLower.includes('mit.edu')) {
-                    sourceLabel = 'MIT EECS';
-                    iconClass = 'fa-solid fa-school';
-                    typeClass = 'type-edu';
-                } else if (urlLower.includes('illinois.edu')) {
-                    sourceLabel = 'UIUC Guide';
-                    iconClass = 'fa-solid fa-file-pdf';
-                    typeClass = 'type-pdf';
-                } else if (urlLower.includes('jhu.edu')) {
-                    sourceLabel = 'JHU CS Guide';
-                    iconClass = 'fa-solid fa-graduation-cap';
-                    typeClass = 'type-edu';
-                } else if (urlLower.endsWith('.pdf')) {
-                    sourceLabel = 'PDF Document';
-                    iconClass = 'fa-solid fa-file-pdf';
-                    typeClass = 'type-pdf';
-                }
-
+                const meta = parseResourceMeta(r.url);
                 const pinBadge = r.pin ? `<span class="resource-pin-chip"><i class="fa-solid fa-thumbtack"></i> Pinned</span>` : '';
                 const dateHtml = r.date ? `<span class="resource-date-tag"><i class="fa-regular fa-calendar-days"></i> ${r.date}</span>` : '';
 
                 html += `<div class="resource-card">` +
                     `<div class="resource-card-left">` +
-                    `<div class="resource-icon-box ${typeClass}"><i class="${iconClass}"></i></div>` +
+                    `<div class="resource-icon-box ${meta.typeClass}"><i class="${meta.icon}"></i></div>` +
                     `</div>` +
                     `<div class="resource-card-body">` +
                     `<div class="resource-header-row">` +
@@ -807,7 +826,7 @@
                     `</div>` +
                     (r.desc ? `<p class="resource-desc-text">${r.desc}</p>` : '') +
                     `<div class="resource-tags-row">` +
-                    `<span class="resource-source-badge ${typeClass}"><i class="${iconClass}"></i> ${sourceLabel}</span>` +
+                    `<span class="resource-source-badge ${meta.typeClass}"><i class="${meta.icon}"></i> ${meta.label}</span>` +
                     dateHtml +
                     `</div>` +
                     `</div></div>`;
@@ -819,7 +838,7 @@
     }
 
     // --- Main Data Loader ---
-    const CACHE_KEY = 'site_data_cache_v20';
+    const CACHE_KEY = 'site_data_cache_v21';
     const CACHE_EXPIRY_MS = 60 * 60 * 1000;
 
     const ranges = [
