@@ -756,32 +756,61 @@
             html += sectionHeader('resources', 'fa-solid fa-folder-open', 'Resources & Lab Tools');
             html += `<div class="container bg-white pt-1 publication-section"><div class="resource-grid">`;
             sortedRes.forEach(r => {
-                const isOverleaf = (r.url || '').includes('overleaf.com');
-                const isDrive = (r.url || '').includes('drive.google.com');
-                const isDoc = (r.url || '').endsWith('.pdf');
-                
-                let iconClass = 'fa-solid fa-link';
-                if (isOverleaf) iconClass = 'fa-solid fa-file-code';
-                else if (isDrive) iconClass = 'fa-brands fa-google-drive';
-                else if (isDoc) iconClass = 'fa-solid fa-file-pdf';
-                else if (r.pin) iconClass = 'fa-solid fa-star';
+                const urlLower = (r.url || '').toLowerCase();
+                let sourceLabel = 'Link';
+                let iconClass = 'fa-solid fa-arrow-up-right-from-square';
+                let typeClass = 'type-link';
+
+                if (urlLower.includes('overleaf.com')) {
+                    sourceLabel = 'Overleaf Template';
+                    iconClass = 'fa-solid fa-file-code';
+                    typeClass = 'type-overleaf';
+                } else if (urlLower.includes('drive.google.com')) {
+                    sourceLabel = 'Google Drive';
+                    iconClass = 'fa-brands fa-google-drive';
+                    typeClass = 'type-drive';
+                } else if (urlLower.includes('dl.acm.org')) {
+                    sourceLabel = 'ACM Digital Library';
+                    iconClass = 'fa-solid fa-bookmark';
+                    typeClass = 'type-acm';
+                } else if (urlLower.includes('mit.edu')) {
+                    sourceLabel = 'MIT EECS';
+                    iconClass = 'fa-solid fa-school';
+                    typeClass = 'type-edu';
+                } else if (urlLower.includes('illinois.edu')) {
+                    sourceLabel = 'UIUC Guide';
+                    iconClass = 'fa-solid fa-file-pdf';
+                    typeClass = 'type-pdf';
+                } else if (urlLower.includes('jhu.edu')) {
+                    sourceLabel = 'JHU CS Guide';
+                    iconClass = 'fa-solid fa-graduation-cap';
+                    typeClass = 'type-edu';
+                } else if (urlLower.endsWith('.pdf')) {
+                    sourceLabel = 'PDF Document';
+                    iconClass = 'fa-solid fa-file-pdf';
+                    typeClass = 'type-pdf';
+                }
 
                 const pinBadge = r.pin ? `<span class="resource-pin-chip"><i class="fa-solid fa-thumbtack"></i> Pinned</span>` : '';
-                const dateHtml = r.date ? `<span class="resource-date"><i class="fa-regular fa-calendar-days"></i> ${r.date}</span>` : '';
+                const dateHtml = r.date ? `<span class="resource-date-tag"><i class="fa-regular fa-calendar-days"></i> ${r.date}</span>` : '';
 
                 html += `<div class="resource-card">` +
-                    `<div class="resource-card-top">` +
-                    `<div class="resource-icon-box"><i class="${iconClass}"></i></div>` +
-                    pinBadge +
+                    `<div class="resource-card-left">` +
+                    `<div class="resource-icon-box ${typeClass}"><i class="${iconClass}"></i></div>` +
                     `</div>` +
-                    `<div class="resource-card-main">` +
+                    `<div class="resource-card-body">` +
+                    `<div class="resource-header-row">` +
                     `<h3 class="resource-title">` +
                     (r.url ? `<a href="${r.url}" target="_blank" rel="noopener noreferrer">${r.title} <i class="fa-solid fa-arrow-up-right-from-square resource-ext-icon"></i></a>` : r.title) +
                     `</h3>` +
-                    (r.desc ? `<p class="resource-text">${r.desc}</p>` : '') +
+                    pinBadge +
                     `</div>` +
-                    `<div class="resource-card-footer">${dateHtml}</div>` +
-                    `</div>`;
+                    (r.desc ? `<p class="resource-desc-text">${r.desc}</p>` : '') +
+                    `<div class="resource-tags-row">` +
+                    `<span class="resource-source-badge ${typeClass}"><i class="${iconClass}"></i> ${sourceLabel}</span>` +
+                    dateHtml +
+                    `</div>` +
+                    `</div></div>`;
             });
             html += `</div></div>`;
         }
@@ -790,7 +819,7 @@
     }
 
     // --- Main Data Loader ---
-    const CACHE_KEY = 'site_data_cache_v19';
+    const CACHE_KEY = 'site_data_cache_v20';
     const CACHE_EXPIRY_MS = 60 * 60 * 1000;
 
     const ranges = [

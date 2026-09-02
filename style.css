@@ -914,85 +914,82 @@ a:hover {
     margin: 0;
 }
 
-/* Resources 2-3 Column Bento Grid */
+/* Compact Media Resource Cards */
 .resource-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 16px;
-    padding: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 14px;
+    padding: 18px 20px;
 }
 
 .resource-card {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 16px 18px;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
     border-radius: var(--radius);
     border: 1px solid var(--border-color);
     background: var(--background-white);
     box-shadow: var(--shadow-sm);
-    transition: all 0.25s ease;
+    transition: all 0.2s ease;
 }
 
 .resource-card:hover {
-    transform: translateY(-3px);
-    border-color: var(--accent-color);
-    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+    border-color: #93C5FD;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.12);
 }
 
-.resource-card-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
+.resource-card-left {
+    flex-shrink: 0;
 }
 
 .resource-icon-box {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    background: var(--accent-light);
-    color: var(--accent-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.05rem;
+    font-size: 1.15rem;
+    transition: transform 0.2s ease;
 }
 
-.resource-pin-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.72rem;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 20px;
-    background: #FEF2F2;
-    color: #DC2626;
-    border: 1px solid #FECACA;
-    text-transform: uppercase;
+.resource-card:hover .resource-icon-box {
+    transform: scale(1.08);
 }
 
-.resource-pin-chip i {
-    font-size: 0.75rem;
-}
+/* Category Accent Colors */
+.type-overleaf { background: #ECFDF5; color: #059669; }
+.type-drive { background: #EFF6FF; color: #2563EB; }
+.type-pdf { background: #FEF2F2; color: #DC2626; }
+.type-acm { background: #FDF4FF; color: #9333EA; }
+.type-edu { background: #F0F9FF; color: #0284C7; }
+.type-link { background: #F8FAFC; color: #475569; }
 
-.resource-card-main {
+.resource-card-body {
     flex: 1;
+    min-width: 0;
+}
+
+.resource-header-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 4px;
 }
 
 .resource-title {
-    font-size: 0.98rem;
+    font-size: 0.95rem;
     font-weight: 600;
-    margin: 0 0 6px 0;
-    line-height: 1.4;
+    margin: 0;
+    line-height: 1.35;
 }
 
 .resource-title a {
     color: var(--text-dark);
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+    display: inline;
 }
 
 .resource-title a:hover {
@@ -1000,8 +997,9 @@ a:hover {
 }
 
 .resource-ext-icon {
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
+    margin-left: 4px;
     transition: transform 0.2s ease, color 0.2s ease;
 }
 
@@ -1010,27 +1008,52 @@ a:hover {
     transform: translate(2px, -2px);
 }
 
-.resource-text {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    margin: 0 0 10px 0;
-    line-height: 1.45;
-}
-
-.resource-card-footer {
-    display: flex;
+.resource-pin-chip {
+    flex-shrink: 0;
+    display: inline-flex;
     align-items: center;
-    justify-content: flex-end;
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    padding-top: 8px;
-    border-top: 1px dashed var(--border-subtle);
+    gap: 3px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 12px;
+    background: #FEF2F2;
+    color: #DC2626;
+    border: 1px solid #FECACA;
 }
 
-.resource-date {
+.resource-desc-text {
+    font-size: 0.83rem;
+    color: var(--text-muted);
+    margin: 3px 0 6px 0;
+    line-height: 1.4;
+}
+
+.resource-tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: 5px;
+}
+
+.resource-source-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 4px;
     display: inline-flex;
     align-items: center;
     gap: 4px;
+}
+
+.resource-date-tag {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
 }
 
 /* -------------------
