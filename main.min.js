@@ -94,7 +94,7 @@
                     btn.classList.remove('show');
                 }
             });
-        });
+        }, { passive: true });
 
         // Cite (BibTeX Copy) Interaction
         document.querySelectorAll('.pub-cite-btn').forEach(btn => {
@@ -183,7 +183,11 @@
         });
 
         if (searchInput) {
-            searchInput.addEventListener('input', applyPubFilters);
+            let debounceTimer;
+            searchInput.addEventListener('input', () => {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(applyPubFilters, 60);
+            });
         }
 
         if (clearBtn) {
@@ -838,7 +842,7 @@
     }
 
     // --- Main Data Loader ---
-    const CACHE_KEY = 'site_data_cache_v21';
+    const CACHE_KEY = 'site_data_cache_v22';
     const CACHE_EXPIRY_MS = 60 * 60 * 1000;
 
     const ranges = [
@@ -961,10 +965,16 @@
 
     const observer = new MutationObserver(() => {
         const target = document.querySelector('span.mm');
-        if (target) decodeEmail(target);
+        if (target && !target.querySelector('a')) {
+            decodeEmail(target);
+            observer.disconnect();
+        }
     });
 
     observer.observe(document.body, { childList: true, subtree: true });
     const initialTarget = document.querySelector('span.mm');
-    if (initialTarget) decodeEmail(initialTarget);
+    if (initialTarget) {
+        decodeEmail(initialTarget);
+        observer.disconnect();
+    }
 })();
