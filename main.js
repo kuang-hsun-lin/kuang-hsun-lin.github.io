@@ -753,15 +753,34 @@
                 return b.sortTime - a.sortTime;
             });
 
-            html += sectionHeader('resources', '', 'Resources');
+            html += sectionHeader('resources', 'fa-solid fa-folder-open', 'Resources & Lab Tools');
             html += `<div class="container bg-white pt-1 publication-section"><div class="resource-grid">`;
             sortedRes.forEach(r => {
-                html += `<div class="resource-card"><h3 class="resource-title">` +
-                    (r.pin ? `<i class="fa-solid fa-thumbtack pin-icon"></i>` : '') +
-                    (r.url ? `<a href="${r.url}" target="_blank" rel="noopener noreferrer">${r.title}</a>` : r.title) +
+                const isOverleaf = (r.url || '').includes('overleaf.com');
+                const isDrive = (r.url || '').includes('drive.google.com');
+                const isDoc = (r.url || '').endsWith('.pdf');
+                
+                let iconClass = 'fa-solid fa-link';
+                if (isOverleaf) iconClass = 'fa-solid fa-file-code';
+                else if (isDrive) iconClass = 'fa-brands fa-google-drive';
+                else if (isDoc) iconClass = 'fa-solid fa-file-pdf';
+                else if (r.pin) iconClass = 'fa-solid fa-star';
+
+                const pinBadge = r.pin ? `<span class="resource-pin-chip"><i class="fa-solid fa-thumbtack"></i> Pinned</span>` : '';
+                const dateHtml = r.date ? `<span class="resource-date"><i class="fa-regular fa-calendar-days"></i> ${r.date}</span>` : '';
+
+                html += `<div class="resource-card">` +
+                    `<div class="resource-card-top">` +
+                    `<div class="resource-icon-box"><i class="${iconClass}"></i></div>` +
+                    pinBadge +
+                    `</div>` +
+                    `<div class="resource-card-main">` +
+                    `<h3 class="resource-title">` +
+                    (r.url ? `<a href="${r.url}" target="_blank" rel="noopener noreferrer">${r.title} <i class="fa-solid fa-arrow-up-right-from-square resource-ext-icon"></i></a>` : r.title) +
                     `</h3>` +
-                    (r.date ? `<div class="resource-meta"><i class="fa-solid fa-calendar-days"></i> ${r.date}</div>` : '') +
-                    (r.desc ? `<div class="resource-text">${r.desc}</div>` : '') +
+                    (r.desc ? `<p class="resource-text">${r.desc}</p>` : '') +
+                    `</div>` +
+                    `<div class="resource-card-footer">${dateHtml}</div>` +
                     `</div>`;
             });
             html += `</div></div>`;
@@ -771,7 +790,7 @@
     }
 
     // --- Main Data Loader ---
-    const CACHE_KEY = 'site_data_cache_v18';
+    const CACHE_KEY = 'site_data_cache_v19';
     const CACHE_EXPIRY_MS = 60 * 60 * 1000;
 
     const ranges = [

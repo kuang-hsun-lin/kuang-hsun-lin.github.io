@@ -914,35 +914,123 @@ a:hover {
     margin: 0;
 }
 
-/* Resources */
+/* Resources 2-3 Column Bento Grid */
+.resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 16px;
+    padding: 20px;
+}
+
 .resource-card {
-    padding: 12px 16px;
-    border-radius: var(--radius-sm);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 16px 18px;
+    border-radius: var(--radius);
     border: 1px solid var(--border-color);
     background: var(--background-white);
     box-shadow: var(--shadow-sm);
-    transition: all 0.2s ease;
+    transition: all 0.25s ease;
 }
 
 .resource-card:hover {
+    transform: translateY(-3px);
     border-color: var(--accent-color);
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-hover);
+}
+
+.resource-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.resource-icon-box {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--accent-light);
+    color: var(--accent-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+}
+
+.resource-pin-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: #FEF2F2;
+    color: #DC2626;
+    border: 1px solid #FECACA;
+    text-transform: uppercase;
+}
+
+.resource-pin-chip i {
+    font-size: 0.75rem;
+}
+
+.resource-card-main {
+    flex: 1;
 }
 
 .resource-title {
-    font-size: 0.95rem;
-    margin: 0 0 4px;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 0 0 6px 0;
+    line-height: 1.4;
 }
 
-.resource-meta {
+.resource-title a {
+    color: var(--text-dark);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.resource-title a:hover {
+    color: var(--accent-color);
+}
+
+.resource-ext-icon {
     font-size: 0.78rem;
     color: var(--text-muted);
-    margin-bottom: 2px;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.resource-card:hover .resource-ext-icon {
+    color: var(--accent-color);
+    transform: translate(2px, -2px);
 }
 
 .resource-text {
-    font-size: 0.86rem;
-    color: var(--secondary-color);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 0 0 10px 0;
+    line-height: 1.45;
+}
+
+.resource-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    padding-top: 8px;
+    border-top: 1px dashed var(--border-subtle);
+}
+
+.resource-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
 }
 
 /* -------------------
