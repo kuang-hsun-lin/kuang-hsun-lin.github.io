@@ -9,7 +9,9 @@
    ------------------- */
 .pub-toolbar {
     max-width: 1200px;
-    margin: 0;
+    width: 100%;
+    margin: 18px auto 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -993,6 +995,10 @@ a:hover {
    11. Responsive Design
    ------------------- */
 @media (max-width: 991.98px) {
+    .pub-toolbar {
+        padding: 0 14px;
+        margin-top: 14px;
+    }
     .sidebar {
         width: 100%;
         min-width: 100%;
