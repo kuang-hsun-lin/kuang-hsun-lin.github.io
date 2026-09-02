@@ -743,7 +743,7 @@
     }
 
     // --- Main Data Loader ---
-    const CACHE_KEY = 'site_data_cache_v14';
+    const CACHE_KEY = 'site_data_cache_v15';
     const CACHE_EXPIRY_MS = 60 * 60 * 1000;
 
     const ranges = [
@@ -773,16 +773,16 @@
         if (navbarEl) navbarEl.innerHTML = getNavbarHTML();
 
         const infoEl = document.getElementById('info');
-        if (infoEl) infoEl.innerHTML = renderInfoPage(dash);
+        if (infoEl) { infoEl.innerHTML = renderInfoPage(dash); infoEl.classList.add('content-loaded'); }
 
         const aboutEl = document.getElementById('about');
-        if (aboutEl) aboutEl.innerHTML = renderAboutPage(dash);
+        if (aboutEl) { aboutEl.innerHTML = renderAboutPage(dash); aboutEl.classList.add('content-loaded'); }
 
         const pubEl = document.getElementById('publications');
-        if (pubEl) pubEl.innerHTML = renderPublicationPage(pubs, dash);
+        if (pubEl) { pubEl.innerHTML = renderPublicationPage(pubs, dash); pubEl.classList.add('content-loaded'); }
 
         const labEl = document.getElementById('lab');
-        if (labEl) labEl.innerHTML = renderLabPage(dash, members, newsData);
+        if (labEl) { labEl.innerHTML = renderLabPage(dash, members, newsData); labEl.classList.add('content-loaded'); }
 
         updateActiveNavLink();
         initPageInteractions();
