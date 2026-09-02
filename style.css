@@ -3,6 +3,114 @@
    Semantic Color-Coding & Glassmorphism
    =================================== */
 
+
+/* -------------------
+   Publication Search & Cite
+   ------------------- */
+.pub-toolbar {
+    max-width: 1200px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.pub-search-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.pub-search-icon {
+    position: absolute;
+    left: 14px;
+    color: var(--accent-color);
+    font-size: 0.95rem;
+    pointer-events: none;
+}
+
+.pub-search-input {
+    width: 100%;
+    padding: 10px 38px 10px 38px;
+    font-size: 0.92rem;
+    font-family: inherit;
+    color: var(--text-dark);
+    background: var(--background-white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+}
+
+.pub-search-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
+
+.pub-search-clear {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.pub-search-clear:hover {
+    color: var(--text-dark);
+}
+
+.pub-cite-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: #EFF6FF;
+    color: #1D4ED8;
+    border: 1px solid #DBEAFE;
+    margin-left: 6px;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.pub-cite-btn:hover {
+    background: #1D4ED8;
+    color: #FFFFFF;
+    border-color: #1D4ED8;
+    transform: scale(1.05);
+}
+
+.pub-cite-btn.copied {
+    background: #DCFCE7 !important;
+    color: #166534 !important;
+    border-color: #86EFAC !important;
+}
+
+.pub-empty-msg {
+    padding: 30px 20px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    background: var(--background-white);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    margin: 18px auto;
+    max-width: 1200px;
+}
+
 /* -------------------
    1. CSS Variables
    ------------------- */
@@ -434,7 +542,7 @@ a:hover {
     padding: 14px 18px;
     background: var(--background-white);
     border-radius: var(--radius);
-    margin: 18px auto 0;
+    margin: 0;
     max-width: 1200px;
     box-shadow: var(--shadow-sm);
     border: 1px solid var(--border-color);

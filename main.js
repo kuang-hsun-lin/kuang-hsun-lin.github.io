@@ -68,31 +68,109 @@
             });
         });
 
-        // Publication Filter Tabs Interaction
-        document.querySelectorAll('.pub-filter-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const filter = btn.getAttribute('data-filter');
-                document.querySelectorAll('.pub-filter-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-
-                const sections = document.querySelectorAll('.pub-category-section');
-                sections.forEach(sec => {
-                    const cat = sec.getAttribute('data-category');
-                    if (filter === 'all' || cat === filter) {
-                        sec.style.display = 'block';
-                    } else {
-                        sec.style.display = 'none';
-                    }
-                });
+        // Cite (BibTeX Copy) Interaction
+        document.querySelectorAll('.pub-cite-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const bib = decodeURIComponent(btn.getAttribute('data-bibtex') || '');
+                if (bib) {
+                    navigator.clipboard.writeText(bib).then(() => {
+                        const originalHTML = btn.innerHTML;
+                        btn.classList.add('copied');
+                        btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+                        setTimeout(() => {
+                            btn.classList.remove('copied');
+                            btn.innerHTML = originalHTML;
+                        }, 2000);
+                    }).catch(err => {
+                        console.error('Failed to copy BibTeX:', err);
+                    });
+                }
             });
         });
+
+        // Publication Filter & Live Search
+        const searchInput = document.getElementById('pubSearchInput');
+        const clearBtn = document.getElementById('pubSearchClear');
+        const filterBtns = document.querySelectorAll('.pub-filter-btn');
+        let currentFilter = 'all';
+
+        function applyPubFilters() {
+            const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+            if (clearBtn) clearBtn.style.display = query ? 'flex' : 'none';
+
+            let totalVisible = 0;
+            const sections = document.querySelectorAll('.pub-category-section');
+
+            sections.forEach(sec => {
+                const cat = sec.getAttribute('data-category');
+                const isCatActive = (currentFilter === 'all' || cat === currentFilter);
+                let sectionVisibleCount = 0;
+
+                const items = sec.querySelectorAll('.publication-item, .interest-card');
+                items.forEach(item => {
+                    const searchData = item.getAttribute('data-search') || item.textContent.toLowerCase();
+                    const matchesQuery = !query || searchData.includes(query);
+
+                    if (isCatActive && matchesQuery) {
+                        item.style.display = '';
+                        sectionVisibleCount++;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                if (isCatActive && sectionVisibleCount > 0) {
+                    sec.style.display = 'block';
+                    totalVisible += sectionVisibleCount;
+                } else {
+                    sec.style.display = 'none';
+                }
+            });
+
+            // Empty state message
+            let emptyEl = document.getElementById('pubEmptyMsg');
+            if (totalVisible === 0) {
+                if (!emptyEl) {
+                    emptyEl = document.createElement('div');
+                    emptyEl.id = 'pubEmptyMsg';
+                    emptyEl.className = 'pub-empty-msg';
+                    emptyEl.innerHTML = '<i class="fa-solid fa-filter-circle-xmark"></i> No matching publications found.';
+                    const pubContainer = document.getElementById('publications');
+                    if (pubContainer) pubContainer.appendChild(emptyEl);
+                }
+                emptyEl.style.display = 'block';
+            } else if (emptyEl) {
+                emptyEl.style.display = 'none';
+            }
+        }
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.getAttribute('data-filter') || 'all';
+                applyPubFilters();
+            });
+        });
+
+        if (searchInput) {
+            searchInput.addEventListener('input', applyPubFilters);
+        }
+
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                applyPubFilters();
+                searchInput.focus();
+            });
+        }
     }
 
     // --- Helpers ---
     function highlightAuthor(authors) {
         if (!authors) return "";
-        // Match all Unicode dash/hyphen variants (-, ‐, ‑, ‒, –, —, −)
-        const dashPattern = '[\-\u2010-\u2015\u2212]';
+        const dashPattern = '[\\-\\u2010-\\u2015\\u2212]';
         const regex = new RegExp(`Lin,\\s*(Kuang|Guang)${dashPattern}(Hsun|Xun)`, 'g');
         return authors.replace(regex, (match, first, second) => {
             return `<b class="highlight-author">Lin, ${first}-${second}</b>`;
@@ -111,7 +189,7 @@
 
     function parseDateSort(dateStr, yearStr, monthStr) {
         if (dateStr) {
-            const d = new Date(dateStr);
+            const d = new Date(dateStr.replace(/-/g, '/'));
             if (!isNaN(d.getTime())) return d.getTime();
         }
         if (yearStr) {
@@ -458,15 +536,21 @@
         const tutorials = dash.tutorials || [];
         const totalCount = journals.length + conferences.length + patents.length + awards.length + tutorials.length;
 
-        // Filter Pills Bar
-        let html = `<div class="pub-filter-container">` +
+        // Toolbar: Search Bar + Filter Pills
+        let html = `<div class="pub-toolbar">` +
+            `<div class="pub-search-wrapper">` +
+            `<i class="fa-solid fa-magnifying-glass pub-search-icon"></i>` +
+            `<input type="text" id="pubSearchInput" class="pub-search-input" placeholder="Search publications by keyword, title, author, venue, year..." aria-label="Search publications">` +
+            `<button id="pubSearchClear" class="pub-search-clear" style="display: none;" title="Clear search"><i class="fa-solid fa-xmark"></i></button>` +
+            `</div>` +
+            `<div class="pub-filter-container">` +
             `<button class="pub-filter-btn active" data-filter="all">All <span class="pub-filter-count">${totalCount}</span></button>` +
             `<button class="pub-filter-btn" data-filter="journal"><i class="fa-solid fa-book"></i> Journals <span class="pub-filter-count">${journals.length}</span></button>` +
             `<button class="pub-filter-btn" data-filter="conference"><i class="fa-solid fa-note-sticky"></i> Conferences <span class="pub-filter-count">${conferences.length}</span></button>` +
             `<button class="pub-filter-btn" data-filter="patent"><i class="fa-solid fa-lightbulb"></i> Patents <span class="pub-filter-count">${patents.length}</span></button>` +
             `<button class="pub-filter-btn" data-filter="award"><i class="fa-solid fa-award"></i> Awards <span class="pub-filter-count">${awards.length}</span></button>` +
             `<button class="pub-filter-btn" data-filter="other">Others <span class="pub-filter-count">${tutorials.length}</span></button>` +
-            `</div>`;
+            `</div></div>`;
 
         const renderListItems = (list) => {
             return list.map(pub => {
@@ -480,10 +564,14 @@
                     venueText = patentParts || pub.venue || 'Patent';
                 }
 
-                return `<li class="publication-item" data-sort="${pub.sortTime}">` +
+                const searchContent = `${pub.title} ${pub.authors} ${venueText} ${dateDisplay} ${pub.year}`.toLowerCase();
+                const citeBtn = pub.bibtex ? ` <button class="pub-cite-btn" data-bibtex="${encodeURIComponent(pub.bibtex)}" title="Copy BibTeX Citation"><i class="fa-solid fa-quote-right"></i> Cite</button>` : '';
+
+                return `<li class="publication-item" data-sort="${pub.sortTime}" data-search="${searchContent.replace(/"/g, '&quot;')}">` +
                     `<div class="pub-main"><h3 class="pub-title">` +
                     (pub.doi ? `<a href="${pub.doi}" target="_blank" rel="noopener noreferrer">${pub.title}</a>` : pub.title) +
                     (pub.pdf ? ` <a class="pub-pdf-link" title="Download PDF" aria-label="Download PDF" href="${pub.pdf}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-file-pdf"></i></a>` : '') +
+                    citeBtn +
                     `</h3><div class="pub-tags-row">` +
                     `<span class="pub-tag tag-authors"><i class="fa-solid fa-user-group"></i> <span>${highlightAuthor(pub.authors)}</span></span>` +
                     (venueText ? `<span class="pub-tag tag-venue"><i class="fa-solid ${venueIcon}"></i> <span>${venueText}</span></span>` : '') +
@@ -522,7 +610,8 @@
                 sectionHeader('award', 'fa-solid fa-award', 'Awards') +
                 `<div class="container bg-white pt-1 publication-section"><div class="interest-grid">`;
             awards.forEach(aw => {
-                html += `<div class="interest-card"><div class="interest-icon card-icon-award"><i class="fa-solid fa-award"></i></div><div class='interest-text'><h3 class="interest-title">${aw.title}</h3><div class="list-item-details"><ul class="fa-ul education-details">` +
+                const searchContent = `${aw.title} ${aw.institute} ${aw.desc} ${aw.time}`.toLowerCase();
+                html += `<div class="interest-card" data-search="${searchContent.replace(/"/g, '&quot;')}"><div class="interest-icon card-icon-award"><i class="fa-solid fa-award"></i></div><div class='interest-text'><h3 class="interest-title">${aw.title}</h3><div class="list-item-details"><ul class="fa-ul education-details">` +
                     `<li><span class="fa-li"><i class="fa-solid fa-building-columns"></i></span>${aw.institute}</li>` +
                     (aw.desc ? `<li><span class="fa-li"><i class="fa-solid fa-note-sticky"></i></span>${aw.desc}</li>` : '') +
                     (aw.time ? `<li><span class="fa-li"><i class="fa-solid fa-calendar-days"></i></span>${aw.time}</li>` : '') +
@@ -537,7 +626,8 @@
                 sectionHeader('other', '', 'Others') +
                 `<div class="container bg-white pt-1 publication-section"><div class="interest-grid">`;
             tutorials.forEach(tut => {
-                html += `<div class="interest-card"><div class="interest-icon"><i class="fa-solid fa-file-lines"></i></div><div class='interest-text'><h3 class="interest-title">${tut.title}</h3><div class="list-item-details"><ul class="fa-ul education-details">` +
+                const searchContent = `${tut.title} ${tut.authors} ${tut.event} ${tut.time}`.toLowerCase();
+                html += `<div class="interest-card" data-search="${searchContent.replace(/"/g, '&quot;')}"><div class="interest-icon"><i class="fa-solid fa-file-lines"></i></div><div class='interest-text'><h3 class="interest-title">${tut.title}</h3><div class="list-item-details"><ul class="fa-ul education-details">` +
                     (tut.authors ? `<li><span class="fa-li"><i class="fa-solid fa-user-group"></i></span>${highlightAuthor(tut.authors)}</li>` : '') +
                     `<li><span class="fa-li"><i class="fa-solid fa-calendar-days"></i></span>${tut.event} (${tut.time})</li>` +
                     `</ul></div></div></div>`;
@@ -597,21 +687,36 @@
                 return (b.start || '').localeCompare(a.start || '');
             });
 
-            html += sectionHeader('members', '', 'Members');
-            html += `<div class="container bg-white pt-1 publication-section"><div class="member-grid">`;
-            sortedMembers.forEach(m => {
-                const genderIcon = m.gender === 'M' ? ' <i class="fa-solid fa-mars icon-m"></i>' : (m.gender === 'F' ? ' <i class="fa-solid fa-venus icon-f"></i>' : '');
-                const imgTag = m.img ? `<img src="${m.img}" onerror="this.src='https://via.placeholder.com/150'" alt="${m.name}" class="member-img">` : `<div class="member-img avatar-placeholder avatar-${m.gender === 'F' ? 'f' : (m.gender === 'M' ? 'm' : 'default')}"><i class="fa-solid fa-user"></i></div>`;
-                const dateRange = m.start ? `<p class="member-desc"><i class="fa-solid fa-calendar-days"></i> ${m.start} – ${m.end || 'Present'}</p>` : '';
+            const currentMembers = sortedMembers.filter(m => !m.end || m.end.trim() === '');
+            const alumniMembers = sortedMembers.filter(m => m.end && m.end.trim() !== '');
 
-                html += `<div class="member-card">${imgTag}<div class="member-info">` +
-                    `<h3 class="member-name">${m.url ? `<a href="${m.url}" target="_blank" rel="noopener noreferrer">${m.name}</a>` : m.name}${genderIcon}</h3>` +
-                    (m.altName ? `<div class="member-name-alt">${m.altName}</div>` : '') +
-                    (m.role ? `<div class="member-role">${m.role}</div>` : '') +
-                    dateRange +
-                    `</div></div>`;
-            });
-            html += `</div></div>`;
+            const renderMemberCards = (list) => {
+                return list.map(m => {
+                    const genderIcon = m.gender === 'M' ? ' <i class="fa-solid fa-mars icon-m"></i>' : (m.gender === 'F' ? ' <i class="fa-solid fa-venus icon-f"></i>' : '');
+                    const imgTag = m.img ? `<img src="${m.img}" onerror="this.src='https://via.placeholder.com/150'" alt="${m.name}" class="member-img">` : `<div class="member-img avatar-placeholder avatar-${m.gender === 'F' ? 'f' : (m.gender === 'M' ? 'm' : 'default')}"><i class="fa-solid fa-user"></i></div>`;
+                    const dateRange = m.start ? `<p class="member-desc"><i class="fa-solid fa-calendar-days"></i> ${m.start} – ${m.end || 'Present'}</p>` : '';
+
+                    return `<div class="member-card">${imgTag}<div class="member-info">` +
+                        `<h3 class="member-name">${m.url ? `<a href="${m.url}" target="_blank" rel="noopener noreferrer">${m.name}</a>` : m.name}${genderIcon}</h3>` +
+                        (m.altName ? `<div class="member-name-alt">${m.altName}</div>` : '') +
+                        (m.role ? `<div class="member-role">${m.role}</div>` : '') +
+                        dateRange +
+                        `</div></div>`;
+                }).join('');
+            };
+
+            // Current Members
+            if (currentMembers.length > 0) {
+                const titleText = alumniMembers.length > 0 ? 'Current Members' : 'Members';
+                html += sectionHeader('members', '', titleText);
+                html += `<div class="container bg-white pt-1 publication-section"><div class="member-grid">${renderMemberCards(currentMembers)}</div></div>`;
+            }
+
+            // Alumni Members (Only rendered if any exist)
+            if (alumniMembers.length > 0) {
+                html += sectionHeader('alumni', '', 'Alumni');
+                html += `<div class="container bg-white pt-1 publication-section"><div class="member-grid">${renderMemberCards(alumniMembers)}</div></div>`;
+            }
         }
 
         if (newsData.resources && newsData.resources.length > 0) {
@@ -638,7 +743,7 @@
     }
 
     // --- Main Data Loader ---
-    const CACHE_KEY = 'site_data_cache_v12';
+    const CACHE_KEY = 'site_data_cache_v13';
     const CACHE_EXPIRY_MS = 60 * 60 * 1000;
 
     const ranges = [
