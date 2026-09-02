@@ -472,8 +472,13 @@
             return list.map(pub => {
                 const dateDisplay = formatDateDisplay(pub.date, pub.year, pub.month);
                 const isPatent = pub.type === 'misc' || (pub.venue && pub.venue.toLowerCase() === 'patent');
-                const venueIcon = isPatent ? 'fa-lightbulb' : 'fa-book';
-                const venueText = pub.venue || (isPatent ? 'Patent' : '');
+                const venueIcon = isPatent ? 'fa-lightbulb' : (pub.type === 'inproceedings' ? 'fa-note-sticky' : 'fa-book');
+                
+                let venueText = pub.venue || '';
+                if (isPatent) {
+                    const patentParts = [pub.publisher, pub.number].filter(Boolean).join(' ');
+                    venueText = patentParts || pub.venue || 'Patent';
+                }
 
                 return `<li class="publication-item" data-sort="${pub.sortTime}">` +
                     `<div class="pub-main"><h3 class="pub-title">` +
@@ -633,7 +638,7 @@
     }
 
     // --- Main Data Loader ---
-    const CACHE_KEY = 'site_data_cache_v10';
+    const CACHE_KEY = 'site_data_cache_v11';
     const CACHE_EXPIRY_MS = 60 * 60 * 1000;
 
     const ranges = [
