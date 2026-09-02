@@ -1,123 +1,12 @@
 /* ===================================
    STYLE.CSS - NYCU Prestige & 6G Tech Blue Theme
-   Semantic Color-Coding & Glassmorphism
+   Clean, Optimized, Unified Stylesheet
    =================================== */
 
-
 /* -------------------
-   Publication Search & Cite
-   ------------------- */
-.pub-toolbar {
-    max-width: 1200px;
-    width: 100%;
-    margin: 18px auto 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.pub-search-wrapper {
-    position: relative;
-    width: 100%;
-    display: flex;
-    align-items: center;
-}
-
-.pub-search-icon {
-    position: absolute;
-    left: 14px;
-    color: var(--accent-color);
-    font-size: 0.95rem;
-    pointer-events: none;
-}
-
-.pub-search-input {
-    width: 100%;
-    padding: 10px 38px 10px 38px;
-    font-size: 0.92rem;
-    font-family: inherit;
-    color: var(--text-dark);
-    background: var(--background-white);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-sm);
-    transition: all 0.2s ease;
-}
-
-.pub-search-input:focus {
-    outline: none;
-    border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
-}
-
-.pub-search-clear {
-    position: absolute;
-    right: 12px;
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    font-size: 1rem;
-    cursor: pointer;
-    padding: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.2s;
-}
-
-.pub-search-clear:hover {
-    color: var(--text-dark);
-}
-
-.pub-cite-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.78rem;
-    font-weight: 600;
-    padding: 2px 7px;
-    border-radius: 4px;
-    background: #EFF6FF;
-    color: #1D4ED8;
-    border: 1px solid #DBEAFE;
-    margin-left: 6px;
-    vertical-align: middle;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-family: inherit;
-}
-
-.pub-cite-btn:hover {
-    background: #1D4ED8;
-    color: #FFFFFF;
-    border-color: #1D4ED8;
-    transform: scale(1.05);
-}
-
-.pub-cite-btn.copied {
-    background: #DCFCE7 !important;
-    color: #166534 !important;
-    border-color: #86EFAC !important;
-}
-
-.pub-empty-msg {
-    padding: 30px 20px;
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    background: var(--background-white);
-    border-radius: var(--radius);
-    border: 1px solid var(--border-color);
-    margin: 18px auto;
-    max-width: 1200px;
-}
-
-/* -------------------
-   1. CSS Variables
+   1. Theme Variables
    ------------------- */
 :root {
-    /* NYCU Prestige Navy & 6G Tech Blue */
     --primary-color: #0A2540;
     --primary-darker: #07192C;
     --primary-navy: #1E3A8A;
@@ -127,7 +16,7 @@
     --accent-hover: #0369A1;
     --accent-light: #E0F2FE;
     
-    /* Semantic Colors */
+    /* Semantic Category Colors */
     --color-award-bg: #FEF3C7;
     --color-award-icon: #D97706;
     --color-proj-bg: #DCFCE7;
@@ -465,34 +354,17 @@ a:hover {
     color: var(--color-interest-icon);
 }
 
-/* Semantic Icon Accents */
-.card-icon-award {
-    background: var(--color-award-bg) !important;
-}
-.card-icon-award i {
-    color: var(--color-award-icon) !important;
-}
+.card-icon-award { background: var(--color-award-bg) !important; }
+.card-icon-award i { color: var(--color-award-icon) !important; }
 
-.card-icon-proj {
-    background: var(--color-proj-bg) !important;
-}
-.card-icon-proj i {
-    color: var(--color-proj-icon) !important;
-}
+.card-icon-proj { background: var(--color-proj-bg) !important; }
+.card-icon-proj i { color: var(--color-proj-icon) !important; }
 
-.card-icon-edu {
-    background: var(--color-edu-bg) !important;
-}
-.card-icon-edu i {
-    color: var(--color-edu-icon) !important;
-}
+.card-icon-edu { background: var(--color-edu-bg) !important; }
+.card-icon-edu i { color: var(--color-edu-icon) !important; }
 
-.card-icon-exp {
-    background: var(--color-exp-bg) !important;
-}
-.card-icon-exp i {
-    color: var(--color-exp-icon) !important;
-}
+.card-icon-exp { background: var(--color-exp-bg) !important; }
+.card-icon-exp i { color: var(--color-exp-icon) !important; }
 
 .interest-text {
     flex: 1;
@@ -536,8 +408,71 @@ a:hover {
 }
 
 /* -------------------
-   7. Publication Page (List & Tabs)
+   7. Publication Page (Toolbar, Search, List, Badges)
    ------------------- */
+.pub-toolbar {
+    max-width: 1200px;
+    width: 100%;
+    margin: 18px auto 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.pub-search-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.pub-search-icon {
+    position: absolute;
+    left: 14px;
+    color: var(--accent-color);
+    font-size: 0.95rem;
+    pointer-events: none;
+}
+
+.pub-search-input {
+    width: 100%;
+    padding: 10px 38px 10px 38px;
+    font-size: 0.92rem;
+    font-family: inherit;
+    color: var(--text-dark);
+    background: var(--background-white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+}
+
+.pub-search-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
+
+.pub-search-clear {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.pub-search-clear:hover {
+    color: var(--text-dark);
+}
+
 .pub-filter-container {
     display: flex;
     flex-wrap: wrap;
@@ -546,7 +481,7 @@ a:hover {
     background: var(--background-white);
     border-radius: var(--radius);
     margin: 0;
-    max-width: 1200px;
+    width: 100%;
     box-shadow: var(--shadow-sm);
     border: 1px solid var(--border-color);
 }
@@ -668,6 +603,37 @@ a:hover {
     transform: scale(1.1);
 }
 
+.pub-cite-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: #EFF6FF;
+    color: #1D4ED8;
+    border: 1px solid #DBEAFE;
+    margin-left: 6px;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.pub-cite-btn:hover {
+    background: #1D4ED8;
+    color: #FFFFFF;
+    border-color: #1D4ED8;
+    transform: scale(1.05);
+}
+
+.pub-cite-btn.copied {
+    background: #DCFCE7 !important;
+    color: #166534 !important;
+    border-color: #86EFAC !important;
+}
+
 .pub-tags-row {
     display: flex;
     flex-wrap: wrap;
@@ -695,6 +661,18 @@ a:hover {
     padding: 1px 6px;
     border-radius: 4px;
     font-weight: 700;
+}
+
+.pub-empty-msg {
+    padding: 30px 20px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    background: var(--background-white);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    margin: 18px auto;
+    max-width: 1200px;
 }
 
 /* -------------------
@@ -746,7 +724,7 @@ a:hover {
 /* -------------------
    9. News, Members, Resources
    ------------------- */
-.news-grid, .resource-grid {
+.news-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 12px;
@@ -810,15 +788,8 @@ a:hover {
     text-transform: uppercase;
 }
 
-.badge-publish {
-    background: #DBEAFE;
-    color: #1E40AF;
-}
-
-.badge-new-join {
-    background: #DCFCE7;
-    color: #166534;
-}
+.badge-publish { background: #DBEAFE; color: #1E40AF; }
+.badge-new-join { background: #DCFCE7; color: #166534; }
 
 .pin-icon {
     color: #E11D48;
@@ -840,6 +811,40 @@ a:hover {
     font-size: 0.88rem;
     color: var(--text-muted);
     line-height: 1.45;
+}
+
+.news-item-extra {
+    display: none;
+}
+
+.news-expand-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0 6px 0;
+}
+
+.news-expand-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    background: var(--accent-light);
+    border: 1px solid #BAE6FD;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.news-expand-btn:hover {
+    background: var(--accent-color);
+    color: #FFFFFF;
+    border-color: var(--accent-color);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);
 }
 
 /* Member Grid */
@@ -960,7 +965,6 @@ a:hover {
     transform: scale(1.08);
 }
 
-/* Category Accent Colors */
 .type-overleaf { background: #ECFDF5; color: #059669; }
 .type-drive { background: #EFF6FF; color: #2563EB; }
 .type-pdf { background: #FEF2F2; color: #DC2626; }
@@ -1058,7 +1062,7 @@ a:hover {
 }
 
 /* -------------------
-   10. Translucent Glassmorphism Floating Icons
+   10. Translucent Floating Action Buttons
    ------------------- */
 .back-to-top, .lnk {
     position: fixed;
@@ -1104,16 +1108,47 @@ a:hover {
 #scjournal { bottom: 196px; }
 
 /* -------------------
-   11. Responsive Design
+   11. Top Progress Bar & Entrance
+   ------------------- */
+#topProgressBar {
+    position: fixed;
+    top: 0;
+    left: var(--sidebar-width);
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #38BDF8, #0284C7, #2563EB);
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.8), 0 0 5px rgba(2, 132, 199, 0.6);
+    z-index: 10000;
+    transition: width 0.3s ease, opacity 0.3s ease;
+    pointer-events: none;
+}
+
+@keyframes firstEntrance {
+    0% { opacity: 0.5; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.first-session-entrance {
+    animation: firstEntrance 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* -------------------
+   12. Responsive Breakpoints
    ------------------- */
 @media (max-width: 991.98px) {
+    #topProgressBar {
+        left: 0;
+    }
+
     .pub-toolbar {
         padding: 0 14px;
         margin-top: 14px;
     }
+
     .sidebar {
         width: 100%;
         min-width: 100%;
+        min-height: 440px;
         height: auto;
         position: static;
         border-right: none;
@@ -1190,78 +1225,9 @@ a:hover {
         padding: 4px 10px;
         font-size: 0.8rem;
     }
-}
 
-/* -------------------
-   Top 6G Laser Progress Bar & Session Entrance
-   ------------------- */
-#topProgressBar {
-    position: fixed;
-    top: 0;
-    left: var(--sidebar-width);
-    width: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #38BDF8, #0284C7, #2563EB);
-    box-shadow: 0 0 10px rgba(56, 189, 248, 0.8), 0 0 5px rgba(2, 132, 199, 0.6);
-    z-index: 10000;
-    transition: width 0.3s ease, opacity 0.3s ease;
-    pointer-events: none;
-}
-
-@media (max-width: 991.98px) {
-    #topProgressBar {
-        left: 0;
+    .resource-grid {
+        grid-template-columns: 1fr;
+        padding: 14px;
     }
-}
-
-@keyframes firstEntrance {
-    0% {
-        opacity: 0.5;
-        transform: translateY(10px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.first-session-entrance {
-    animation: firstEntrance 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-/* -------------------
-   News Expand/Collapse
-   ------------------- */
-.news-item-extra {
-    display: none;
-}
-
-.news-expand-wrapper {
-    display: flex;
-    justify-content: center;
-    padding: 10px 0 6px 0;
-}
-
-.news-expand-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--accent-color);
-    background: var(--accent-light);
-    border: 1px solid #BAE6FD;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-family: inherit;
-}
-
-.news-expand-btn:hover {
-    background: var(--accent-color);
-    color: #FFFFFF;
-    border-color: var(--accent-color);
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);
 }
