@@ -1228,3 +1228,40 @@ a:hover {
 .first-session-entrance {
     animation: firstEntrance 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* -------------------
+   News Expand/Collapse
+   ------------------- */
+.news-item-extra {
+    display: none;
+}
+
+.news-expand-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0 6px 0;
+}
+
+.news-expand-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    background: var(--accent-light);
+    border: 1px solid #BAE6FD;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.news-expand-btn:hover {
+    background: var(--accent-color);
+    color: #FFFFFF;
+    border-color: var(--accent-color);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);
+}

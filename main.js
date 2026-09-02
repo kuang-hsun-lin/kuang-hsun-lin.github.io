@@ -197,6 +197,25 @@
                 searchInput.focus();
             });
         }
+
+        // News Expand/Collapse Interaction
+        const newsToggleBtn = document.getElementById('newsToggleBtn');
+        if (newsToggleBtn) {
+            let isExpanded = false;
+            newsToggleBtn.addEventListener('click', () => {
+                isExpanded = !isExpanded;
+                const extras = document.querySelectorAll('.news-item-extra');
+                extras.forEach(el => {
+                    el.style.display = isExpanded ? 'flex' : 'none';
+                });
+                const count = newsToggleBtn.getAttribute('data-count') || '';
+                if (isExpanded) {
+                    newsToggleBtn.innerHTML = '<i class="fa-solid fa-chevron-up"></i> Show Less';
+                } else {
+                    newsToggleBtn.innerHTML = `<i class="fa-solid fa-chevron-down"></i> View Older News (${count} more)`;
+                }
+            });
+        }
     }
 
     // --- Helpers ---
@@ -741,11 +760,17 @@
                 return b.sortTime - a.sortTime;
             });
 
+            const INITIAL_LIMIT = 5;
+            const hasMore = sortedNews.length > INITIAL_LIMIT;
+
             html += sectionHeader('news', '', 'News');
             html += `<div class="container bg-white pt-1 publication-section"><div class="news-grid">`;
-            sortedNews.forEach(n => {
+            sortedNews.forEach((n, idx) => {
+                const isExtra = idx >= INITIAL_LIMIT && !n.pin;
+                const extraClass = isExtra ? ' news-item-extra' : '';
                 const catSlug = (n.category || '').toLowerCase().replace(/\s+/g, '-');
-                html += `<div class="news-card"><div class="news-card-header">` +
+
+                html += `<div class="news-card${extraClass}"><div class="news-card-header">` +
                     (n.monthStr ? `<div class="news-date-box"><span class="date-month">${n.monthStr}</span><span class="date-day">${n.dayStr}</span></div>` : '') +
                     `<div class="news-badge-container">` +
                     (n.category ? `<span class="news-badge badge-${catSlug}">${n.category}</span>` : '') +
@@ -757,6 +782,12 @@
                     (n.desc ? `<div class="news-text">${n.desc}</div>` : '') +
                     `</div></div>`;
             });
+
+            if (hasMore) {
+                const extraCount = sortedNews.length - INITIAL_LIMIT;
+                html += `<div class="news-expand-wrapper"><button class="news-expand-btn" id="newsToggleBtn" data-count="${extraCount}"><i class="fa-solid fa-chevron-down"></i> View Older News (${extraCount} more)</button></div>`;
+            }
+
             html += `</div></div>`;
         }
 
@@ -842,7 +873,7 @@
     }
 
     // --- Main Data Loader ---
-    const CACHE_KEY = 'site_data_cache_v23';
+    const CACHE_KEY = 'site_data_cache_v24';
     const CACHE_EXPIRY_MS = 60 * 60 * 1000;
 
     const ranges = [
