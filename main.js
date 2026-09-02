@@ -247,7 +247,7 @@
     function getSidebarHTML(photoUrl) {
         const imgUrl = photoUrl || "https://lh3.googleusercontent.com/pw/AP1GczMEUGdtwza6KiRmnTREfA0thaF_kQEe-NXd3ElLBzRKQUs7EDgs6OI9goAIPrtRlqyEdkZWDZtFWgWPwSpaU-Zh9K7rJaIFifrf7N7yRww3WUtLsD2xkBAB11K8CFhJmjPaNcYt-hRJwsd7XKCqgKC0rw=w232";
         return `<div class="sidebar-text d-flex flex-column h-100 justify-content-center text-center">` +
-            `<img class="mx-auto d-block bg-primary img-fluid rounded-circle mb-4 p-3" src="${imgUrl}" alt="Kuang-Hsun Lin 林光勛" title="Kuang-Hsun Lin 林光勛" width="200">` +
+            `<img class="mx-auto d-block bg-primary img-fluid rounded-circle mb-4 p-3" src="${imgUrl}" alt="Kuang-Hsun Lin 林光勛" decoding="async" fetchpriority="high" title="Kuang-Hsun Lin 林光勛" width="200">` +
             `<h1 class="font-weight-bold">Kuang-Hsun Lin<br>林光勛</h1>` +
             `<small class="text-left mt-4"><div class="mb-2"><ul class="fa-ul">` +
             `<li><span class="fa-li"><i class="fa-solid fa-user" title="Position"></i></span>Assistant Professor</li>` +
@@ -470,7 +470,7 @@
         return sectionHeader('about-sec', 'fa-solid fa-user', 'About') +
             `<div class="container bg-white pt-1 publication-section">` +
             `<div class="about-card">` +
-            `<div class="about-image"><img class="img-fluid" src="${photoUrl}" alt="Kuang-Hsun Lin 林光勛"></div>` +
+            `<div class="about-image"><img class="img-fluid" src="${photoUrl}" loading="lazy" decoding="async" alt="Kuang-Hsun Lin 林光勛"></div>` +
             `<div class="about-text"><p>${bioContent}</p></div>` +
             `</div></div>`;
     }
@@ -721,7 +721,7 @@
             const renderMemberCards = (list) => {
                 return list.map(m => {
                     const genderIcon = m.gender === 'M' ? ' <i class="fa-solid fa-mars icon-m"></i>' : (m.gender === 'F' ? ' <i class="fa-solid fa-venus icon-f"></i>' : '');
-                    const imgTag = m.img ? `<img src="${m.img}" onerror="this.src='https://via.placeholder.com/150'" alt="${m.name}" class="member-img">` : `<div class="member-img avatar-placeholder avatar-${m.gender === 'F' ? 'f' : (m.gender === 'M' ? 'm' : 'default')}"><i class="fa-solid fa-user"></i></div>`;
+                    const imgTag = m.img ? `<img src="${m.img}" onerror="this.src='https://via.placeholder.com/150'" alt="${m.name}" class="member-img" loading="lazy" decoding="async">` : `<div class="member-img avatar-placeholder avatar-${m.gender === 'F' ? 'f' : (m.gender === 'M' ? 'm' : 'default')}"><i class="fa-solid fa-user"></i></div>`;
                     const dateRange = m.start ? `<p class="member-desc"><i class="fa-solid fa-calendar-days"></i> ${m.start} – ${m.end || 'Present'}</p>` : '';
 
                     return `<div class="member-card">${imgTag}<div class="member-info">` +
@@ -771,7 +771,7 @@
     }
 
     // --- Main Data Loader ---
-    const CACHE_KEY = 'site_data_cache_v17';
+    const CACHE_KEY = 'site_data_cache_v18';
     const CACHE_EXPIRY_MS = 60 * 60 * 1000;
 
     const ranges = [
@@ -830,11 +830,19 @@
         startProgress();
         const cachedData = localStorage.getItem(CACHE_KEY);
         const cachedTimestamp = localStorage.getItem(`${CACHE_KEY}_timestamp`);
+        let hasRenderedCache = false;
 
-        if (cachedData && cachedTimestamp && (Date.now() - parseInt(cachedTimestamp, 10)) < CACHE_EXPIRY_MS) {
+        // Stale-While-Revalidate: Instant render from cache if available (< 1ms)
+        if (cachedData) {
             try {
-                renderAllContent(JSON.parse(cachedData));
-                return;
+                const parsed = JSON.parse(cachedData);
+                renderAllContent(parsed);
+                hasRenderedCache = true;
+                
+                // If cache is fresh (< 30 mins), avoid background re-fetch
+                if (cachedTimestamp && (Date.now() - parseInt(cachedTimestamp, 10)) < (30 * 60 * 1000)) {
+                    return;
+                }
             } catch (e) {
                 console.warn('Cache parse failed, fetching fresh data...', e);
             }
@@ -848,20 +856,29 @@
                 return res.json();
             })
             .then(data => {
-                localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+                const newDataStr = JSON.stringify(data);
+                if (newDataStr !== cachedData) {
+                    renderAllContent(data);
+                }
+                localStorage.setItem(CACHE_KEY, newDataStr);
                 localStorage.setItem(`${CACHE_KEY}_timestamp`, Date.now().toString());
-                renderAllContent(data);
             })
             .catch(err => {
                 console.error('Failed to load site data from Google Sheets:', err);
-                ['info', 'about', 'publications', 'lab'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.innerHTML = '<div class="container p-4 text-center">無法載入內容，請稍後再試。</div>';
-                });
+                if (!hasRenderedCache) {
+                    ['info', 'about', 'publications', 'lab'].forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.innerHTML = '<div class="container p-4 text-center text-muted">無法載入內容，請稍後再試。</div>';
+                    });
+                }
             });
     }
 
-    document.addEventListener('DOMContentLoaded', loadSiteData);
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadSiteData);
+    } else {
+        loadSiteData();
+    }
 
     // Email Obfuscation Decoder
     const emailKey = 5;
