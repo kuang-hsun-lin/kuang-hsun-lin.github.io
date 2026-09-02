@@ -121,7 +121,7 @@
     --primary-color: #0A2540;
     --primary-darker: #07192C;
     --primary-navy: #1E3A8A;
-    --secondary-color: #334155;
+    --secondary-color: #1E293B;
     
     --accent-color: #0284C7;
     --accent-hover: #0369A1;
@@ -142,7 +142,7 @@
     --background-light: #F8FAFC;
     --background-white: #FFFFFF;
     --text-dark: #0F172A;
-    --text-muted: #64748B;
+    --text-muted: #475569;
     --text-light: #FFFFFF;
     --border-color: #E2E8F0;
     --border-subtle: #F1F5F9;
@@ -325,6 +325,7 @@ a:hover {
 #includeNavbar {
     margin-left: var(--sidebar-width);
     width: calc(100% - var(--sidebar-width));
+    min-height: 48px;
     position: sticky;
     top: 0;
     z-index: 999;

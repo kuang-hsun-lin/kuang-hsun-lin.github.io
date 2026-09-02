@@ -304,7 +304,7 @@
     function getSidebarHTML(photoUrl) {
         const imgUrl = photoUrl || "https://lh3.googleusercontent.com/pw/AP1GczMEUGdtwza6KiRmnTREfA0thaF_kQEe-NXd3ElLBzRKQUs7EDgs6OI9goAIPrtRlqyEdkZWDZtFWgWPwSpaU-Zh9K7rJaIFifrf7N7yRww3WUtLsD2xkBAB11K8CFhJmjPaNcYt-hRJwsd7XKCqgKC0rw=w232";
         return `<div class="sidebar-text d-flex flex-column h-100 justify-content-center text-center">` +
-            `<img class="mx-auto d-block bg-primary img-fluid rounded-circle mb-4 p-3" src="${imgUrl}" alt="Kuang-Hsun Lin 林光勛" decoding="async" fetchpriority="high" title="Kuang-Hsun Lin 林光勛" width="200">` +
+            `<img class="mx-auto d-block bg-primary img-fluid rounded-circle mb-4 p-3" src="${imgUrl}" alt="Kuang-Hsun Lin 林光勛" decoding="async" fetchpriority="high" title="Kuang-Hsun Lin 林光勛" width="125" height="125">` +
             `<h1 class="font-weight-bold">Kuang-Hsun Lin<br>林光勛</h1>` +
             `<small class="text-left mt-4"><div class="mb-2"><ul class="fa-ul">` +
             `<li><span class="fa-li"><i class="fa-solid fa-user" title="Position"></i></span>Assistant Professor</li>` +
@@ -778,7 +778,7 @@
             const renderMemberCards = (list) => {
                 return list.map(m => {
                     const genderIcon = m.gender === 'M' ? ' <i class="fa-solid fa-mars icon-m"></i>' : (m.gender === 'F' ? ' <i class="fa-solid fa-venus icon-f"></i>' : '');
-                    const imgTag = m.img ? `<img src="${m.img}" onerror="this.src='https://via.placeholder.com/150'" alt="${m.name}" class="member-img" loading="lazy" decoding="async">` : `<div class="member-img avatar-placeholder avatar-${m.gender === 'F' ? 'f' : (m.gender === 'M' ? 'm' : 'default')}"><i class="fa-solid fa-user"></i></div>`;
+                    const imgTag = m.img ? `<img src="${m.img}" onerror="this.src='https://via.placeholder.com/150'" alt="${m.name}" class="member-img" width="64" height="64" loading="lazy" decoding="async">` : `<div class="member-img avatar-placeholder avatar-${m.gender === 'F' ? 'f' : (m.gender === 'M' ? 'm' : 'default')}"><i class="fa-solid fa-user"></i></div>`;
                     const dateRange = m.start ? `<p class="member-desc"><i class="fa-solid fa-calendar-days"></i> ${m.start} – ${m.end || 'Present'}</p>` : '';
 
                     return `<div class="member-card">${imgTag}<div class="member-info">` +
@@ -842,7 +842,7 @@
     }
 
     // --- Main Data Loader ---
-    const CACHE_KEY = 'site_data_cache_v22';
+    const CACHE_KEY = 'site_data_cache_v23';
     const CACHE_EXPIRY_MS = 60 * 60 * 1000;
 
     const ranges = [

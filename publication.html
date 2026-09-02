@@ -21,6 +21,9 @@
         <meta name="twitter:description" content="Assistant Professor at ICE, NYCU. Research in 6G Wireless Networks.">
         <meta name="twitter:image" content="https://lh3.googleusercontent.com/pw/AP1GczMEUGdtwza6KiRmnTREfA0thaF_kQEe-NXd3ElLBzRKQUs7EDgs6OI9goAIPrtRlqyEdkZWDZtFWgWPwSpaU-Zh9K7rJaIFifrf7N7yRww3WUtLsD2xkBAB11K8CFhJmjPaNcYt-hRJwsd7XKCqgKC0rw=w232">
 
+        <!-- Preload Critical LCP Image -->
+        <link rel="preload" as="image" href="https://lh3.googleusercontent.com/pw/AP1GczMEUGdtwza6KiRmnTREfA0thaF_kQEe-NXd3ElLBzRKQUs7EDgs6OI9goAIPrtRlqyEdkZWDZtFWgWPwSpaU-Zh9K7rJaIFifrf7N7yRww3WUtLsD2xkBAB11K8CFhJmjPaNcYt-hRJwsd7XKCqgKC0rw=w232" fetchpriority="high">
+
         <link rel="canonical" href="https://kuang-hsun-lin.github.io/publication.html">
         <link rel="preconnect" href="https://sheets.googleapis.com" crossorigin>
         <link rel="preconnect" href="https://lh3.googleusercontent.com" crossorigin>
@@ -30,6 +33,7 @@
         
         <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer">
         <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"></noscript>
+
         <link href="favicon.ico" rel="icon">
         <link rel="preload" href="style.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="style.min.css"></noscript>
@@ -37,11 +41,11 @@
 
     <body>
         <div class="wrapper">
-            <div class="sidebar" id="includeSidebar"></div>
-            <div class="container p-0" id="includeNavbar"></div>
-            <div class="content">
+            <aside class="sidebar" id="includeSidebar" role="complementary" aria-label="Author Profile Sidebar"></aside>
+            <nav class="container p-0" id="includeNavbar" role="navigation" aria-label="Main Site Navigation"></nav>
+            <main class="content" id="mainContent" role="main">
                 <div id="publications"></div>
-            </div>
+            </main>
         </div>
 
         <a href="#" class="back-to-top" aria-label="Back to top."><i class="fa-solid fa-angles-up"></i></a>
