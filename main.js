@@ -483,7 +483,7 @@
                 return `<li class="publication-item" data-sort="${pub.sortTime}">` +
                     `<div class="pub-main"><h3 class="pub-title">` +
                     (pub.doi ? `<a href="${pub.doi}" target="_blank" rel="noopener noreferrer">${pub.title}</a>` : pub.title) +
-                    (pub.pdf ? ` <a class="pub-pdf-link" title="PDF" href="${pub.pdf}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-file-pdf"></i> PDF</a>` : '') +
+                    (pub.pdf ? ` <a class="pub-pdf-link" title="Download PDF" aria-label="Download PDF" href="${pub.pdf}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-file-pdf"></i></a>` : '') +
                     `</h3><div class="pub-tags-row">` +
                     `<span class="pub-tag tag-authors"><i class="fa-solid fa-user-group"></i> <span>${highlightAuthor(pub.authors)}</span></span>` +
                     (venueText ? `<span class="pub-tag tag-venue"><i class="fa-solid ${venueIcon}"></i> <span>${venueText}</span></span>` : '') +
@@ -638,7 +638,7 @@
     }
 
     // --- Main Data Loader ---
-    const CACHE_KEY = 'site_data_cache_v11';
+    const CACHE_KEY = 'site_data_cache_v12';
     const CACHE_EXPIRY_MS = 60 * 60 * 1000;
 
     const ranges = [
