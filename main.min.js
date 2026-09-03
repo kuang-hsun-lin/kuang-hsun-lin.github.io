@@ -1215,26 +1215,25 @@
     }
 
     // Email Obfuscation Decoder
+    // Email Obfuscation Decoder (Multi-instance safe)
     const emailKey = 5;
-    function decodeEmail(target) {
-        if (!target || target.querySelector('a')) return;
-        const encodedStr = target.getAttribute('data-v');
-        if (encodedStr) {
-            const decoded = encodedStr.split('').map(char =>
-                String.fromCharCode(char.charCodeAt(0) - emailKey)
-            ).join('');
-            target.innerHTML = `<a href="mailto:${decoded}">${decoded}</a>`;
-        }
+    function decodeEmails() {
+        document.querySelectorAll('span.mm').forEach(target => {
+            if (target.querySelector('a')) return;
+            const encodedStr = target.getAttribute('data-v');
+            if (encodedStr) {
+                const decoded = encodedStr.split('').map(char =>
+                    String.fromCharCode(char.charCodeAt(0) - emailKey)
+                ).join('');
+                target.innerHTML = `<a href="mailto:${decoded}">${decoded}</a>`;
+            }
+        });
     }
 
     const emailObserver = new MutationObserver(() => {
-        const target = document.querySelector('span.mm');
-        if (target && !target.querySelector('a')) {
-            decodeEmail(target);
-            emailObserver.disconnect();
-        }
+        decodeEmails();
     });
 
     emailObserver.observe(document.body, { childList: true, subtree: true });
-    decodeEmail(document.querySelector('span.mm'));
+    decodeEmails();
 })();

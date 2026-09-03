@@ -551,7 +551,7 @@
                     </div>
                 </div>
                 <div class="cv-contact-info">
-                    <div><i class="fa-solid fa-envelope mr-1"></i> <a href="mailto:khlin@nycu.edu.tw">khlin@nycu.edu.tw</a></div>
+                    <div><i class="fa-solid fa-envelope mr-1"></i> <span class="mm" data-v="pmqnsEs~hz3jiz3y|"></span></div>
                     <div><i class="fa-solid fa-globe mr-1"></i> <a href="https://kuang-hsun-lin.github.io/" target="_blank">kuang-hsun-lin.github.io</a></div>
                     <div><i class="fa-brands fa-orcid mr-1"></i> <a href="https://orcid.org/0000-0002-0426-9301" target="_blank">0000-0002-0426-9301</a></div>
                     <div><i class="fa-brands fa-google-scholar mr-1"></i> <a href="https://scholar.google.com/citations?user=pA0SI4cAAAAJ" target="_blank">Google Scholar</a></div>
@@ -786,6 +786,18 @@
             }
 
             root.innerHTML = html;
+
+            // De-obfuscate email on client-side
+            const emailKey = 5;
+            document.querySelectorAll('span.mm').forEach(target => {
+                const encodedStr = target.getAttribute('data-v');
+                if (encodedStr && !target.querySelector('a')) {
+                    const decoded = encodedStr.split('').map(char =>
+                        String.fromCharCode(char.charCodeAt(0) - emailKey)
+                    ).join('');
+                    target.innerHTML = `<a href="mailto:${decoded}">${decoded}</a>`;
+                }
+            });
         }
 
         fetchCVData();
