@@ -422,7 +422,7 @@
         for (let i = 1; i < otherRows.length; i++) {
             const r = otherRows[i];
             if (r && r[0]) {
-                res.tutorials.push({ title: r[0], authors: r[1] || "", event: r[2] || "", time: r[3] || "" });
+                res.tutorials.push({ title: r[0], authors: r[1] || "", event: r[2] || "", time: r[3] || "", url: r[4] || "" });
             }
         }
 
@@ -881,7 +881,8 @@
                 `<div class="container bg-white pt-1 publication-section"><div class="interest-grid">`;
             tutorials.forEach(tut => {
                 const searchContent = `${tut.title} ${tut.authors} ${tut.event} ${tut.time}`.toLowerCase();
-                html += `<div class="interest-card" data-search="${searchContent.replace(/"/g, '&quot;')}"><div class="interest-icon"><i class="fa-solid fa-file-lines"></i></div><div class='interest-text'><h3 class="interest-title">${tut.title}</h3><div class="list-item-details"><ul class="fa-ul education-details">` +
+                const titleHtml = tut.url ? `<a href="${tut.url}" target="_blank" rel="noopener noreferrer">${tut.title} <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.8rem; margin-left: 4px;"></i></a>` : tut.title;
+                html += `<div class="interest-card" data-search="${searchContent.replace(/"/g, '&quot;')}"><div class="interest-icon"><i class="fa-solid fa-file-lines"></i></div><div class='interest-text'><h3 class="interest-title">${titleHtml}</h3><div class="list-item-details"><ul class="fa-ul education-details">` +
                     (tut.authors ? `<li><span class="fa-li"><i class="fa-solid fa-user-group"></i></span>${highlightAuthor(tut.authors)}</li>` : '') +
                     `<li><span class="fa-li"><i class="fa-solid fa-calendar-days"></i></span>${tut.event} (${tut.time})</li>` +
                     `</ul></div></div></div>`;
