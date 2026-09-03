@@ -365,32 +365,7 @@
         const currentYear = new Date().getFullYear();
         return `<footer class="site-footer" role="contentinfo">` +
             `<div class="footer-inner">` +
-            `<div class="footer-top">` +
-            `<div class="footer-brand">` +
-            `<div class="footer-title">Kuang-Hsun Lin 林光勛</div>` +
-            `<div class="footer-subtitle">Assistant Professor &bull; Institute of Communications Engineering, NYCU</div>` +
-            `<div class="footer-lab">Evolved Wireless Networking Laboratory (EWN Lab)</div>` +
-            `</div>` +
-            `<div class="footer-links">` +
-            `<div class="footer-links-title">Quick Links</div>` +
-            `<div class="footer-links-grid">` +
-            `<a href="index.html"><i class="fa-solid fa-house"></i> Home</a>` +
-            `<a href="lab.html"><i class="fa-solid fa-flask"></i> Lab & Members</a>` +
-            `<a href="publication.html"><i class="fa-solid fa-book-open"></i> Publications</a>` +
-            `<a href="cv.html"><i class="fa-solid fa-file-lines"></i> Curriculum Vitae</a>` +
-            `</div>` +
-            `</div>` +
-            `<div class="footer-contact">` +
-            `<div class="footer-links-title">Office & Lab</div>` +
-            `<div class="footer-contact-item"><i class="fa-solid fa-location-dot"></i> <span>Office: ED828 / Lab: ED916</span></div>` +
-            `<div class="footer-contact-item"><i class="fa-solid fa-building-columns"></i> <span>National Yang Ming Chiao Tung University</span></div>` +
-            `<div class="footer-contact-item"><i class="fa-solid fa-envelope"></i> <span class="mm" data-v="pmqnsEs~hz3jiz3y|"></span></div>` +
-            `</div>` +
-            `</div>` +
-            `<div class="footer-bottom">` +
-            `<div class="footer-copy">&copy; ${currentYear} Kuang-Hsun Lin. All rights reserved. &bull; Hosted on GitHub Pages.</div>` +
-            `<div class="footer-academic-badge"><i class="fa-solid fa-satellite-dish mr-1"></i> 6G Wireless & NTN Research</div>` +
-            `</div>` +
+            `<div class="footer-text">&copy; ${currentYear} Kuang-Hsun Lin (林光勛). All rights reserved. &bull; National Yang Ming Chiao Tung University (NYCU)</div>` +
             `</div></footer>`;
     }
 

@@ -389,14 +389,15 @@ a:hover {
 }
 
 /* -------------------
-   4.1 Modern Academic Footer
+   4.1 Sleek Minimalist Academic Footer
    ------------------- */
 .site-footer {
-    background: #0A2540;
-    color: #94A3B8;
-    padding: 45px 24px 30px;
-    margin-top: 50px;
-    border-top: 3px solid var(--accent-color);
+    background: transparent;
+    color: var(--text-muted);
+    padding: 24px 20px 20px;
+    margin-top: 36px;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
 }
 
 .footer-inner {
@@ -404,116 +405,10 @@ a:hover {
     margin: 0 auto;
 }
 
-.footer-top {
-    display: grid;
-    grid-template-columns: 2fr 1.2fr 1.5fr;
-    gap: 36px;
-    padding-bottom: 30px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.footer-brand .footer-title {
-    font-size: 1.25rem;
-    font-weight: 800;
-    color: #FFFFFF;
-    margin-bottom: 6px;
-    letter-spacing: 0.2px;
-}
-
-.footer-brand .footer-subtitle {
-    font-size: 0.88rem;
-    color: #CBD5E1;
-    margin-bottom: 6px;
-    line-height: 1.4;
-}
-
-.footer-brand .footer-lab {
-    font-size: 0.82rem;
-    color: var(--accent-color);
-    font-weight: 600;
-}
-
-.footer-links-title {
-    font-size: 0.9rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: #FFFFFF;
-    margin-bottom: 14px;
-}
-
-.footer-links-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.footer-links-grid a {
-    color: #94A3B8;
-    font-size: 0.86rem;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.2s ease;
-}
-
-.footer-links-grid a:hover {
-    color: #38BDF8;
-    transform: translateX(3px);
-    text-decoration: none;
-}
-
-.footer-contact {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.footer-contact-item {
-    font-size: 0.86rem;
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    color: #CBD5E1;
-    line-height: 1.4;
-}
-
-.footer-contact-item i {
-    color: var(--accent-color);
-    margin-top: 3px;
-    font-size: 0.85rem;
-    width: 14px;
-    flex-shrink: 0;
-}
-
-.footer-contact-item a {
-    color: #38BDF8;
-    text-decoration: none;
-}
-
-.footer-bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 24px;
-    font-size: 0.82rem;
-}
-
-.footer-copy {
-    color: #64748B;
-}
-
-.footer-academic-badge {
-    display: inline-flex;
-    align-items: center;
-    background: rgba(2, 132, 199, 0.15);
-    border: 1px solid rgba(2, 132, 199, 0.3);
-    color: #38BDF8;
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 0.78rem;
-    font-weight: 600;
+.footer-text {
+    font-size: 0.84rem;
+    color: var(--text-muted);
+    letter-spacing: 0.1px;
 }
 
 /* -------------------
@@ -1501,16 +1396,5 @@ a:hover {
     .navbar-nav-pill .nav-link {
         padding: 6px 10px;
         font-size: 0.84rem;
-    }
-
-    .footer-top {
-        grid-template-columns: 1fr;
-        gap: 24px;
-    }
-
-    .footer-bottom {
-        flex-direction: column;
-        gap: 12px;
-        text-align: center;
     }
 }
