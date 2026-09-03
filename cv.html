@@ -639,11 +639,24 @@
             }
 
             // 5. Honors & Awards
-            const awardRows = (data['Award'] || []).slice(1);
+            const rawAwardRows = (data['Award'] || []).slice(1);
+            const awardRows = rawAwardRows.filter(r => {
+                if (!r || !r[0]) return false;
+                if (selectedYearRange === 0) return true;
+                const ym = String(r[2] || '').match(/\b(19\d\d|20\d\d)\b/);
+                const yr = ym ? parseInt(ym[1], 10) : 0;
+                return yr >= cutoffYear;
+            }).sort((a, b) => {
+                const ymA = String(a[2] || '').match(/\b(19\d\d|20\d\d)\b/);
+                const ymB = String(b[2] || '').match(/\b(19\d\d|20\d\d)\b/);
+                const yrA = ymA ? parseInt(ymA[1], 10) : 0;
+                const yrB = ymB ? parseInt(ymB[1], 10) : 0;
+                return yrB - yrA;
+            });
+
             if (awardRows.length > 0) {
                 html += `<section class="cv-section"><h2 class="cv-section-title">Honors & Awards</h2>`;
                 awardRows.forEach(r => {
-                    if (!r[0]) return;
                     html += `
                     <div class="cv-item">
                         <div class="cv-item-header">

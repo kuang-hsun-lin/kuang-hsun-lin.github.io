@@ -362,7 +362,7 @@
             `<li><span class="fa-li"><i class="fa-solid fa-user" title="Position"></i></span>Assistant Professor</li>` +
             `<li><span class="fa-li"><i class="fa-solid fa-building-user" title="Affiliation"></i></span>ICE, NYCU, TW</li>` +
             `<li><span class="fa-li"><i class="fa-solid fa-envelope" title="Email"></i></span><span class="mm" data-v="pmqnsEs~hz3jiz3y|"></span></li>` +
-            `<li><span class="fa-li"><i class="fa-solid fa-phone" title="Phone"></i></span>+886-3-571-2121#54527</li>` +
+            `<li><span class="fa-li"><i class="fa-solid fa-phone" title="Phone"></i></span><span class="pp" data-v="0==;282:<627676(:9:7<"></span></li>` +
             `<li><span class="fa-li"><i class="fa-solid fa-building" title="Office"></i></span>Office: ED828</li>` +
             `<li><span class="fa-li"><i class="fa-solid fa-building" title="Lab"></i></span>Lab: ED916</li>` +
             `</ul></div></small>` +
@@ -447,9 +447,18 @@
         for (let i = 1; i < expRows.length; i++) {
             const r = expRows[i];
             if (r && r[0]) {
-                res.experience.push({ title: r[0], affiliation: r[1] || "", start: r[2] || "", desc: r[3] || "", end: r[4] || "" });
+                const sTime = r[2] ? new Date(String(r[2]).replace(/-/g, '/')).getTime() : 0;
+                res.experience.push({
+                    title: r[0],
+                    affiliation: r[1] || "",
+                    start: r[2] || "",
+                    desc: r[3] || "",
+                    end: r[4] || "",
+                    sortTime: isNaN(sTime) ? 0 : sTime
+                });
             }
         }
+        res.experience.sort((a, b) => b.sortTime - a.sortTime);
 
         // Education sheet
         const eduRows = sheetsMap['Education'] || [];
@@ -474,9 +483,18 @@
         for (let i = 1; i < awardRows.length; i++) {
             const r = awardRows[i];
             if (r && r[0]) {
-                res.awards.push({ title: r[0], institute: r[1] || "", time: r[2] || "", desc: r[3] || "" });
+                const yrMatch = String(r[2] || '').match(/\b(19\d\d|20\d\d)\b/);
+                const yr = yrMatch ? parseInt(yrMatch[1], 10) : 0;
+                res.awards.push({
+                    title: r[0],
+                    institute: r[1] || "",
+                    time: r[2] || "",
+                    desc: r[3] || "",
+                    year: yr
+                });
             }
         }
+        res.awards.sort((a, b) => (b.year || 0) - (a.year || 0));
 
         // Course sheet
         const courseRows = sheetsMap['Course'] || [];
@@ -1085,7 +1103,7 @@
     }
 
     // --- Main Data Loader ---
-    const CACHE_KEY = 'site_data_cache_v25';
+    const CACHE_KEY = 'site_data_cache_v28';
 
     const sheetNames = [
         'About',
@@ -1237,10 +1255,9 @@
         loadSiteData();
     }
 
-    // Email Obfuscation Decoder
-    // Email Obfuscation Decoder (Multi-instance safe)
+    // Email & Phone Obfuscation Decoder (Multi-instance safe)
     const emailKey = 5;
-    function decodeEmails() {
+    function decodeSecureContacts() {
         document.querySelectorAll('span.mm').forEach(target => {
             if (target.querySelector('a')) return;
             const encodedStr = target.getAttribute('data-v');
@@ -1251,12 +1268,23 @@
                 target.innerHTML = `<a href="mailto:${decoded}">${decoded}</a>`;
             }
         });
+
+        document.querySelectorAll('span.pp').forEach(target => {
+            if (target.textContent) return;
+            const encodedStr = target.getAttribute('data-v');
+            if (encodedStr) {
+                const decoded = encodedStr.split('').map(char =>
+                    String.fromCharCode(char.charCodeAt(0) - emailKey)
+                ).join('');
+                target.textContent = decoded;
+            }
+        });
     }
 
-    const emailObserver = new MutationObserver(() => {
-        decodeEmails();
+    const secureContactObserver = new MutationObserver(() => {
+        decodeSecureContacts();
     });
 
-    emailObserver.observe(document.body, { childList: true, subtree: true });
-    decodeEmails();
+    secureContactObserver.observe(document.body, { childList: true, subtree: true });
+    decodeSecureContacts();
 })();
