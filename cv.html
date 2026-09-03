@@ -461,7 +461,7 @@
         const SPREADSHEET_ID = '1EsbqSfOS97txN7_nwxpujdkV3g6scHB24TSAaJ25AMo';
         const API_KEY = 'AIzaSyD8sJOgRFmGvQ6T5X-PjwVfpEsb8pG2y2o';
         const SHEETS = [
-            'About', 'Education', 'Experience', 'Project', 'Award', 'Course', 'Service', 'Other', 'ORCID'
+            'About', 'Member', 'Education', 'Experience', 'Project', 'Award', 'Course', 'Service', 'Other', 'ORCID'
         ];
 
         let cvData = null;
@@ -525,8 +525,20 @@
             let html = '';
 
             // 1. Header
-            const aboutRows = data['About'] || [];
-            const photoUrl = (aboutRows.length > 1 && aboutRows[1][1]) ? aboutRows[1][1] : "https://lh3.googleusercontent.com/pw/AP1GczMEUGdtwza6KiRmnTREfA0thaF_kQEe-NXd3ElLBzRKQUs7EDgs6OI9goAIPrtRlqyEdkZWDZtFWgWPwSpaU-Zh9K7rJaIFifrf7N7yRww3WUtLsD2xkBAB11K8CFhJmjPaNcYt-hRJwsd7XKCqgKC0rw=w232";
+            const memberRows = data['Member'] || [];
+            let photoUrl = "";
+            for (let i = 1; i < memberRows.length; i++) {
+                const r = memberRows[i];
+                if (r && (r[0] === 'Kuang-Hsun Lin' || (r[3] && r[3].toLowerCase() === 'advisor'))) {
+                    if (r[4]) {
+                        photoUrl = r[4];
+                        break;
+                    }
+                }
+            }
+            if (!photoUrl) {
+                photoUrl = "https://lh3.googleusercontent.com/pw/AP1GczMEUGdtwza6KiRmnTREfA0thaF_kQEe-NXd3ElLBzRKQUs7EDgs6OI9goAIPrtRlqyEdkZWDZtFWgWPwSpaU-Zh9K7rJaIFifrf7N7yRww3WUtLsD2xkBAB11K8CFhJmjPaNcYt-hRJwsd7XKCqgKC0rw=w232";
+            }
 
             html += `
             <header class="cv-header">
