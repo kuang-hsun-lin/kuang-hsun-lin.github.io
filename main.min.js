@@ -483,9 +483,18 @@
         for (let i = 1; i < projRows.length; i++) {
             const r = projRows[i];
             if (r && r[0]) {
-                res.projects.push({ title: r[0], role: r[1] || "", funder: r[2] || "", start: r[3] || "", end: r[4] || "" });
+                const sTime = r[3] ? new Date(String(r[3]).replace(/-/g, '/')).getTime() : 0;
+                res.projects.push({
+                    title: r[0],
+                    role: r[1] || "",
+                    funder: r[2] || "",
+                    start: r[3] || "",
+                    end: r[4] || "",
+                    sortTime: isNaN(sTime) ? 0 : sTime
+                });
             }
         }
+        res.projects.sort((a, b) => b.sortTime - a.sortTime);
 
         return res;
     }

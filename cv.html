@@ -598,11 +598,15 @@
             }
 
             // 4. Research Grants & Projects
-            const projRows = (data['Project'] || []).slice(1);
+            const rawProjRows = (data['Project'] || []).slice(1);
+            const projRows = rawProjRows.filter(r => r && r[0]).sort((a, b) => {
+                const ta = a[3] ? new Date(String(a[3]).replace(/-/g, '/')).getTime() : 0;
+                const tb = b[3] ? new Date(String(b[3]).replace(/-/g, '/')).getTime() : 0;
+                return (isNaN(tb) ? 0 : tb) - (isNaN(ta) ? 0 : ta);
+            });
             if (projRows.length > 0) {
                 html += `<section class="cv-section"><h2 class="cv-section-title">Research Grants & Sponsored Projects</h2>`;
                 projRows.forEach(r => {
-                    if (!r[0]) return;
                     const dateStr = r[3] ? (r[3] + (r[4] ? ` – ${r[4]}` : '')) : '';
                     html += `
                     <div class="cv-item">
