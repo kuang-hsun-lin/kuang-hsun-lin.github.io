@@ -252,12 +252,12 @@
 
         /* Publication Specifics */
         .pub-entry {
-            margin-bottom: 12px;
-            font-size: 0.9rem;
-            line-height: 1.48;
+            margin-bottom: 14px;
+            font-size: 0.92rem;
+            line-height: 1.5;
             page-break-inside: avoid;
             break-inside: avoid;
-            padding-left: 28px;
+            padding-left: 42px;
             position: relative;
         }
 
@@ -265,19 +265,31 @@
             position: absolute;
             left: 0;
             top: 0;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--accent);
-            font-size: 0.85rem;
-            width: 24px;
+            font-size: 0.88rem;
+            width: 36px;
+            text-align: left;
+            letter-spacing: -0.2px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .pub-entry-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
         }
 
         .pub-entry-title {
             font-weight: 600;
             color: var(--primary);
+            font-size: 0.95rem;
+            line-height: 1.35;
         }
 
         .pub-entry-authors {
             color: var(--text-main);
+            font-size: 0.88rem;
         }
 
         .pub-entry-authors b.highlight-author {
@@ -289,12 +301,13 @@
         .pub-entry-venue {
             font-style: italic;
             color: #334155;
+            font-size: 0.88rem;
         }
 
         .pub-entry-meta {
             font-size: 0.82rem;
             color: var(--text-muted);
-            margin-top: 2px;
+            margin-top: 1px;
         }
 
         .pub-entry-meta a {
@@ -364,6 +377,19 @@
                 break-inside: avoid !important;
                 page-break-inside: avoid !important;
                 margin-bottom: 8pt !important;
+            }
+
+            .pub-num {
+                color: #000000 !important;
+                width: 32px !important;
+            }
+
+            .pub-entry {
+                padding-left: 36px !important;
+            }
+
+            .pub-entry-title {
+                color: #000000 !important;
             }
 
             .pub-entry-authors b.highlight-author {
@@ -606,10 +632,12 @@
                     html += `
                     <div class="pub-entry">
                         <span class="pub-num">[J${idx + 1}]</span>
-                        <div class="pub-entry-title">${p.title}</div>
-                        <div class="pub-entry-authors">${highlightAuthor(p.authors)}</div>
-                        <div class="pub-entry-venue">${venueStr}</div>
-                        ${p.doi ? `<div class="pub-entry-meta"><a href="${p.doi}" target="_blank">DOI: ${p.doi.replace('https://doi.org/', '')}</a></div>` : ''}
+                        <div class="pub-entry-content">
+                            <div class="pub-entry-title">${p.title}</div>
+                            <div class="pub-entry-authors">${highlightAuthor(p.authors)}</div>
+                            <div class="pub-entry-venue">${venueStr}</div>
+                            ${p.doi ? `<div class="pub-entry-meta"><a href="${p.doi}" target="_blank">DOI: ${p.doi.replace('https://doi.org/', '')}</a></div>` : ''}
+                        </div>
                     </div>`;
                 });
             }
@@ -622,10 +650,12 @@
                     html += `
                     <div class="pub-entry">
                         <span class="pub-num">[C${idx + 1}]</span>
-                        <div class="pub-entry-title">${p.title}</div>
-                        <div class="pub-entry-authors">${highlightAuthor(p.authors)}</div>
-                        <div class="pub-entry-venue">${venueStr}</div>
-                        ${p.doi ? `<div class="pub-entry-meta"><a href="${p.doi}" target="_blank">DOI: ${p.doi.replace('https://doi.org/', '')}</a></div>` : ''}
+                        <div class="pub-entry-content">
+                            <div class="pub-entry-title">${p.title}</div>
+                            <div class="pub-entry-authors">${highlightAuthor(p.authors)}</div>
+                            <div class="pub-entry-venue">${venueStr}</div>
+                            ${p.doi ? `<div class="pub-entry-meta"><a href="${p.doi}" target="_blank">DOI: ${p.doi.replace('https://doi.org/', '')}</a></div>` : ''}
+                        </div>
                     </div>`;
                 });
             }
@@ -637,9 +667,11 @@
                     html += `
                     <div class="pub-entry">
                         <span class="pub-num">[P${idx + 1}]</span>
-                        <div class="pub-entry-title">${p.title}</div>
-                        <div class="pub-entry-authors">${highlightAuthor(p.authors)}</div>
-                        <div class="pub-entry-venue">${p.publisher || 'US Patent'} ${p.number || ''}, Issued ${p.year}.</div>
+                        <div class="pub-entry-content">
+                            <div class="pub-entry-title">${p.title}</div>
+                            <div class="pub-entry-authors">${highlightAuthor(p.authors)}</div>
+                            <div class="pub-entry-venue">${p.publisher || 'US Patent'} ${p.number || ''}, Issued ${p.year}.</div>
+                        </div>
                     </div>`;
                 });
             }
@@ -658,9 +690,11 @@
                     html += `
                     <div class="pub-entry">
                         <span class="pub-num">[O${idx + 1}]</span>
-                        <div class="pub-entry-title">${r[0]}</div>
-                        <div class="pub-entry-authors">${highlightAuthor(r[1])}</div>
-                        <div class="pub-entry-venue">${r[2] || ''} (${r[3] || ''})</div>
+                        <div class="pub-entry-content">
+                            <div class="pub-entry-title">${r[0]}</div>
+                            <div class="pub-entry-authors">${highlightAuthor(r[1])}</div>
+                            <div class="pub-entry-venue">${r[2] || ''} (${r[3] || ''})</div>
+                        </div>
                     </div>`;
                 });
             }
