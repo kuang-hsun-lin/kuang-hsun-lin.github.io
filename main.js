@@ -357,6 +357,111 @@
     }
 
     // --- Parser Functions ---
+    function parseDashboardFromSheets(sheetsMap) {
+        const res = {
+            about: { content: "", photo: "" },
+            interests: [],
+            experience: [],
+            education: [],
+            tutorials: [],
+            awards: [],
+            courses: [],
+            services: [],
+            projects: [],
+            welcome: []
+        };
+
+        // About sheet
+        const aboutRows = sheetsMap['About'] || [];
+        if (aboutRows.length > 1 && aboutRows[1]) {
+            res.about.content = aboutRows[1][0] || "";
+            res.about.photo = aboutRows[1][1] || "";
+        }
+
+        // Welcome sheet
+        const welcomeRows = sheetsMap['Welcome'] || [];
+        for (let i = 1; i < welcomeRows.length; i++) {
+            const r = welcomeRows[i];
+            if (r && r[0]) {
+                res.welcome.push(r[0]);
+            }
+        }
+
+        // Interest sheet
+        const interestRows = sheetsMap['Interest'] || [];
+        for (let i = 1; i < interestRows.length; i++) {
+            const r = interestRows[i];
+            if (r && r[0]) {
+                res.interests.push({ item: r[0], desc: r[1] || "", icon: r[2] || "circle" });
+            }
+        }
+
+        // Experience sheet
+        const expRows = sheetsMap['Experience'] || [];
+        for (let i = 1; i < expRows.length; i++) {
+            const r = expRows[i];
+            if (r && r[0]) {
+                res.experience.push({ title: r[0], affiliation: r[1] || "", start: r[2] || "", desc: r[3] || "", end: r[4] || "" });
+            }
+        }
+
+        // Education sheet
+        const eduRows = sheetsMap['Education'] || [];
+        for (let i = 1; i < eduRows.length; i++) {
+            const r = eduRows[i];
+            if (r && r[0]) {
+                res.education.push({ degree: r[0], dept: r[1] || "", univ: r[2] || "", start: r[3] || "", end: r[4] || "" });
+            }
+        }
+
+        // Other sheet (Tutorials / Whitepapers)
+        const otherRows = sheetsMap['Other'] || [];
+        for (let i = 1; i < otherRows.length; i++) {
+            const r = otherRows[i];
+            if (r && r[0]) {
+                res.tutorials.push({ title: r[0], authors: r[1] || "", event: r[2] || "", time: r[3] || "" });
+            }
+        }
+
+        // Award sheet
+        const awardRows = sheetsMap['Award'] || [];
+        for (let i = 1; i < awardRows.length; i++) {
+            const r = awardRows[i];
+            if (r && r[0]) {
+                res.awards.push({ title: r[0], institute: r[1] || "", time: r[2] || "", desc: r[3] || "" });
+            }
+        }
+
+        // Course sheet
+        const courseRows = sheetsMap['Course'] || [];
+        for (let i = 1; i < courseRows.length; i++) {
+            const r = courseRows[i];
+            if (r && r[0]) {
+                res.courses.push({ title: r[0], time: r[1] || "", resources: r[2] || "" });
+            }
+        }
+
+        // Service sheet
+        const serviceRows = sheetsMap['Service'] || [];
+        for (let i = 1; i < serviceRows.length; i++) {
+            const r = serviceRows[i];
+            if (r && r[0]) {
+                res.services.push({ title: r[0], affiliation: r[1] || "", time: r[2] || "" });
+            }
+        }
+
+        // Project sheet
+        const projRows = sheetsMap['Project'] || [];
+        for (let i = 1; i < projRows.length; i++) {
+            const r = projRows[i];
+            if (r && r[0]) {
+                res.projects.push({ title: r[0], role: r[1] || "", funder: r[2] || "", start: r[3] || "", end: r[4] || "" });
+            }
+        }
+
+        return res;
+    }
+
     function parseDashboard(dashRows) {
         const res = {
             about: { content: "", photo: "" },
@@ -490,7 +595,49 @@
         return members;
     }
 
-    function parseNewsAndResources(newsRows) {
+    function parseResourcesFromSheet(resourceRows) {
+        const resources = [];
+        if (!resourceRows || !resourceRows.length) return resources;
+        for (let i = 1; i < resourceRows.length; i++) {
+            const r = resourceRows[i];
+            if (!r || !r.length || !r[0]) continue;
+            const pin = (r[3] === true || String(r[3]).toUpperCase() === 'TRUE');
+            resources.push({
+                title: r[0] || '',
+                desc: r[1] || '',
+                date: r[2] || '',
+                pin: pin,
+                url: r[4] || '',
+                sortTime: r[2] ? new Date(r[2]).getTime() : 0
+            });
+        }
+        return resources;
+    }
+
+    function parseNewsAndResources(newsRows, directResourceRows) {
+        if (directResourceRows && directResourceRows.length > 0) {
+            const news = [];
+            for (let i = 1; i < newsRows.length; i++) {
+                const r = newsRows[i];
+                if (!r || !r.length || !r[0]) continue;
+                const pin = (r[3] === true || String(r[3]).toUpperCase() === 'TRUE');
+                const dateInfo = parseNewsDate(r[2]);
+                news.push({
+                    title: r[0] || '',
+                    desc: r[1] || '',
+                    date: r[2] || '',
+                    pin: pin,
+                    url: r[4] || '',
+                    category: r[5] || '',
+                    monthStr: dateInfo.monthStr,
+                    dayStr: dateInfo.dayStr,
+                    sortTime: dateInfo.sortTime
+                });
+            }
+            const resources = parseResourcesFromSheet(directResourceRows);
+            return { news, resources };
+        }
+
         const news = [];
         const resources = [];
         if (!newsRows || !newsRows.length) return { news, resources };
@@ -873,25 +1020,57 @@
     }
 
     // --- Main Data Loader ---
-    const CACHE_KEY = 'site_data_cache_v24';
+    const CACHE_KEY = 'site_data_cache_v25';
 
-    const ranges = [
-        'Dashboard!A1:F64',
-        'ORCID!A1:N100',
-        'Member!A1:H20',
-        'News!A1:F30'
+    const sheetNames = [
+        'About',
+        'Welcome',
+        'Interest',
+        'Experience',
+        'Education',
+        'Award',
+        'Course',
+        'Service',
+        'Project',
+        'Other',
+        'Member',
+        'News',
+        'Resource',
+        'ORCID'
     ];
 
-    function renderAllContent(rawData) {
-        const dashRows = rawData.valueRanges[0]?.values || [];
-        const orcidRows = rawData.valueRanges[1]?.values || [];
-        const memberRows = rawData.valueRanges[2]?.values || [];
-        const newsRows = rawData.valueRanges[3]?.values || [];
+    const ranges = sheetNames.map(name => `${name}!A1:Z`);
 
-        const dash = parseDashboard(dashRows);
+    function renderAllContent(rawData) {
+        const sheetsMap = {};
+        if (rawData && rawData.valueRanges) {
+            rawData.valueRanges.forEach(vr => {
+                const rangeStr = vr.range || '';
+                // Extracts sheet title from range, e.g. "About!A1:Z50" or "'About'!A1:Z50"
+                const titleMatch = rangeStr.match(/^'?([^'!]+)'?!/);
+                if (titleMatch && titleMatch[1]) {
+                    sheetsMap[titleMatch[1]] = vr.values || [];
+                }
+            });
+        }
+
+        // Support both new multi-sheet structure and legacy single Dashboard fallback
+        let dash;
+        if (sheetsMap['About'] || sheetsMap['Project'] || sheetsMap['Experience']) {
+            dash = parseDashboardFromSheets(sheetsMap);
+        } else {
+            const legacyDashRows = rawData.valueRanges[0]?.values || [];
+            dash = parseDashboard(legacyDashRows);
+        }
+
+        const orcidRows = sheetsMap['ORCID'] || rawData.valueRanges?.find(vr => vr.range?.includes('ORCID'))?.values || [];
+        const memberRows = sheetsMap['Member'] || rawData.valueRanges?.find(vr => vr.range?.includes('Member'))?.values || [];
+        const newsRows = sheetsMap['News'] || rawData.valueRanges?.find(vr => vr.range?.includes('News'))?.values || [];
+        const resourceRows = sheetsMap['Resource'] || [];
+
         const pubs = parseOrcid(orcidRows);
         const members = parseMembers(memberRows);
-        const newsData = parseNewsAndResources(newsRows);
+        const newsData = parseNewsAndResources(newsRows, resourceRows);
 
         const advisorImg = members.find(m => m.name === 'Kuang-Hsun Lin' || (m.role && m.role.toLowerCase() === 'advisor'))?.img || "https://lh3.googleusercontent.com/pw/AP1GczMEUGdtwza6KiRmnTREfA0thaF_kQEe-NXd3ElLBzRKQUs7EDgs6OI9goAIPrtRlqyEdkZWDZtFWgWPwSpaU-Zh9K7rJaIFifrf7N7yRww3WUtLsD2xkBAB11K8CFhJmjPaNcYt-hRJwsd7XKCqgKC0rw=w232";
 
