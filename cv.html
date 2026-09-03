@@ -489,7 +489,7 @@
 
         async function fetchCVData() {
             // Check cache
-            const cacheKey = 'cv_data_cache_v25';
+            const cacheKey = 'cv_data_cache_v28';
             const cached = localStorage.getItem(cacheKey);
             if (cached) {
                 try {
@@ -523,6 +523,8 @@
         function renderCV(data) {
             const root = document.getElementById('cvRoot');
             let html = '';
+
+            const cutoffYear = selectedYearRange === 5 ? (currentYear - 5) : 0;
 
             // 1. Header
             const memberRows = data['Member'] || [];
@@ -694,7 +696,6 @@
             });
 
             // Filter by selected year range (5 years vs All)
-            const cutoffYear = selectedYearRange === 5 ? (currentYear - 5) : 0;
             const filteredPubs = allPubs.filter(p => p.year >= cutoffYear).sort((a, b) => b.sortTime - a.sortTime);
 
             const journals = filteredPubs.filter(p => p.type === 'article');
