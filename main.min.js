@@ -358,9 +358,6 @@
             `<a id="navbarAbout" href="about.html" class="nav-link"><i class="fa-solid fa-user nav-icon"></i><span>About</span></a>` +
             `<a id="navbarPublication" href="publication.html" class="nav-link"><i class="fa-solid fa-book-open nav-icon"></i><span>Publication</span></a>` +
             `</div>` +
-            `<div class="navbar-actions">` +
-            `<a href="cv.html" class="navbar-cv-chip" title="View Academic Curriculum Vitae"><i class="fa-solid fa-file-lines mr-1"></i> CV</a>` +
-            `</div>` +
             `</div></nav>`;
     }
 
