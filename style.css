@@ -173,6 +173,36 @@ a:hover {
     box-shadow: 0 4px 10px rgba(2, 132, 199, 0.25);
 }
 
+.sidebar-cv-wrapper {
+    margin: 0.75rem auto 0.5rem;
+    width: 100%;
+}
+
+.btn-sidebar-cv {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 7px 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    background: var(--background-white);
+    border: 1.5px solid var(--accent-color);
+    border-radius: var(--radius);
+    text-decoration: none;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+}
+
+.btn-sidebar-cv:hover {
+    background: var(--accent-color);
+    color: var(--text-light);
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+}
+
 .sidebar small {
     display: block;
     margin: 0 auto;
