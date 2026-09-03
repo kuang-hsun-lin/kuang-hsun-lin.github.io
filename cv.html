@@ -768,11 +768,25 @@
             }
 
             // 8. Teaching
-            const courseRows = (data['Course'] || []).slice(1);
+            function parseTermSort(termStr) {
+                if (!termStr) return 0;
+                const s = String(termStr).trim();
+                const ym = s.match(/\b(19\d\d|20\d\d)\b/);
+                const yr = ym ? parseInt(ym[1], 10) : 0;
+                let sem = 0;
+                const low = s.toLowerCase();
+                if (low.includes('spring')) sem = 1;
+                else if (low.includes('summer')) sem = 2;
+                else if (low.includes('fall') || low.includes('autumn')) sem = 3;
+                else if (low.includes('winter')) sem = 4;
+                return yr * 10 + sem;
+            }
+
+            const rawCourseRows = (data['Course'] || []).slice(1);
+            const courseRows = rawCourseRows.filter(r => r && r[0]).sort((a, b) => parseTermSort(b[1]) - parseTermSort(a[1]));
             if (courseRows.length > 0) {
                 html += `<section class="cv-section"><h2 class="cv-section-title">Teaching</h2>`;
                 courseRows.forEach(r => {
-                    if (!r[0]) return;
                     html += `
                     <div class="cv-item">
                         <div class="cv-item-header">

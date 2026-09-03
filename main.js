@@ -315,6 +315,20 @@
         };
     }
 
+    function parseAcademicTermSort(termStr) {
+        if (!termStr) return 0;
+        const s = String(termStr).trim();
+        const yearMatch = s.match(/\b(19\d\d|20\d\d)\b/);
+        const year = yearMatch ? parseInt(yearMatch[1], 10) : 0;
+        let semesterVal = 0;
+        const lower = s.toLowerCase();
+        if (lower.includes('spring')) semesterVal = 1;
+        else if (lower.includes('summer')) semesterVal = 2;
+        else if (lower.includes('fall') || lower.includes('autumn')) semesterVal = 3;
+        else if (lower.includes('winter')) semesterVal = 4;
+        return year * 10 + semesterVal;
+    }
+
     function sectionHeader(id, iconClass, title) {
         return `<div class="container py-1 px-2 bg-primary publication-section"><div class="row py-3 px-4" id="${id}"><h2 class="mb-3 mb-md-0 text-white text-uppercase font-weight-bold">${iconClass ? `<i class="${iconClass}"></i> ` : ''}${title}</h2></div></div>`;
     }
@@ -450,9 +464,10 @@
         for (let i = 1; i < courseRows.length; i++) {
             const r = courseRows[i];
             if (r && r[0]) {
-                res.courses.push({ title: r[0], time: r[1] || "", resources: r[2] || "" });
+                res.courses.push({ title: r[0], time: r[1] || "", resources: r[2] || "", sortVal: parseAcademicTermSort(r[1]) });
             }
         }
+        res.courses.sort((a, b) => b.sortVal - a.sortVal);
 
         // Service sheet
         const serviceRows = sheetsMap['Service'] || [];
