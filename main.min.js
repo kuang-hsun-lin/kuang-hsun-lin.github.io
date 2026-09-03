@@ -216,6 +216,25 @@
                 }
             });
         }
+
+        // Project Expand/Collapse Interaction
+        const projectToggleBtn = document.getElementById('projectToggleBtn');
+        if (projectToggleBtn) {
+            let isProjExpanded = false;
+            projectToggleBtn.addEventListener('click', () => {
+                isProjExpanded = !isProjExpanded;
+                const extras = document.querySelectorAll('.project-item-extra');
+                extras.forEach(el => {
+                    el.style.display = isProjExpanded ? 'flex' : 'none';
+                });
+                const count = projectToggleBtn.getAttribute('data-count') || '';
+                if (isProjExpanded) {
+                    projectToggleBtn.innerHTML = '<i class="fa-solid fa-chevron-up"></i> Show Less';
+                } else {
+                    projectToggleBtn.innerHTML = `<i class="fa-solid fa-chevron-down"></i> View Full Projects History (${count} more)`;
+                }
+            });
+        }
     }
 
     // --- Helpers ---
@@ -776,16 +795,24 @@
         }
 
         if (dash.projects.length > 0) {
+            const PROJECT_LIMIT = 3;
+            const hasMoreProjects = dash.projects.length > PROJECT_LIMIT;
             html += sectionHeader('project', '', 'Projects');
             html += `<div class="container bg-white pt-1 publication-section"><div class="interest-grid">`;
-            dash.projects.forEach(proj => {
+            dash.projects.forEach((proj, idx) => {
+                const isExtra = idx >= PROJECT_LIMIT;
+                const extraClass = isExtra ? ' project-item-extra' : '';
                 const dateStr = proj.start ? (proj.start + (proj.end ? `–${proj.end}` : '')) : '';
-                html += `<div class="interest-card"><div class="interest-icon card-icon-proj"><i class="fa-solid fa-diagram-project"></i></div><div class='interest-text'><h3 class="interest-title">${proj.title}</h3><div class="list-item-details"><ul class="fa-ul education-details">` +
+                html += `<div class="interest-card${extraClass}"><div class="interest-icon card-icon-proj"><i class="fa-solid fa-diagram-project"></i></div><div class='interest-text'><h3 class="interest-title">${proj.title}</h3><div class="list-item-details"><ul class="fa-ul education-details">` +
                     (proj.role ? `<li><span class="fa-li"><i class="fa-solid fa-id-badge"></i></span>${proj.role}</li>` : '') +
                     (proj.funder ? `<li><span class="fa-li"><i class="fa-solid fa-landmark"></i></span>${proj.funder}</li>` : '') +
                     (dateStr ? `<li><span class="fa-li"><i class="fa-solid fa-calendar-days"></i></span>${dateStr}</li>` : '') +
                     `</ul></div></div></div>`;
             });
+            if (hasMoreProjects) {
+                const extraCount = dash.projects.length - PROJECT_LIMIT;
+                html += `<div class="news-expand-wrapper w-100" style="grid-column: 1 / -1;"><button class="news-expand-btn" id="projectToggleBtn" data-count="${extraCount}"><i class="fa-solid fa-chevron-down"></i> View Full Projects History (${extraCount} more)</button></div>`;
+            }
             html += `</div></div>`;
         }
 

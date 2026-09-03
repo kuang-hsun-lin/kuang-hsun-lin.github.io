@@ -963,7 +963,8 @@ a:hover {
     line-height: 1.45;
 }
 
-.news-item-extra {
+.news-item-extra,
+.project-item-extra {
     display: none;
 }
 

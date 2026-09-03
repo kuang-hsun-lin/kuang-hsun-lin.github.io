@@ -578,11 +578,19 @@
             }
 
             // 3. Academic & Professional Experience
-            const expRows = (data['Experience'] || []).slice(1);
+            const expRows = (data['Experience'] || []).slice(1).filter(r => {
+                if (!r || !r[0]) return false;
+                if (selectedYearRange === 0) return true;
+                // If End is empty, it's Present/Current
+                if (!r[4] || r[4].trim() === '' || r[4].toLowerCase().includes('present')) return true;
+                const endYrMatch = String(r[4]).match(/\b(19\d\d|20\d\d)\b/);
+                const endYr = endYrMatch ? parseInt(endYrMatch[1], 10) : 0;
+                return endYr >= cutoffYear;
+            });
+
             if (expRows.length > 0) {
                 html += `<section class="cv-section"><h2 class="cv-section-title">Professional Experience</h2>`;
                 expRows.forEach(r => {
-                    if (!r[0]) return;
                     const dateStr = r[2] ? (r[2] + (r[4] ? ` – ${r[4]}` : ' – Present')) : '';
                     html += `
                     <div class="cv-item">
@@ -599,11 +607,21 @@
 
             // 4. Research Grants & Projects
             const rawProjRows = (data['Project'] || []).slice(1);
-            const projRows = rawProjRows.filter(r => r && r[0]).sort((a, b) => {
+            const projRows = rawProjRows.filter(r => {
+                if (!r || !r[0]) return false;
+                if (selectedYearRange === 0) return true;
+                // Active if End is empty or End year/Start year >= cutoffYear
+                const sYrMatch = String(r[3] || '').match(/\b(19\d\d|20\d\d)\b/);
+                const eYrMatch = String(r[4] || '').match(/\b(19\d\d|20\d\d)\b/);
+                const sYr = sYrMatch ? parseInt(sYrMatch[1], 10) : 0;
+                const eYr = eYrMatch ? parseInt(eYrMatch[1], 10) : (r[4] ? 0 : 9999);
+                return eYr >= cutoffYear || sYr >= cutoffYear;
+            }).sort((a, b) => {
                 const ta = a[3] ? new Date(String(a[3]).replace(/-/g, '/')).getTime() : 0;
                 const tb = b[3] ? new Date(String(b[3]).replace(/-/g, '/')).getTime() : 0;
                 return (isNaN(tb) ? 0 : tb) - (isNaN(ta) ? 0 : ta);
             });
+
             if (projRows.length > 0) {
                 html += `<section class="cv-section"><h2 class="cv-section-title">Research Grants & Sponsored Projects</h2>`;
                 projRows.forEach(r => {
@@ -754,11 +772,18 @@
             html += `</section>`;
 
             // 7. Academic Service
-            const svcRows = (data['Service'] || []).slice(1);
+            const svcRows = (data['Service'] || []).slice(1).filter(r => {
+                if (!r || !r[0]) return false;
+                if (selectedYearRange === 0) return true;
+                if (!r[2] || r[2].trim() === '') return true; // Continuous service
+                const yrMatch = String(r[2]).match(/\b(19\d\d|20\d\d)\b/);
+                const yr = yrMatch ? parseInt(yrMatch[1], 10) : 0;
+                return yr >= cutoffYear;
+            });
+
             if (svcRows.length > 0) {
                 html += `<section class="cv-section"><h2 class="cv-section-title">Academic Services</h2>`;
                 svcRows.forEach(r => {
-                    if (!r[0]) return;
                     html += `
                     <div class="cv-item">
                         <div class="cv-item-header">
