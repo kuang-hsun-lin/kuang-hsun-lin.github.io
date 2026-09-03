@@ -342,7 +342,7 @@
             `<a class="btn btn-outline-primary mr-2" href="https://www.lens.org/lens/profile/khlin/" title="Lens" aria-label="Lens Profile" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-o"></i></a>` +
             `</small>` +
             `<div class="sidebar-cv-wrapper mb-3">` +
-            `<a class="btn-sidebar-cv" href="cv.html" title="Curriculum Vitae / Academic CV"><i class="fa-solid fa-file-lines mr-1"></i> Curriculum Vitae (CV)</a>` +
+            `<a class="btn-sidebar-cv" href="cv.html" title="Curriculum Vitae / Academic CV"><span class="cv-icon-badge"><i class="fa-solid fa-file-invoice"></i></span> Curriculum Vitae <i class="fa-solid fa-chevron-right" style="font-size: 0.72rem; opacity: 0.8; margin-left: 2px;"></i></a>` +
             `</div>` +
             `<small class="text-justify mb-1 mt-2">Delight thyself also in the Lord: and he shall give thee the desires of thine heart. Commit thy way unto the Lord; trust also in him; and he shall bring it to pass.<p class="text-right">Psalm 37:4-5</p></small>` +
             `<small class="text-justify mb-1 mt-2">又要以耶和華為樂，他就將你心裡所求的賜給你。當將你的事交託耶和華，並倚靠他，他就必成全。<p class="text-right">詩篇37:4-5</p></small>` +

@@ -174,33 +174,65 @@ a:hover {
 }
 
 .sidebar-cv-wrapper {
-    margin: 0.75rem auto 0.5rem;
+    margin: 1.1rem auto 0.75rem;
+    padding: 0 4px;
     width: 100%;
 }
 
 .btn-sidebar-cv {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
+    gap: 8px;
     width: 100%;
-    padding: 7px 14px;
-    font-size: 0.85rem;
+    padding: 9px 16px;
+    font-size: 0.88rem;
     font-weight: 600;
-    color: var(--primary-color);
-    background: var(--background-white);
-    border: 1.5px solid var(--accent-color);
-    border-radius: var(--radius);
+    letter-spacing: 0.2px;
+    color: #FFFFFF;
+    background: linear-gradient(135deg, #0A2540 0%, #0284C7 100%);
+    border: none;
+    border-radius: 24px;
     text-decoration: none;
-    box-shadow: var(--shadow-sm);
-    transition: all 0.2s ease;
+    box-shadow: 0 3px 10px rgba(10, 37, 64, 0.15), 0 1px 3px rgba(2, 132, 199, 0.2);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-sidebar-cv::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+.btn-sidebar-cv:hover::before {
+    left: 100%;
 }
 
 .btn-sidebar-cv:hover {
-    background: var(--accent-color);
-    color: var(--text-light);
+    background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);
+    color: #FFFFFF;
     text-decoration: none;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(2, 132, 199, 0.35);
+}
+
+.btn-sidebar-cv .cv-icon-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    font-size: 0.75rem;
+    flex-shrink: 0;
 }
 
 .sidebar small {
