@@ -350,13 +350,51 @@
     }
 
     function getNavbarHTML() {
-        return `<nav class="navbar navbar-expand-lg bg-secondary navbar-dark">` +
-            `<div class="collapse navbar-collapse justify-content-center" id="navbarCollapse"><div class="navbar-nav m-auto">` +
-            `<a id="navbarHome" href="index.html" class="nav-item nav-link">Home</a>` +
-            `<a id="navbarLab" href="lab.html" class="nav-item nav-link">Lab</a>` +
-            `<a id="navbarAbout" href="about.html" class="nav-item nav-link">About</a>` +
-            `<a id="navbarPublication" href="publication.html" class="nav-item nav-link">Publication</a>` +
-            `</div></div></nav>`;
+        return `<nav class="navbar navbar-expand-lg">` +
+            `<div class="navbar-container">` +
+            `<div class="navbar-nav-pill" id="navbarCollapse">` +
+            `<a id="navbarHome" href="index.html" class="nav-link"><i class="fa-solid fa-house nav-icon"></i><span>Home</span></a>` +
+            `<a id="navbarLab" href="lab.html" class="nav-link"><i class="fa-solid fa-flask nav-icon"></i><span>Lab</span></a>` +
+            `<a id="navbarAbout" href="about.html" class="nav-link"><i class="fa-solid fa-user nav-icon"></i><span>About</span></a>` +
+            `<a id="navbarPublication" href="publication.html" class="nav-link"><i class="fa-solid fa-book-open nav-icon"></i><span>Publication</span></a>` +
+            `</div>` +
+            `<div class="navbar-actions">` +
+            `<a href="cv.html" class="navbar-cv-chip" title="View Academic Curriculum Vitae"><i class="fa-solid fa-file-lines mr-1"></i> CV</a>` +
+            `</div>` +
+            `</div></nav>`;
+    }
+
+    function getFooterHTML() {
+        const currentYear = new Date().getFullYear();
+        return `<footer class="site-footer" role="contentinfo">` +
+            `<div class="footer-inner">` +
+            `<div class="footer-top">` +
+            `<div class="footer-brand">` +
+            `<div class="footer-title">Kuang-Hsun Lin 林光勛</div>` +
+            `<div class="footer-subtitle">Assistant Professor &bull; Institute of Communications Engineering, NYCU</div>` +
+            `<div class="footer-lab">Evolved Wireless Networking Laboratory (EWN Lab)</div>` +
+            `</div>` +
+            `<div class="footer-links">` +
+            `<div class="footer-links-title">Quick Links</div>` +
+            `<div class="footer-links-grid">` +
+            `<a href="index.html"><i class="fa-solid fa-house"></i> Home</a>` +
+            `<a href="lab.html"><i class="fa-solid fa-flask"></i> Lab & Members</a>` +
+            `<a href="publication.html"><i class="fa-solid fa-book-open"></i> Publications</a>` +
+            `<a href="cv.html"><i class="fa-solid fa-file-lines"></i> Curriculum Vitae</a>` +
+            `</div>` +
+            `</div>` +
+            `<div class="footer-contact">` +
+            `<div class="footer-links-title">Office & Lab</div>` +
+            `<div class="footer-contact-item"><i class="fa-solid fa-location-dot"></i> <span>Office: ED828 / Lab: ED916</span></div>` +
+            `<div class="footer-contact-item"><i class="fa-solid fa-building-columns"></i> <span>National Yang Ming Chiao Tung University</span></div>` +
+            `<div class="footer-contact-item"><i class="fa-solid fa-envelope"></i> <span class="mm" data-v="pmqnsEs~hz3jiz3y|"></span></div>` +
+            `</div>` +
+            `</div>` +
+            `<div class="footer-bottom">` +
+            `<div class="footer-copy">&copy; ${currentYear} Kuang-Hsun Lin. All rights reserved. &bull; Hosted on GitHub Pages.</div>` +
+            `<div class="footer-academic-badge"><i class="fa-solid fa-satellite-dish mr-1"></i> 6G Wireless & NTN Research</div>` +
+            `</div>` +
+            `</div></footer>`;
     }
 
     // --- Parser Functions ---
@@ -1095,6 +1133,18 @@
 
         const labEl = document.getElementById('lab');
         if (labEl) labEl.innerHTML = renderLabPage(dash, members, newsData);
+
+        // Inject Universal Footer
+        const mainContentEl = document.getElementById('mainContent');
+        if (mainContentEl) {
+            let footerEl = document.getElementById('siteFooter');
+            if (!footerEl) {
+                footerEl = document.createElement('div');
+                footerEl.id = 'siteFooter';
+                mainContentEl.appendChild(footerEl);
+            }
+            footerEl.innerHTML = getFooterHTML();
+        }
 
         // Session-only subtle entrance animation
         if (!sessionStorage.getItem('site_intro_played')) {

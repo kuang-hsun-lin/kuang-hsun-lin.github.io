@@ -271,56 +271,249 @@ a:hover {
 }
 
 /* -------------------
-   4. Navbar (Glassmorphism Prestige)
+   4. Navbar (Floating Capsule & Micro-Interactions)
    ------------------- */
 #includeNavbar {
     margin-left: var(--sidebar-width);
     width: calc(100% - var(--sidebar-width));
-    min-height: 48px;
+    min-height: 60px;
     position: sticky;
     top: 0;
     z-index: 999;
+    padding: 10px 24px;
+    display: flex;
+    justify-content: center;
+    pointer-events: none; /* Allows click-through outside the pill */
 }
 
 #includeNavbar .navbar {
-    background-color: rgba(10, 37, 64, 0.92) !important;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    padding: 0.4rem 1.25rem;
+    background: transparent !important;
+    padding: 0;
     margin: 0;
-    border-radius: 0;
-    box-shadow: 0 2px 12px rgba(10, 37, 64, 0.15);
-    display: flex;
-    justify-content: center;
+    width: 100%;
+    max-width: 1200px;
 }
 
-#includeNavbar .navbar-nav {
+.navbar-container {
+    width: 100%;
     display: flex;
-    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    pointer-events: auto;
+}
+
+.navbar-nav-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(10, 37, 64, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 5px 8px;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 20px rgba(10, 37, 64, 0.2), 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.navbar-nav-pill .nav-link {
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.82) !important;
+    padding: 6px 14px;
+    border-radius: 20px;
+    display: inline-flex;
     align-items: center;
     gap: 6px;
-    margin: 0 auto;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    text-decoration: none;
 }
 
-#includeNavbar .nav-link {
-    font-weight: 500;
-    font-size: 0.95rem;
-    color: rgba(255, 255, 255, 0.85) !important;
-    padding: 0.45rem 1.1rem;
-    border-radius: var(--radius-sm);
+.navbar-nav-pill .nav-link .nav-icon {
+    font-size: 0.82rem;
+    opacity: 0.75;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.navbar-nav-pill .nav-link:hover {
+    color: #FFFFFF !important;
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+.navbar-nav-pill .nav-link:hover .nav-icon {
+    opacity: 1;
+    transform: translateY(-1px);
+}
+
+.navbar-nav-pill .nav-link.active {
+    color: #FFFFFF !important;
+    background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%) !important;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);
+}
+
+.navbar-nav-pill .nav-link.active .nav-icon {
+    opacity: 1;
+}
+
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.navbar-cv-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(10, 37, 64, 0.08);
     transition: all 0.2s ease;
 }
 
-#includeNavbar .nav-link:hover {
-    color: #ffffff !important;
-    background-color: rgba(255, 255, 255, 0.15);
+.navbar-cv-chip:hover {
+    background: var(--accent-color);
+    color: #FFFFFF;
+    border-color: var(--accent-color);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    text-decoration: none;
 }
 
-#includeNavbar .nav-link.active {
-    color: #ffffff !important;
-    background-color: var(--accent-color) !important;
+/* -------------------
+   4.1 Modern Academic Footer
+   ------------------- */
+.site-footer {
+    background: #0A2540;
+    color: #94A3B8;
+    padding: 45px 24px 30px;
+    margin-top: 50px;
+    border-top: 3px solid var(--accent-color);
+}
+
+.footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1.2fr 1.5fr;
+    gap: 36px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-brand .footer-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin-bottom: 6px;
+    letter-spacing: 0.2px;
+}
+
+.footer-brand .footer-subtitle {
+    font-size: 0.88rem;
+    color: #CBD5E1;
+    margin-bottom: 6px;
+    line-height: 1.4;
+}
+
+.footer-brand .footer-lab {
+    font-size: 0.82rem;
+    color: var(--accent-color);
     font-weight: 600;
-    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.35);
+}
+
+.footer-links-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #FFFFFF;
+    margin-bottom: 14px;
+}
+
+.footer-links-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.footer-links-grid a {
+    color: #94A3B8;
+    font-size: 0.86rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.footer-links-grid a:hover {
+    color: #38BDF8;
+    transform: translateX(3px);
+    text-decoration: none;
+}
+
+.footer-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.footer-contact-item {
+    font-size: 0.86rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: #CBD5E1;
+    line-height: 1.4;
+}
+
+.footer-contact-item i {
+    color: var(--accent-color);
+    margin-top: 3px;
+    font-size: 0.85rem;
+    width: 14px;
+    flex-shrink: 0;
+}
+
+.footer-contact-item a {
+    color: #38BDF8;
+    text-decoration: none;
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 24px;
+    font-size: 0.82rem;
+}
+
+.footer-copy {
+    color: #64748B;
+}
+
+.footer-academic-badge {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(2, 132, 199, 0.15);
+    border: 1px solid rgba(2, 132, 199, 0.3);
+    color: #38BDF8;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    font-weight: 600;
 }
 
 /* -------------------
@@ -1291,5 +1484,33 @@ a:hover {
     .resource-grid {
         grid-template-columns: 1fr;
         padding: 14px;
+    }
+
+    #includeNavbar {
+        padding: 8px 12px;
+    }
+
+    .navbar-container {
+        justify-content: center;
+    }
+
+    .navbar-actions {
+        display: none; /* On mobile, CV button is already prominent in the top sidebar */
+    }
+
+    .navbar-nav-pill .nav-link {
+        padding: 6px 10px;
+        font-size: 0.84rem;
+    }
+
+    .footer-top {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
     }
 }
