@@ -143,14 +143,31 @@
             margin-bottom: 24px;
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .cv-header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .cv-photo {
+            width: 95px;
+            height: 95px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2.5px solid var(--accent);
+            box-shadow: 0 2px 8px rgba(2, 132, 199, 0.2);
+            flex-shrink: 0;
         }
 
         .cv-title-name {
-            font-size: 2rem;
+            font-size: 1.85rem;
             font-weight: 800;
             color: var(--primary);
-            margin: 0 0 4px;
+            margin: 0 0 3px;
             letter-spacing: -0.5px;
         }
 
@@ -158,13 +175,14 @@
             font-size: 1.05rem;
             font-weight: 600;
             color: var(--text-muted);
-            margin: 0 0 6px;
+            margin: 0 0 4px;
         }
 
         .cv-affiliation {
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             color: var(--text-main);
             margin: 0;
+            line-height: 1.4;
         }
 
         .cv-contact-info {
@@ -172,6 +190,7 @@
             font-size: 0.85rem;
             color: var(--text-muted);
             line-height: 1.6;
+            flex-shrink: 0;
         }
 
         .cv-contact-info a {
@@ -359,6 +378,15 @@
                 margin-bottom: 16px !important;
             }
 
+            .cv-photo {
+                width: 80px !important;
+                height: 80px !important;
+                border: 1.5px solid #000000 !important;
+                box-shadow: none !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
             .cv-title-name {
                 color: #000000 !important;
                 font-size: 18pt !important;
@@ -497,12 +525,18 @@
             let html = '';
 
             // 1. Header
+            const aboutRows = data['About'] || [];
+            const photoUrl = (aboutRows.length > 1 && aboutRows[1][1]) ? aboutRows[1][1] : "https://lh3.googleusercontent.com/pw/AP1GczMEUGdtwza6KiRmnTREfA0thaF_kQEe-NXd3ElLBzRKQUs7EDgs6OI9goAIPrtRlqyEdkZWDZtFWgWPwSpaU-Zh9K7rJaIFifrf7N7yRww3WUtLsD2xkBAB11K8CFhJmjPaNcYt-hRJwsd7XKCqgKC0rw=w232";
+
             html += `
             <header class="cv-header">
-                <div>
-                    <h1 class="cv-title-name">Kuang-Hsun Lin, Ph.D. <span style="font-weight: 500; font-size: 1.4rem; color: #475569;">林光勛</span></h1>
-                    <div class="cv-subtitle">Assistant Professor</div>
-                    <div class="cv-affiliation">Institute of Communications Engineering, National Yang Ming Chiao Tung University (NYCU), Taiwan</div>
+                <div class="cv-header-left">
+                    <img class="cv-photo" src="${photoUrl}" alt="Kuang-Hsun Lin 林光勛" decoding="async">
+                    <div>
+                        <h1 class="cv-title-name">Kuang-Hsun Lin, Ph.D. <span style="font-weight: 500; font-size: 1.35rem; color: #475569;">林光勛</span></h1>
+                        <div class="cv-subtitle">Assistant Professor</div>
+                        <div class="cv-affiliation">Institute of Communications Engineering, National Yang Ming Chiao Tung University (NYCU), Taiwan</div>
+                    </div>
                 </div>
                 <div class="cv-contact-info">
                     <div><i class="fa-solid fa-envelope mr-1"></i> <a href="mailto:khlin@nycu.edu.tw">khlin@nycu.edu.tw</a></div>
