@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Curriculum Vitae | Kuang-Hsun Lin 林光勛</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta content="Curriculum Vitae of Kuang-Hsun Lin, Assistant Professor at National Yang Ming Chiao Tung University (NYCU)." name="description">
 
     <!-- Open Graph -->
@@ -355,87 +355,132 @@
             .cv-toolbar {
                 flex-direction: column;
                 align-items: stretch;
-                padding: 10px 14px;
-                gap: 10px;
+                padding: 8px 12px;
+                gap: 8px;
             }
 
             .cv-toolbar-left {
+                display: flex;
+                align-items: center;
                 justify-content: space-between;
                 width: 100%;
             }
 
+            .cv-toolbar-title {
+                font-weight: 600;
+                font-size: 0.88rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
             .cv-toolbar-right {
-                flex-wrap: wrap;
+                display: flex;
+                align-items: center;
                 justify-content: space-between;
                 width: 100%;
                 gap: 8px;
             }
 
             .filter-chip-group {
+                display: flex;
                 flex: 1 1 auto;
                 justify-content: center;
+                padding: 2px;
             }
 
             .filter-chip {
-                padding: 6px 10px;
-                font-size: 0.78rem;
+                padding: 5px 8px;
+                font-size: 0.76rem;
                 flex: 1;
                 text-align: center;
+                white-space: nowrap;
             }
 
             .cv-toolbar .btn-primary-action {
-                flex: 1 1 auto;
-                justify-content: center;
+                flex: 0 0 auto;
+                padding: 5px 12px;
+                font-size: 0.78rem;
+                white-space: nowrap;
             }
 
             /* Sheet adjustments */
             .cv-sheet {
-                margin: 12px 10px 36px;
-                padding: 24px 18px;
+                margin: 10px 8px 36px;
+                padding: 20px 16px;
                 border-radius: 6px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.06);
             }
 
             /* Header stacking on mobile */
             .cv-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 16px;
-                padding-bottom: 14px;
-                margin-bottom: 20px;
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 14px !important;
+                padding-bottom: 14px !important;
+                margin-bottom: 18px !important;
             }
 
             .cv-header-left {
-                flex-direction: row;
-                align-items: center;
-                gap: 16px;
-                width: 100%;
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: flex-start !important;
+                gap: 14px !important;
+                width: 100% !important;
+            }
+
+            .cv-header-info {
+                flex: 1 1 auto !important;
+                min-width: 0 !important;
             }
 
             .cv-photo {
-                width: 75px;
-                height: 75px;
+                width: 72px !important;
+                height: 72px !important;
+                flex-shrink: 0 !important;
             }
 
             .cv-title-name {
-                font-size: 1.5rem;
-                line-height: 1.25;
+                font-size: 1.35rem !important;
+                line-height: 1.25 !important;
+                word-break: normal !important;
+                overflow-wrap: break-word !important;
+                margin: 0 0 3px !important;
+            }
+
+            .cv-title-name .zh-name {
+                font-weight: 500;
+                font-size: 1.15rem;
+                color: #475569;
+                display: inline-block;
+                margin-left: 4px;
             }
 
             .cv-subtitle {
-                font-size: 0.98rem;
+                font-size: 0.92rem !important;
+                font-weight: 600 !important;
+                margin: 0 0 3px !important;
             }
 
             .cv-affiliation {
-                font-size: 0.88rem;
+                font-size: 0.82rem !important;
+                line-height: 1.35 !important;
             }
 
             .cv-contact-info {
-                text-align: left;
-                width: 100%;
-                font-size: 0.82rem;
-                line-height: 1.6;
-                padding-top: 10px;
-                border-top: 1px dashed var(--border-light);
+                text-align: left !important;
+                width: 100% !important;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 4px !important;
+                font-size: 0.82rem !important;
+                line-height: 1.5 !important;
+                padding-top: 10px !important;
+                border-top: 1px dashed var(--border-light) !important;
+            }
+
+            .cv-contact-info > div {
+                word-break: break-all;
             }
 
             /* Item headers: stack title and date if tight */
@@ -493,23 +538,30 @@
 
         @media screen and (max-width: 480px) {
             .cv-sheet {
-                margin: 8px 6px 30px;
-                padding: 18px 14px;
+                margin: 6px 4px 24px;
+                padding: 16px 12px;
+            }
+
+            .cv-toolbar-title {
+                font-size: 0.82rem;
+            }
+
+            .btn-toolbar {
+                padding: 4px 8px;
+                font-size: 0.76rem;
             }
 
             .cv-header-left {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
+                gap: 12px !important;
             }
 
             .cv-photo {
-                width: 68px;
-                height: 68px;
+                width: 64px !important;
+                height: 64px !important;
             }
 
             .cv-title-name {
-                font-size: 1.35rem;
+                font-size: 1.25rem !important;
             }
         }
 
@@ -605,14 +657,14 @@
     <div class="cv-toolbar no-print">
         <div class="cv-toolbar-left">
             <a href="index.html" class="btn-toolbar"><i class="fa-solid fa-arrow-left"></i> Main Site</a>
-            <span style="font-weight: 600; font-size: 0.95rem; margin-left: 6px;">Kuang-Hsun Lin &bull; Academic CV</span>
+            <span class="cv-toolbar-title">Kuang-Hsun Lin &bull; Academic CV</span>
         </div>
         <div class="cv-toolbar-right">
             <div class="filter-chip-group">
                 <button class="filter-chip active" id="filter5YearsBtn" onclick="setPublicationRange(5)"><i class="fa-solid fa-filter mr-1"></i> Past 5 Years (<span id="fiveYearLabel">2021–2026</span>)</button>
                 <button class="filter-chip" id="filterAllBtn" onclick="setPublicationRange(0)">All Years</button>
             </div>
-            <button class="btn-toolbar btn-primary-action" onclick="window.print()"><i class="fa-solid fa-print"></i> Print / Save PDF</button>
+            <button class="btn-toolbar btn-primary-action" onclick="window.print()"><i class="fa-solid fa-print"></i> Print / PDF</button>
         </div>
     </div>
 
@@ -656,7 +708,7 @@
 
         async function fetchCVData() {
             // Check cache
-            const cacheKey = 'cv_data_cache_v28';
+            const cacheKey = 'cv_data_cache_v32';
             const cached = localStorage.getItem(cacheKey);
             if (cached) {
                 try {
@@ -713,8 +765,8 @@
             <header class="cv-header">
                 <div class="cv-header-left">
                     <img class="cv-photo" src="${photoUrl}" alt="Kuang-Hsun Lin 林光勛" decoding="async">
-                    <div>
-                        <h1 class="cv-title-name">Kuang-Hsun Lin, Ph.D. <span style="font-weight: 500; font-size: 1.35rem; color: #475569;">林光勛</span></h1>
+                    <div class="cv-header-info">
+                        <h1 class="cv-title-name">Kuang-Hsun Lin, Ph.D. <span class="zh-name">林光勛</span></h1>
                         <div class="cv-subtitle">Assistant Professor</div>
                         <div class="cv-affiliation">Institute of Communications Engineering, National Yang Ming Chiao Tung University (NYCU), Taiwan</div>
                     </div>

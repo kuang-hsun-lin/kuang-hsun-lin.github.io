@@ -977,31 +977,7 @@
 
         if (dash.welcome && dash.welcome.length > 0) {
             html += sectionHeader('welcome', '', 'Welcome');
-            html += `<div class="container bg-white pt-1 publication-section"><div class="about-card welcome-card">` +
-                `<div class="lab-brand-hero">` +
-                `<svg viewBox="0 0 420 96" width="100%" class="lab-hero-logo" style="max-width: 420px; height: auto;" xmlns="http://www.w3.org/2000/svg">` +
-                `<defs>` +
-                `<linearGradient id="logo-bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0A2540"/><stop offset="100%" stop-color="#081C30"/></linearGradient>` +
-                `<linearGradient id="logo-gold" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FDE68A"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient>` +
-                `<linearGradient id="text-brand-grad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#0284C7"/><stop offset="100%" stop-color="#38BDF8"/></linearGradient>` +
-                `</defs>` +
-                `<g transform="translate(6, 4)">` +
-                `<rect width="88" height="88" rx="20" fill="url(#logo-bg)"/>` +
-                `<path d="M 25 28 C 40 28, 53 23, 62 17" stroke="#38BDF8" stroke-width="6.5" stroke-linecap="round" fill="none"/>` +
-                `<path d="M 25 44 C 40 44, 49 42, 55 39" stroke="#0284C7" stroke-width="6.5" stroke-linecap="round" fill="none"/>` +
-                `<path d="M 25 60 C 42 60, 55 65, 63 71" stroke="#38BDF8" stroke-width="6.5" stroke-linecap="round" fill="none"/>` +
-                `<path d="M 25 21 L 25 67" stroke="#FFFFFF" stroke-width="7.5" stroke-linecap="round"/>` +
-                `<circle cx="65" cy="18" r="6.5" fill="url(#logo-gold)"/>` +
-                `<circle cx="65" cy="18" r="11" stroke="#FDE68A" stroke-width="1.2" stroke-dasharray="2.5 2.5" fill="none" opacity="0.85"/>` +
-                `</g>` +
-                `<g transform="translate(112, 0)">` +
-                `<text x="0" y="44" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="34" font-weight="900" letter-spacing="1.5" fill="#0A2540">EWN <tspan fill="url(#text-brand-grad)">LAB</tspan></text>` +
-                `<text x="1" y="66" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="13" font-weight="600" letter-spacing="0.4" fill="#475569">Evolved Wireless Networking Laboratory</text>` +
-                `<text x="1" y="84" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="600" letter-spacing="0.8" fill="#0284C7">NYCU &bull; INSTITUTE OF COMMUNICATIONS ENGINEERING</text>` +
-                `</g>` +
-                `</svg>` +
-                `</div>` +
-                `<div class="about-text w-100">`;
+            html += `<div class="container bg-white pt-1 publication-section"><div class="about-card welcome-card"><div class="about-text w-100">`;
             dash.welcome.forEach(msg => {
                 html += `<p>${msg}</p>`;
             });
