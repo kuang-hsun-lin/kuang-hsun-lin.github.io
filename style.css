@@ -857,7 +857,34 @@ a:hover {
 }
 
 .welcome-card {
-    padding: 20px 24px;
+    padding: 24px 28px;
+}
+
+.lab-brand-hero {
+    margin-bottom: 20px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border-color);
+    width: 100%;
+}
+
+.lab-hero-logo {
+    max-width: 380px;
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+@media (max-width: 576px) {
+    .welcome-card {
+        padding: 18px 16px;
+    }
+    .lab-brand-hero {
+        margin-bottom: 16px;
+        padding-bottom: 14px;
+    }
+    .lab-hero-logo {
+        max-width: 100%;
+    }
 }
 
 .welcome-card p {

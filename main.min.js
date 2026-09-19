@@ -977,7 +977,30 @@
 
         if (dash.welcome && dash.welcome.length > 0) {
             html += sectionHeader('welcome', '', 'Welcome');
-            html += `<div class="container bg-white pt-1 publication-section"><div class="about-card welcome-card"><div class="about-text w-100">`;
+            html += `<div class="container bg-white pt-1 publication-section"><div class="about-card welcome-card">` +
+                `<div class="lab-brand-hero">` +
+                `<svg viewBox="0 0 380 76" width="100%" height="auto" class="lab-hero-logo" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="EWN LAB - Evolved Wireless Networking Laboratory">` +
+                `<g transform="translate(10, 8)">` +
+                `<polygon points="30,3 56,18 56,48 30,63 4,48 4,18" fill="#F8FAFC" stroke="#0A2540" stroke-width="2.2" stroke-linejoin="round"/>` +
+                `<line x1="30" y1="3" x2="30" y2="33" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="2 2"/>` +
+                `<line x1="4" y1="18" x2="30" y2="33" stroke="#BAE6FD" stroke-width="1.5"/>` +
+                `<line x1="56" y1="18" x2="30" y2="33" stroke="#0284C7" stroke-width="2"/>` +
+                `<line x1="30" y1="33" x2="30" y2="63" stroke="#0284C7" stroke-width="2.2"/>` +
+                `<line x1="4" y1="48" x2="30" y2="33" stroke="#0A2540" stroke-width="2"/>` +
+                `<circle cx="30" cy="33" r="4.2" fill="#0284C7"/>` +
+                `<circle cx="30" cy="33" r="7.5" stroke="#38BDF8" stroke-width="1" stroke-dasharray="2 2" fill="none"/>` +
+                `<circle cx="56" cy="18" r="2.8" fill="#0A2540"/>` +
+                `<circle cx="4" cy="48" r="2.8" fill="#0A2540"/>` +
+                `<circle cx="30" cy="63" r="2.8" fill="#0284C7"/>` +
+                `</g>` +
+                `<g transform="translate(86, 12)">` +
+                `<text x="0" y="27" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="25" font-weight="800" letter-spacing="-0.3" fill="#0A2540">EWN<tspan fill="#94A3B8" font-weight="300"> | </tspan><tspan fill="#0284C7" font-weight="700">LAB</tspan></text>` +
+                `<text x="1" y="44" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="9.5" font-weight="600" letter-spacing="0.3" fill="#334155">Evolved Wireless Networking Laboratory</text>` +
+                `<text x="1" y="56" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="8" font-weight="600" letter-spacing="0.8" fill="#64748B">NYCU &bull; INSTITUTE OF COMMUNICATIONS ENGINEERING</text>` +
+                `</g>` +
+                `</svg>` +
+                `</div>` +
+                `<div class="about-text w-100">`;
             dash.welcome.forEach(msg => {
                 html += `<p>${msg}</p>`;
             });
