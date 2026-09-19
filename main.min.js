@@ -1127,7 +1127,7 @@
     }
 
     // --- Main Data Loader ---
-    const CACHE_KEY = 'site_data_cache_v29';
+    const CACHE_KEY = 'site_data_cache_v31';
 
     const sheetNames = [
         'About',
@@ -1227,6 +1227,16 @@
 
     function loadSiteData() {
         startProgress();
+        // Automatically clear any outdated caches to force instant rendering of new features
+        try {
+            for (let i = localStorage.length - 1; i >= 0; i--) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith('site_data_cache_') && key !== CACHE_KEY) {
+                    localStorage.removeItem(key);
+                }
+            }
+        } catch (e) {}
+
         const cachedData = localStorage.getItem(CACHE_KEY);
         const cachedTimestamp = localStorage.getItem(`${CACHE_KEY}_timestamp`);
         let hasRenderedCache = false;
