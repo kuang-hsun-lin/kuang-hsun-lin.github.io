@@ -977,7 +977,11 @@
 
         if (dash.welcome && dash.welcome.length > 0) {
             html += sectionHeader('welcome', '', 'Welcome');
-            html += `<div class="container bg-white pt-1 publication-section"><div class="about-card welcome-card"><div class="about-text w-100">`;
+            html += `<div class="container bg-white pt-1 publication-section"><div class="about-card welcome-card">` +
+                `<div class="lab-brand-hero">` +
+                `<img src="ewn_logo.svg" alt="EWN Lab - Evolved Wireless Networking Laboratory, NYCU" class="lab-hero-logo" width="340" height="80">` +
+                `</div>` +
+                `<div class="about-text w-100">`;
             dash.welcome.forEach(msg => {
                 html += `<p>${msg}</p>`;
             });

@@ -1,0 +1,30 @@
+<svg viewBox="0 0 100 100" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="ewn-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#0A2540"/>
+            <stop offset="100%" stop-color="#071727"/>
+        </linearGradient>
+        <linearGradient id="ewn-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#FDE68A"/>
+            <stop offset="100%" stop-color="#F59E0B"/>
+        </linearGradient>
+    </defs>
+    <!-- Background rounded squircle -->
+    <rect width="100" height="100" rx="24" fill="url(#ewn-bg)"/>
+    
+    <!-- Wave 1 (Top Satellite / High Orbit Link) -->
+    <path d="M 28 32 C 45 32, 60 26, 70 20" stroke="#38BDF8" stroke-width="7.5" stroke-linecap="round" fill="none"/>
+    
+    <!-- Wave 2 (Center Evolved Beam / Drone Layer) -->
+    <path d="M 28 50 C 45 50, 55 48, 62 44" stroke="#0284C7" stroke-width="7.5" stroke-linecap="round" fill="none"/>
+    
+    <!-- Wave 3 (Ground Cellular Mesh / Terrestrial Layer) -->
+    <path d="M 28 68 C 48 68, 62 74, 72 80" stroke="#38BDF8" stroke-width="7.5" stroke-linecap="round" fill="none"/>
+    
+    <!-- Backbone Pillar 'E' (Pure Crisp White) -->
+    <path d="M 28 24 L 28 76" stroke="#FFFFFF" stroke-width="8.5" stroke-linecap="round"/>
+    
+    <!-- NTN Satellite Pulse Node (Gold Amber Glow) -->
+    <circle cx="74" cy="20" r="7.5" fill="url(#ewn-gold)"/>
+    <circle cx="74" cy="20" r="12.5" stroke="#FDE68A" stroke-width="1.5" stroke-dasharray="3 3" fill="none" opacity="0.85"/>
+</svg>
