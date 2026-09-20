@@ -186,6 +186,7 @@ function checkAndUpdateBibtex(forceAll = false) {
     const numberIndex = headerIndex['Number'];
     const pagesIndex = headerIndex['Pages'];
     const titleIndex = headerIndex['Title'];
+    const typeIndex = headerIndex['Type'];
 
     let updatedCount = 0;
     let skippedCount = 0;
@@ -198,14 +199,16 @@ function checkAndUpdateBibtex(forceAll = false) {
 
       const volumeVal = volumeIndex ? String(row[volumeIndex - 1] || '').trim() : '';
       const pagesVal = pagesIndex ? String(row[pagesIndex - 1] || '').trim() : '';
+      const typeVal = typeIndex ? String(row[typeIndex - 1] || '').trim().toLowerCase() : '';
       const bibtexLower = currentTrimmed.toLowerCase();
+      const isJournal = typeVal.includes('article') || typeVal.includes('journal') || (!typeVal && bibtexLower.startsWith('@article'));
 
       // 判定是否為「Early Access / 待補齊正式卷期」的論文：
-      // 1. 尚未收錄 BibTeX
-      // 2. 卷 (Volume) 為空，或 頁碼 (Pages) 為空
+      // 1. 尚未收錄完整 BibTeX (長度不足)
+      // 2. 期刊論文 (Journal/Article) 但 卷 (Volume) 為空，或 頁碼 (Pages) 為空（如 IEEE TVT Early Access）
       // 3. 原 BibTeX 中註記有 early access / to appear
       const isMissingBibtex = currentTrimmed.length < 40;
-      const isMissingVolOrPages = !volumeVal || !pagesVal;
+      const isMissingVolOrPages = isJournal ? (!volumeVal || !pagesVal) : (!pagesVal && !currentTrimmed.includes('pages'));
       const isEarlyAccess = bibtexLower.includes('early access') || bibtexLower.includes('earlyaccess') || bibtexLower.includes('to appear');
 
       const needsCheck = forceAll || isMissingBibtex || isMissingVolOrPages || isEarlyAccess;
