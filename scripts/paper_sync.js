@@ -3,11 +3,10 @@
  * Source: https://github.com/kuang-hsun-lin/kuang-hsun-lin.github.io/blob/main/scripts/paper_sync.js
  *
  * 整合式腳本功能：
- * 1. 從 ORCID 抓取論文清單。
- * 2. 檢查試算表，只處理未收錄的新論文。
- * 3. 根據 DOI 從 Crossref 取得 BibTeX 或 JSON。
- * 4. 解析資料並填入試算表對應的欄位。
- * 5. 從 Google Scholar BibTeX 連結補足尚未收錄之論文。
+ * 1. 從 ORCID 抓取論文清單，自動比對並新增未收錄之新論文。
+ * 2. 根據 DOI 透過 Crossref Polite Pool 高速取得官方 BibTeX / JSON。
+ * 3. 智慧增量檢查與更新缺漏或未補齊之 BibTeX 中繼資料。
+ * 4. 嚴格保持原生 BibTeX 月份格式，相容於 IEEEtran 等標準學術排版規範。
  */
 
 // --- 全域設定 ---
@@ -37,7 +36,7 @@ var PUBLISHER_MAPPING = {
   'hindawi': 'Hindawi'
 };
 
-// 月份英文縮寫與數字對照表
+// 月份英文縮寫與數字對照表（僅供試算表 Month 欄位填寫，不更動原始 Bibtex 字串）
 var MONTH_MAPPING = {
   'jan': '01', 'feb': '02', 'mar': '03', 'apr': '04',
   'may': '05', 'jun': '06', 'jul': '07', 'aug': '08',
@@ -45,20 +44,26 @@ var MONTH_MAPPING = {
 };
 
 /**
- * 一鍵執行所有同步任務：ORCID 同步 -> Crossref BibTeX 校對
+ * 一鍵執行所有同步任務：ORCID 同步 -> Crossref BibTeX 智慧增量校對
+ * @param {boolean} forceAllBibtex - 若設為 true 則強制全表重新向 Crossref 查詢更新，預設為 false (智慧增量模式)
  */
-function runAllPaperSync() {
-  Logger.log('=== [1/2] 開始從 ORCID 同步論文 ===');
-  updateMyPaperList();
-  Logger.log('=== [2/2] 開始校對與更新 BibTeX 中繼資料 ===');
-  checkAndUpdateBibtex();
-  Logger.log('=== 全部論文同步流程完成 ===');
+function runAllPaperSync(forceAllBibtex = false) {
+  const startTime = new Date().getTime();
+  Logger.log('=== [1/2] 開始從 ORCID 同步最新論文 ===');
+  const orcidRes = updateMyPaperList();
+  
+  Logger.log('=== [2/2] 開始智慧增量校對與補齊 BibTeX 中繼資料 ===');
+  const bibtexRes = checkAndUpdateBibtex(forceAllBibtex);
+  
+  const elapsed = ((new Date().getTime() - startTime) / 1000).toFixed(2);
+  Logger.log(`=== 全部論文同步流程完成 (總耗時: ${elapsed} 秒) ===`);
 }
 
 /**
  * 從 ORCID 抓取論文清單並新增至試算表。
  */
 function updateMyPaperList() {
+  const result = { newPapers: 0, updatedDoi: 0 };
   try {
     const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
     if (!sheet) throw new Error(`找不到名為 "${SHEET_NAME}" 的工作表。`);
@@ -67,9 +72,19 @@ function updateMyPaperList() {
     const existingData = getExistingData(sheet, headerIndex['Title']);
 
     const url = `https://pub.orcid.org/v3.0/${ORCID_ID}/works`;
-    const response = UrlFetchApp.fetch(url, {'headers': {'Accept': 'application/vnd.orcid+json'}});
+    const response = UrlFetchApp.fetch(url, {
+      'headers': {
+        'Accept': 'application/vnd.orcid+json',
+        'User-Agent': 'EWN-Lab-Publication-Sync/1.0 (https://kuang-hsun-lin.github.io/; mailto:khlin@nycu.edu.tw)'
+      },
+      'muteHttpExceptions': true
+    });
+
+    if (response.getResponseCode() !== 200) {
+      throw new Error(`ORCID API 連線失敗，HTTP 狀態碼：${response.getResponseCode()}`);
+    }
+
     const data = JSON.parse(response.getContentText());
-    
     let newWorks = [];
     let updatedDoiRows = [];
 
@@ -81,7 +96,8 @@ function updateMyPaperList() {
         
         const externalIds = work['external-ids']?.['external-id'] || [];
         const doiObject = externalIds.find(id => id['external-id-type'] === 'doi');
-        const doi = doiObject?.['external-id-value'] || null;
+        const rawDoi = doiObject?.['external-id-value'] || null;
+        const doi = cleanDoi(rawDoi);
 
         // 檢查論文是否已存在於試算表
         if (existingData[normalizedTitle]) {
@@ -120,25 +136,32 @@ function updateMyPaperList() {
 
     if (newWorks.length > 0) {
       sheet.getRange(sheet.getLastRow() + 1, 1, newWorks.length, newWorks[0].length).setValues(newWorks);
+      result.newPapers = newWorks.length;
       Logger.log(`已成功新增 ${newWorks.length} 篇新論文到試算表！`);
     } else {
-      Logger.log('沒有找到新的論文可以新增。');
+      Logger.log('ORCID 檢查完畢：沒有找到新的論文可以新增。');
     }
 
     if (updatedDoiRows.length > 0) {
       updatedDoiRows.forEach(update => sheet.getRange(update.row, update.col).setValue(update.value));
+      result.updatedDoi = updatedDoiRows.length;
       Logger.log(`已成功更新 ${updatedDoiRows.length} 篇已存在論文的 DOI。`);
     }
 
+    return result;
+
   } catch (e) {
-    Logger.log('發生錯誤：' + e.message);
+    Logger.log('ORCID 同步發生錯誤：' + e.message);
+    return result;
   }
 }
 
 /**
- * 檢查與更新現有的 BibTeX 資料。
+ * 檢查與補齊現有的 BibTeX 資料（支援智慧增量檢查，大幅節省時間與配額）。
+ * @param {boolean} forceAll - 是否強制掃描整張表向 Crossref 重新拉取
  */
-function checkAndUpdateBibtex() {
+function checkAndUpdateBibtex(forceAll = false) {
+  const result = { updatedCount: 0, skippedCount: 0 };
   try {
     const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
     if (!sheet) throw new Error(`找不到名為 "${SHEET_NAME}" 的工作表。`);
@@ -154,81 +177,111 @@ function checkAndUpdateBibtex() {
     const lastRow = sheet.getLastRow();
     if (lastRow <= 1) {
       Logger.log('試算表中沒有論文資料。');
-      return;
+      return result;
     }
     const dataRange = sheet.getRange(2, 1, lastRow - 1, sheet.getLastColumn());
     const data = dataRange.getValues();
 
-    let updatedRows = [];
+    let updatedCount = 0;
+    let skippedCount = 0;
+
     data.forEach(row => {
       const doiUrl = row[doiIndex - 1];
       const currentBibtex = row[bibtexIndex - 1];
-      
-      let doi = '';
-      if (typeof doiUrl === 'string') {
-        const doiMatch = doiUrl.match(/(10\.\d{4,}\/[^\s]+)$/);
-        if (doiMatch) {
-          doi = doiMatch[1];
-        } else if (!doiUrl.startsWith('http')) {
-          doi = doiUrl;
-        }
+      const currentTrimmed = currentBibtex ? currentBibtex.toString().trim() : '';
+
+      // 智慧增量判定：若非強制模式且已有完整 BibTeX (字元數 > 40)，直接略過以避免多餘的 HTTP 查詢
+      if (!forceAll && currentTrimmed.length > 40) {
+        skippedCount++;
+        return;
       }
+
+      const doi = cleanDoi(doiUrl);
 
       if (doi) {
         const { bibtex: fetchedBibtex } = fetchBibtexFromDoi(doi);
-        
-        const currentTrimmed = currentBibtex ? currentBibtex.toString().trim() : '';
         const fetchedTrimmed = fetchedBibtex ? fetchedBibtex.trim() : '';
         
         if (fetchedTrimmed && fetchedTrimmed !== currentTrimmed) {
           row[bibtexIndex - 1] = fetchedTrimmed;
-          // 解析新 BibTeX 並更新所有相關欄位，包括 Title
+          // 解析新 BibTeX 並更新所有相關欄位
           parseBibtexAndFillRowData(row, headerIndex, fetchedTrimmed);
-          // 額外更新 Title 欄位
+          
+          // 若有新標題，乾淨同步 Title 欄位
           const newTitleMatch = fetchedTrimmed.match(/title\s*=\s*[{"]?([^}]+)[}"]?/i);
           if (newTitleMatch && newTitleMatch[1] && headerIndex['Title']) {
             row[headerIndex['Title'] - 1] = newTitleMatch[1].replace(/\\/g, '').replace(/\{|\}/g, '').trim();
           }
-          updatedRows.push(row);
+          updatedCount++;
         }
       }
     });
 
-    if (updatedRows.length > 0) {
+    if (updatedCount > 0) {
       dataRange.setValues(data);
-      Logger.log(`更新完成！共有 ${updatedRows.length} 篇論文的 BibTeX 資訊被更新。`);
+      Logger.log(`BibTeX 補齊完成！共有 ${updatedCount} 篇論文更新了中繼資料。`);
     } else {
-      Logger.log('沒有找到任何需要更新的 BibTeX 資料。');
+      Logger.log(`BibTeX 檢查完畢：現有論文中繼資料皆齊全（略過已收錄 ${skippedCount} 篇）。`);
     }
 
+    result.updatedCount = updatedCount;
+    result.skippedCount = skippedCount;
+    return result;
+
   } catch (e) {
-    Logger.log('發生錯誤：' + e.message);
+    Logger.log('BibTeX 校驗發生錯誤：' + e.message);
+    return result;
   }
 }
 
 // --- 輔助函式 ---
 
 /**
- * 統一正規化標題，移除空白並轉換為小寫。
+ * 統一正規化標題，移除空白並轉換為小寫，折疊連續空格與換行符號。
  * @param {string} title - 論文標題。
  * @returns {string} 正規化後的標題。
  */
 function normalizeTitle(title) {
   if (!title) return '';
-  return title.trim().toLowerCase().replace(/[^a-z0-9\s]/g, '');
+  return title.trim().toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, ' ');
 }
 
 /**
- * 根據 DOI 從 Crossref 獲取 BibTeX 或 JSON。
- * @param {string} doi - 論文的 DOI 字串。
+ * 清理並擷取乾淨的 DOI 字串（去除 URL 前綴、結尾句點與多餘符號）。
+ * @param {string} doiStr - 原始 DOI 字串或網址。
+ * @returns {string} 乾淨的純 DOI。
+ */
+function cleanDoi(doiStr) {
+  if (!doiStr || typeof doiStr !== 'string') return '';
+  let doi = doiStr.trim();
+  const doiMatch = doi.match(/(10\.\d{4,}\/[^\s"']+)/);
+  if (doiMatch) {
+    doi = doiMatch[1];
+  } else if (doi.startsWith('http')) {
+    doi = doi.replace(/^https?:\/\/(dx\.)?doi\.org\//i, '');
+  }
+  return doi.replace(/[.,/]+$/, '').trim();
+}
+
+/**
+ * 根據 DOI 透過 Crossref Polite Pool 獲取官方 BibTeX 或 JSON。
+ * @param {string} rawDoi - 論文的 DOI 字串。
  * @returns {Object} 包含 bibtex 或 json 數據的物件。
  */
-function fetchBibtexFromDoi(doi) {
+function fetchBibtexFromDoi(rawDoi) {
+  const doi = cleanDoi(rawDoi);
+  if (!doi) return {};
   const timestamp = new Date().getTime();
   
+  // 遵循 Crossref 官方禮貌池 (Polite Pool) 規範，附帶學術聯絡郵箱以獲得高速與穩定配額
+  const politeHeaders = {
+    'Accept': 'application/x-bibtex',
+    'User-Agent': 'EWN-Lab-Publication-Sync/1.0 (https://kuang-hsun-lin.github.io/; mailto:khlin@nycu.edu.tw)'
+  };
+
   try {
     const bibtexResponse = UrlFetchApp.fetch(`https://doi.org/${doi}?t=${timestamp}`, {
-      'headers': {'Accept': 'application/x-bibtex'},
+      'headers': politeHeaders,
       'muteHttpExceptions': true
     });
     
@@ -236,7 +289,14 @@ function fetchBibtexFromDoi(doi) {
       return { bibtex: bibtexResponse.getContentText().trim() };
     }
     
-    const jsonResponse = UrlFetchApp.fetch(`https://doi.org/api/works/${doi}?t=${timestamp}`, {'headers': {'Accept': 'application/json'}, 'muteHttpExceptions': true});
+    const jsonHeaders = {
+      'Accept': 'application/json',
+      'User-Agent': 'EWN-Lab-Publication-Sync/1.0 (https://kuang-hsun-lin.github.io/; mailto:khlin@nycu.edu.tw)'
+    };
+    const jsonResponse = UrlFetchApp.fetch(`https://doi.org/api/works/${doi}?t=${timestamp}`, {
+      'headers': jsonHeaders,
+      'muteHttpExceptions': true
+    });
     if (jsonResponse.getResponseCode() === 200) {
       return { json: JSON.parse(jsonResponse.getContentText()) };
     }
@@ -297,6 +357,7 @@ function getExistingTitles(sheet, titleIndex) {
 
 /**
  * 通用函式：根據 BibTeX 字串解析並填入資料到指定的行。
+ * 嚴格保留原始 BibTeX 中的月份巨集 (month = jan/feb/...)，絕不擅改 BibTeX 格式。
  * @param {Array} rowData - 欲寫入資料的陣列。
  * @param {Object} headerIndex - 標題索引映射。
  * @param {string} fullEntry - 完整的 BibTeX 字串。
@@ -319,7 +380,7 @@ function parseBibtexAndFillRowData(rowData, headerIndex, fullEntry) {
           let parsedValue = match[1].replace(/\\/g, '').replace(/\{|\}/g, '').trim();
           
           if (key === 'Authors') {
-            parsedValue = parsedValue.replace(/\s+and\s+/gi, '; ');
+            parsedValue = parsedValue.replace(/\s+and\s+/gi, '; ').replace(/\s*;\s*/g, '; ');
           } else if (key === 'Publisher') {
             const publisherKey = parsedValue.toLowerCase();
             parsedValue = PUBLISHER_MAPPING[publisherKey] || parsedValue;
