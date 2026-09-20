@@ -228,9 +228,30 @@ function checkByGoogleScholarBibtex() {
       if (!headerIndex[field]) throw new Error(`表格中缺少必要的欄位："${field}"。`);
     });
 
-    const existingTitles = getExistingTitles(sheet, headerIndex['Title']);
-    
-    const bibtexContent = UrlFetchApp.fetch(GOOGLE_SCHOLAR_BIBTEX_URL).getContentText();
+    let bibtexContent = '';
+    try {
+      const scholarRes = UrlFetchApp.fetch(GOOGLE_SCHOLAR_BIBTEX_URL, {
+        'headers': {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+        },
+        'muteHttpExceptions': true
+      });
+      const code = scholarRes.getResponseCode();
+      if (code === 403 || code === 429) {
+        Logger.log('提示：Google 學術 (Scholar) 回傳 HTTP ' + code + '（反爬蟲機器人驗證或 citsig 簽名過期），本次已優雅跳過 Scholar。請以 ORCID 作為主要自動同步來源，或手動更新 citsig 匯出連結。');
+        return;
+      }
+      if (code !== 200) {
+        Logger.log('Google 學術請求失敗，HTTP 狀態碼：' + code);
+        return;
+      }
+      bibtexContent = scholarRes.getContentText();
+    } catch (err) {
+      Logger.log('Google 學術連線失敗：' + err.message);
+      return;
+    }
+
     const entries = bibtexContent.split(/\s*@/);
     let newWorks = [];
 
