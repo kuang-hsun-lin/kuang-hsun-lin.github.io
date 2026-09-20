@@ -14,7 +14,6 @@
 var SPREADSHEET_ID = "1EsbqSfOS97txN7_nwxpujdkV3g6scHB24TSAaJ25AMo";
 var SHEET_NAME = "ORCID";
 var ORCID_ID = '0000-0002-0426-9301'; 
-var GOOGLE_SCHOLAR_BIBTEX_URL = "https://scholar.googleusercontent.com/citations?view_op=export_citations&user=pA0SI4cAAAAJ&citsig=ACUpqDcAAAAAaKpcPlTPShxhPdCIn9TtR6uDU08&hl=zh-TW";
 
 // 要從 BibTeX/JSON 解析並填入的欄位名稱
 var BIBTEX_MAPPING = {
@@ -46,14 +45,12 @@ var MONTH_MAPPING = {
 };
 
 /**
- * 一鍵執行所有同步任務：ORCID -> Google Scholar -> BibTeX 校準
+ * 一鍵執行所有同步任務：ORCID 同步 -> Crossref BibTeX 校對
  */
 function runAllPaperSync() {
-  Logger.log('=== [1/3] 開始從 ORCID 同步論文 ===');
+  Logger.log('=== [1/2] 開始從 ORCID 同步論文 ===');
   updateMyPaperList();
-  Logger.log('=== [2/3] 開始從 Google Scholar 補充論文 ===');
-  checkByGoogleScholarBibtex();
-  Logger.log('=== [3/3] 開始校對與更新 BibTeX 中繼資料 ===');
+  Logger.log('=== [2/2] 開始校對與更新 BibTeX 中繼資料 ===');
   checkAndUpdateBibtex();
   Logger.log('=== 全部論文同步流程完成 ===');
 }
@@ -202,98 +199,6 @@ function checkAndUpdateBibtex() {
       Logger.log(`更新完成！共有 ${updatedRows.length} 篇論文的 BibTeX 資訊被更新。`);
     } else {
       Logger.log('沒有找到任何需要更新的 BibTeX 資料。');
-    }
-
-  } catch (e) {
-    Logger.log('發生錯誤：' + e.message);
-  }
-}
-
-/**
- * 從 Google 學術的 BibTeX 連結檢查並新增漏掉的論文。
- */
-function checkByGoogleScholarBibtex() {
-  if (!GOOGLE_SCHOLAR_BIBTEX_URL || GOOGLE_SCHOLAR_BIBTEX_URL.length < 50) {
-    Logger.log('請先更新腳本中的 Google 學術 BibTeX 連結。');
-    return;
-  }
-  
-  try {
-    const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
-    if (!sheet) throw new Error(`找不到名為 "${SHEET_NAME}" 的工作表。`);
-    
-    const headerIndex = getHeaderIndex(sheet);
-    const requiredFields = ['Title', 'Authors', 'Year', 'Journal/Booktitle'];
-    requiredFields.forEach(field => {
-      if (!headerIndex[field]) throw new Error(`表格中缺少必要的欄位："${field}"。`);
-    });
-
-    let bibtexContent = '';
-    try {
-      const scholarRes = UrlFetchApp.fetch(GOOGLE_SCHOLAR_BIBTEX_URL, {
-        'headers': {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
-        },
-        'muteHttpExceptions': true
-      });
-      const code = scholarRes.getResponseCode();
-      if (code === 403 || code === 429) {
-        Logger.log('提示：Google 學術 (Scholar) 回傳 HTTP ' + code + '（反爬蟲機器人驗證或 citsig 簽名過期），本次已優雅跳過 Scholar。請以 ORCID 作為主要自動同步來源，或手動更新 citsig 匯出連結。');
-        return;
-      }
-      if (code !== 200) {
-        Logger.log('Google 學術請求失敗，HTTP 狀態碼：' + code);
-        return;
-      }
-      bibtexContent = scholarRes.getContentText();
-    } catch (err) {
-      Logger.log('Google 學術連線失敗：' + err.message);
-      return;
-    }
-
-    const entries = bibtexContent.split(/\s*@/);
-    let newWorks = [];
-
-    entries.forEach(entry => {
-      if (!entry.trim()) return;
-      const fullEntry = `@${entry}`;
-      const titleMatch = fullEntry.match(/title\s*=\s*[{"]?([^}]+)[}"]?/i);
-      const title = titleMatch?.[1]?.replace(/\{|\}/g, '').trim() || 'N/A';
-      
-      const normalizedTitle = normalizeTitle(title);
-      
-      if (title !== 'N/A' && !existingTitles.has(normalizedTitle)) {
-        Logger.log(`發現新論文 (Google 學術)：${title}`);
-        const newRowData = new Array(sheet.getLastColumn()).fill('');
-        
-        newRowData[headerIndex['Title'] - 1] = title;
-        newRowData[headerIndex['Bibtex'] - 1] = fullEntry.trim();
-
-        const doiMatch = fullEntry.match(/doi\s*=\s*[{"]?([^}]+)[}"]?/i);
-        const doi = doiMatch?.[1]?.replace(/\{|\}/g, '').trim() || null;
-        if (doi) {
-          newRowData[headerIndex['DOI'] - 1] = `https://doi.org/${doi}`;
-          const { bibtex: crossrefBibtex } = fetchBibtexFromDoi(doi);
-          if (crossrefBibtex) {
-            newRowData[headerIndex['Bibtex'] - 1] = crossrefBibtex;
-          }
-        }
-        
-        const finalBibtex = newRowData[headerIndex['Bibtex'] - 1];
-        if (finalBibtex) {
-          parseBibtexAndFillRowData(newRowData, headerIndex, finalBibtex);
-        }
-        
-        newWorks.push(newRowData);
-      }
-    });
-
-    if (newWorks.length > 0) {
-      sheet.getRange(sheet.getLastRow() + 1, 1, newWorks.length, newWorks[0].length).setValues(newWorks);
-      Logger.log(`已成功從 Google 學術新增 ${newWorks.length} 篇論文。`);
-    } else {
-      Logger.log('沒有從 Google 學術連結中找到新的論文。');
     }
 
   } catch (e) {

@@ -8,7 +8,7 @@ function _auth() {
   SpreadsheetApp.openById("");
 }
 
-// 一鍵執行所有同步：ORCID -> Google Scholar -> BibTeX 校對
+// 一鍵執行所有同步：ORCID 同步 -> Crossref BibTeX 校對
 function autoUpdatePapers() {
   const url = "https://raw.githubusercontent.com/kuang-hsun-lin/kuang-hsun-lin.github.io/main/scripts/paper_sync.js?t=" + new Date().getTime();
   const code = UrlFetchApp.fetch(url).getContentText();
@@ -21,13 +21,6 @@ function syncFromOrcid() {
   const url = "https://raw.githubusercontent.com/kuang-hsun-lin/kuang-hsun-lin.github.io/main/scripts/paper_sync.js?t=" + new Date().getTime();
   (1, eval)(UrlFetchApp.fetch(url).getContentText());
   updateMyPaperList();
-}
-
-// 僅從 Google Scholar 補充新論文
-function syncFromScholar() {
-  const url = "https://raw.githubusercontent.com/kuang-hsun-lin/kuang-hsun-lin.github.io/main/scripts/paper_sync.js?t=" + new Date().getTime();
-  (1, eval)(UrlFetchApp.fetch(url).getContentText());
-  checkByGoogleScholarBibtex();
 }
 
 // 僅校對現有 BibTeX 資料
