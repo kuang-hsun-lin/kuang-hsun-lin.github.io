@@ -182,16 +182,36 @@ function checkAndUpdateBibtex(forceAll = false) {
     const dataRange = sheet.getRange(2, 1, lastRow - 1, sheet.getLastColumn());
     const data = dataRange.getValues();
 
+    const volumeIndex = headerIndex['Volume'];
+    const numberIndex = headerIndex['Number'];
+    const pagesIndex = headerIndex['Pages'];
+    const titleIndex = headerIndex['Title'];
+
     let updatedCount = 0;
     let skippedCount = 0;
+    let earlyAccessCheckedCount = 0;
 
     data.forEach(row => {
       const doiUrl = row[doiIndex - 1];
       const currentBibtex = row[bibtexIndex - 1];
       const currentTrimmed = currentBibtex ? currentBibtex.toString().trim() : '';
 
-      // 智慧增量判定：若非強制模式且已有完整 BibTeX (字元數 > 40)，直接略過以避免多餘的 HTTP 查詢
-      if (!forceAll && currentTrimmed.length > 40) {
+      const volumeVal = volumeIndex ? String(row[volumeIndex - 1] || '').trim() : '';
+      const pagesVal = pagesIndex ? String(row[pagesIndex - 1] || '').trim() : '';
+      const bibtexLower = currentTrimmed.toLowerCase();
+
+      // 判定是否為「Early Access / 待補齊正式卷期」的論文：
+      // 1. 尚未收錄 BibTeX
+      // 2. 卷 (Volume) 為空，或 頁碼 (Pages) 為空
+      // 3. 原 BibTeX 中註記有 early access / to appear
+      const isMissingBibtex = currentTrimmed.length < 40;
+      const isMissingVolOrPages = !volumeVal || !pagesVal;
+      const isEarlyAccess = bibtexLower.includes('early access') || bibtexLower.includes('earlyaccess') || bibtexLower.includes('to appear');
+
+      const needsCheck = forceAll || isMissingBibtex || isMissingVolOrPages || isEarlyAccess;
+
+      // 若已有完整卷期頁碼與 BibTeX，且非強制模式，直接略過以節省網路請求
+      if (!needsCheck) {
         skippedCount++;
         return;
       }
@@ -199,19 +219,34 @@ function checkAndUpdateBibtex(forceAll = false) {
       const doi = cleanDoi(doiUrl);
 
       if (doi) {
+        earlyAccessCheckedCount++;
         const { bibtex: fetchedBibtex } = fetchBibtexFromDoi(doi);
         const fetchedTrimmed = fetchedBibtex ? fetchedBibtex.trim() : '';
         
         if (fetchedTrimmed && fetchedTrimmed !== currentTrimmed) {
+          const oldVol = volumeVal;
+          const oldPages = pagesVal;
+          
           row[bibtexIndex - 1] = fetchedTrimmed;
-          // 解析新 BibTeX 並更新所有相關欄位
+          // 解析新 BibTeX 並更新所有相關欄位（Volume, Number, Pages, Publisher, Month 等）
           parseBibtexAndFillRowData(row, headerIndex, fetchedTrimmed);
           
           // 若有新標題，乾淨同步 Title 欄位
           const newTitleMatch = fetchedTrimmed.match(/title\s*=\s*[{"]?([^}]+)[}"]?/i);
-          if (newTitleMatch && newTitleMatch[1] && headerIndex['Title']) {
-            row[headerIndex['Title'] - 1] = newTitleMatch[1].replace(/\\/g, '').replace(/\{|\}/g, '').trim();
+          if (newTitleMatch && newTitleMatch[1] && titleIndex) {
+            row[titleIndex - 1] = newTitleMatch[1].replace(/\\/g, '').replace(/\{|\}/g, '').trim();
           }
+
+          const newVol = volumeIndex ? String(row[volumeIndex - 1] || '').trim() : '';
+          const newPages = pagesIndex ? String(row[pagesIndex - 1] || '').trim() : '';
+          const paperTitle = titleIndex ? row[titleIndex - 1] : doi;
+
+          if ((!oldVol && newVol) || (!oldPages && newPages)) {
+            Logger.log(`[正式出版更新] 論文 "${paperTitle}" 已更新正式卷期頁碼：Vol. ${newVol || '-'}, No. ${numberIndex ? (row[numberIndex - 1] || '-') : '-'}, pp. ${newPages || '-'}`);
+          } else {
+            Logger.log(`[中繼資料更新] 論文 "${paperTitle}" 的 BibTeX 已同步更新。`);
+          }
+
           updatedCount++;
         }
       }
@@ -219,9 +254,9 @@ function checkAndUpdateBibtex(forceAll = false) {
 
     if (updatedCount > 0) {
       dataRange.setValues(data);
-      Logger.log(`BibTeX 補齊完成！共有 ${updatedCount} 篇論文更新了中繼資料。`);
+      Logger.log(`BibTeX 更新完成！共有 ${updatedCount} 篇論文更新了中繼資料與正式卷期。`);
     } else {
-      Logger.log(`BibTeX 檢查完畢：現有論文中繼資料皆齊全（略過已收錄 ${skippedCount} 篇）。`);
+      Logger.log(`BibTeX 檢查完畢：現有已完整收錄文獻無需重複拉取（已檢查 Early Access/缺漏文獻 ${earlyAccessCheckedCount} 篇，略過完整歷史論文 ${skippedCount} 篇）。`);
     }
 
     result.updatedCount = updatedCount;
